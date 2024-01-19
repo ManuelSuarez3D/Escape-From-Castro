@@ -12,7 +12,7 @@ Escape from the beautiful island of Cuba to avoid the dictatorship of Fidel Cast
 You must travel the ocean on Fony's boat, avoiding wildlife, and security and surviving against the rugged weather. Increase your score by staying alive. Reach the final coast of Miami, Florida to complete the game. The levels are broken into three parts, the first is leaving the waters of Cuba where dunes, sharks, coral, and the Cuban army will try to stop you, the second is the open waters of the Gulf of Mexico where giant squids, water vortexes, tornados and sharks will try to destroy you, and the third and final level is the coastal waters of the U.S.A where the U.S coast guard, sharks, dunes and the elusive Florida Man will try to stop you from entering 'murica.
 
 # Main Character
-The main character is a middle-aged Cuban man named Tony Montana, 30 years of age, with short dark brown hair and 5"7. His only power is picking up floating bags filled with a white powdered substance floating in the waters. He enters "The Limit" mode where he brings out his special little M16A1 friend he brought from Cuba which fires 5.56×45mm NATO. The game is a third-person view side scroller.
+The main character is a middle-aged Cuban man named Fony Tontana, 30 years of age, with short dark brown hair and 5"7. His only power is picking up floating bags filled with a white powdered substance floating in the waters. He enters "The Limit" mode where he brings out his special little M16A1 friend he brought from Cuba which fires 5.56×45mm NATO. The game is a third-person view side scroller.
 
 # Sketch of Main Character
 ![image](https://github.com/CanadianZombie/Escape-From-Castro/assets/82544173/6b12af84-5257-493d-98a3-7e1209f12f2b)
@@ -66,4 +66,4 @@ The crystal blue waters of Cuba and blue skies for level one, with the deep dark
 Background music will be Latin American-inspired upbeat music, with sounds for the environment and enemies. For example ocean sounds, storm sounds for level 2, engine, military chatter, and alarms for the enemy's coast guard with varying levels of sophistication between the Cuban and U.S.
 
 # Summary
-If you're a fan of Scarface and want a simple, quick, 2D side-scroller game that doesn't itself too seriously this game is right for you. The game offers a dynamic blend of survival and strategy, challenging players to make risky maneuvers while immersing them in the gripping narrative of Tony's quest for freedom.
+If you're a fan of Scarface and want a simple, quick, 2D side-scroller game that doesn't itself too seriously this game is right for you. The game offers a dynamic blend of survival and strategy, challenging players to make risky maneuvers while immersing them in the gripping narrative of Fony's quest for freedom.
