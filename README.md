@@ -1,4 +1,4 @@
-# Escape-From-Castro
+# Escape From Castro
 # Manuel Suarez
 ## Game Pitch
 
