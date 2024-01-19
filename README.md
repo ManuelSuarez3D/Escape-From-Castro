@@ -2,8 +2,6 @@
 # Manuel Suarez
 ## 5 Games Pitches 
 #
-#
-#
 # #1 - Escape from Castro
 # Overview
 Escape from the beautiful island of Cuba to avoid the dictatorship of Fidel Casto. You are a Cuban refugee named Tony Montana, 30 years old trying to reach Miami Florida in hopes of a better life.
