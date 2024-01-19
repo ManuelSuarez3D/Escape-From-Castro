@@ -57,6 +57,7 @@ The crystal blue waters of Cuba and blue skies for level one, with the deep dark
 - Movement - A, S, W, D
 - Special - R
 - Pause - Q
+- Shoot - SPACE
 
 # Sounds
 Background music will be Latin american inspired upbeat music, there will be sounds for the environment and enemies. For example ocean sounds, storm sounds for level 2, engine, military chatter and alarms for the enemies coast guard with varying levels of sophistication between the Cuban and U.S.
