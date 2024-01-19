@@ -46,6 +46,8 @@ The crystal blue waters of Cuba and blue skies for level one, with the deep dark
 
 # Sketch of World
 ![image](https://github.com/CanadianZombie/Escape-From-Castro/assets/82544173/042938bd-644d-4bdb-b72e-34d69ab5c22a)
+![image](https://github.com/CanadianZombie/Escape-From-Castro/assets/82544173/5284cd99-2ff6-4f73-886f-a3aaf9b5ffb5)
+![image](https://github.com/CanadianZombie/Escape-From-Castro/assets/82544173/41656b49-fbc6-40d1-9633-e703a165ba55)
 
 # Menus
 - Initial Menu Screen with option to start or quit
