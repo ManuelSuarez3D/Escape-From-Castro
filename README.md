@@ -1,6 +1,6 @@
 # Escape-From-Castro
 # Manuel Suarez
-## 5 Games Pitches 
+## Game Pitch
 # #1 - Escape from Castro
 
 # Executive Summary
