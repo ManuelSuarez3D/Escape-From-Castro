@@ -1,6 +1,0 @@
-# Frogger
-
-# Level	| Name |	| Values |
-World 			480 600
-Bkg	Background 	0 0
-Wtr  			480 197 480 197
