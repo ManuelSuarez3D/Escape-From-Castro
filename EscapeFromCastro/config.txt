@@ -1,0 +1,89 @@
+# GameEngine Config
+
+Window  900 512
+
+# Font    Arial           ../assets/fonts/arial.ttf
+# Font    main            ../assets/fonts/Sansation.ttf
+Font    Arcade          ../assets/fonts/arcadeclassic.regular.ttf
+
+Music gameTheme         ../assets/Music/menu.ogg
+# Music missionTheme      ../assets/Music/tweener.ogg
+
+# Textures
+Texture 	Menu      	../assets/Textures/menu.png
+Texture 	Level1      	../assets/Textures/cuba.png
+Texture 	Start01         ../assets/Textures/start_01.png
+Texture 	Start02         ../assets/Textures/start_02.png
+Texture 	HowToPlay01     ../assets/Textures/howtoplay_01.png
+Texture 	HowToPlay02     ../assets/Textures/howtoplay_02.png
+Texture 	Quit01          ../assets/Textures/quit_01.png
+Texture 	Quit02          ../assets/Textures/quit_02.png
+Texture 	Restart01       ../assets/Textures/restart_01.png
+Texture 	Restart02       ../assets/Textures/restart_02.png
+Texture 	Back01          ../assets/Textures/back_01.png
+Texture 	Back02          ../assets/Textures/back_02.png
+Texture 	Back03          ../assets/Textures/back_03.png
+Texture 	Back04          ../assets/Textures/back_04.png
+Texture 	Instructions    ../assets/Textures/instructions.png
+Texture 	Special      	../assets/Textures/ui_special.png
+Texture 	Score          	../assets/Textures/ui_score.png
+Texture 	Hp01          	../assets/Textures/ui_hp01.png
+Texture 	Hp02          	../assets/Textures/ui_hp02.png
+Texture 	Hp03          	../assets/Textures/ui_hp03.png
+Texture 	Special01     	../assets/Textures/ui_special01.png
+Texture 	Special02     	../assets/Textures/ui_special02.png
+Texture 	Special03     	../assets/Textures/ui_special03.png
+Texture 	Pause          	../assets/Textures/pause_button.png
+Texture 	Play          	../assets/Textures/play_button.png
+Texture 	Exit          	../assets/Textures/exit_button.png
+Texture 	Chapter01       ../assets/Textures/chapter_01.png
+Texture 	GameOver        ../assets/Textures/gameover.png
+Texture 	MilitaryAtlas   ../assets/Textures/Sprites/Military_Atlas.png
+Texture 	Tony_Idle_Atlas   ../assets/Textures/Sprites/Tony_Idle_Atlas.png
+Texture 	Shark_Atlas   ../assets/Textures/Sprites/Shark_Atlas.png
+
+# Sprites
+Sprite Menu       		Menu   		0 0 
+Sprite Level1       		Level1   	0 0
+Sprite Start01         		Start01		0 0 
+Sprite Start02         		Start02		0 0
+Sprite HowToPlay01         	HowToPlay01	0 0
+Sprite HowToPlay02         	HowToPlay02	0 0 
+Sprite Quit01          		Quit01		0 0 
+Sprite Quit02        		Quit02		0 0
+Sprite Back01          		Back01		0 0 
+Sprite Back02        		Back02		0 0
+Sprite Back03          		Back03		0 0 
+Sprite Back04        		Back04		0 0
+Sprite Restart01          	Restart01	0 0 
+Sprite Restart02        	Restart02	0 0
+Sprite Instructions		Instructions	0 0
+Sprite Special       		Special		0 0
+Sprite Special       		Special		0 0
+Sprite Score          		Score		0 0
+Sprite Pause          		Pause		0 0
+Sprite Play          		Play		0 0
+Sprite Exit          		Exit		0 0
+Sprite Hp01          		Hp01		0 0
+Sprite Hp02          		Hp02		0 0
+Sprite Hp03          		Hp03		0 0
+Sprite GameOver          	GameOver	0 0
+Sprite Special01         	Special01	0 0
+Sprite Special02         	Special01	0 0
+Sprite Special03         	Special01	0 0
+Sprite Chapter01         	Chapter01	0 0
+
+#
+# SOUNDS
+# Sound death             ../assets/Sound/froggerDie.wav
+# Sound hop               ../assets/Sound/froggerMove.wav
+
+JSON                    ../assets/Textures/Sprites/Military_Atlas.json
+JSON                    ../assets/Textures/Sprites/Tony_Idle_Atlas.json
+JSON                    ../assets/Textures/Sprites/Shark_Atlas.json
+
+#
+#  Animation    Name            Texture     	Speed   Repeats
+Animation       Military_Left    MilitaryAtlas    12        yes
+Animation       Tony_Idle_Right  Tony_Idle_Atlas  12        yes
+Animation       Shark_Left  		Shark_Atlas  12        yes

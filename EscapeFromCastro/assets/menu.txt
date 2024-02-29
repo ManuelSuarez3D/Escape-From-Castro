@@ -1,0 +1,15 @@
+# EscapeFromCastro Menu
+
+# Level	| Name |	| Values |
+World 			900 512
+Bkg	Menu 		0 0
+Strt1	Start01 	302.5 	210
+Htp1	HowToPlay01	176	304
+Qut1	Quit01 		345 	397
+Strt2	Start02 	283 	201
+Htp2	HowToPlay02	139.5	297
+Qut2	Quit02 		331 	390
+Instrc	Instructions	178	221
+Bck1	Back01		688	427
+Bck2	Back02		680	424
+	

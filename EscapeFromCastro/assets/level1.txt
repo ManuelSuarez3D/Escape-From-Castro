@@ -1,0 +1,25 @@
+# EscapeFromCastro Level1
+
+# Level		| Name |	| Values |
+Lvl1		Level1 		0 	0
+PlayerSpeed 			250
+EnemySpeed  			125		
+Back3		Back03 		329.5 	369
+Back4		Back04	 	320 	365
+Restart1	Restart01 	245 	278
+Restart2	Restart02 	222 	271
+ScrollSpeed 			30
+World				2800 	512
+Special		Special		14 	58
+Score		Score 		716 	9
+Pause		Pause		715	68
+Play		Play		746	68
+Exit		Exit		816 	68
+Hp1		Hp01		13 	12
+Hp2		Hp02		13 	12
+Hp3  		Hp03		13 	12
+Special1	Special01	37	68
+Special2	Special02	37	68
+Special3	Special03	37	68
+Chapter1	Chapter01	122	159
+GameOver	GameOver	102.5	145

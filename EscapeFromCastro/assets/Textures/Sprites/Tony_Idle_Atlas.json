@@ -1,0 +1,127 @@
+{ "frames": [
+   {
+    "filename": "Tony_Idle_Right (1).png",
+    "frame": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (2).png",
+    "frame": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (3).png",
+    "frame": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (4).png",
+    "frame": { "x": 178, "y": 0, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (5).png",
+    "frame": { "x": 178, "y": 0, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (6).png",
+    "frame": { "x": 178, "y": 0, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (7).png",
+    "frame": { "x": 0, "y": 35, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (8).png",
+    "frame": { "x": 0, "y": 35, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (9).png",
+    "frame": { "x": 0, "y": 35, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (10).png",
+    "frame": { "x": 178, "y": 35, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (11).png",
+    "frame": { "x": 178, "y": 35, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   },
+   {
+    "filename": "Tony_Idle_Right (12).png",
+    "frame": { "x": 178, "y": 35, "w": 178, "h": 35 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 178, "h": 35 },
+    "sourceSize": { "w": 178, "h": 35 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.x-dev",
+  "image": "Tony_Idle_Atlas.png",
+  "format": "RGBA8888",
+  "size": { "w": 356, "h": 70 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "Tony_Idle_Right", "from": 0, "to": 11, "direction": "forward", "color": "#000000ff" }
+  ],
+  "layers": [
+   { "name": "Layer", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
