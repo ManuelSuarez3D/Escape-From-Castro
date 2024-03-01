@@ -16,6 +16,7 @@ namespace {
     std::mt19937 rng(rd());
 }
 
+#pragma region Init
 Scene_Cuba::Scene_Cuba(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine),
     m_worldView(gameEngine->window().getDefaultView()) {
@@ -28,29 +29,6 @@ Scene_Cuba::Scene_Cuba(GameEngine* gameEngine, const std::string& levelPath)
 
     MusicPlayer::getInstance().play("gameTheme");
     MusicPlayer::getInstance().setVolume(50);
-}
-void Scene_Cuba::mapMovement() {
-    auto worldViewBounds = getViewBounds();
-
-    for (auto e : m_entityManager.getEntities("lvl1")) {
-
-        auto& sprite = e->getComponent<CSprite>().sprite;
-
-        sf::Vector2f spritePosition = sprite.getPosition();
-        sf::FloatRect spriteBounds = sprite.getLocalBounds();
-
-        // Calculate the position of the right side edge of the sprite
-        float rightEdgeX = spritePosition.x + spriteBounds.width;
-
-        if (worldViewBounds.contains(rightEdgeX, 0.f)) {
-            m_config.scrollSpeed = 0;
-            m_hasEnd = true;
-
-            auto& pVel = m_player->getComponent<CTransform>().pos;
-            m_player->removeComponent<CBoundingBox>();
-            pVel.x += 3.f;
-        }
-    }
 }
 void Scene_Cuba::loadLevel(const std::string& path) {
 
@@ -75,6 +53,30 @@ void Scene_Cuba::loadLevel(const std::string& path) {
             sprite.setOrigin(0.f, 0.f);
             sprite.setPosition(pos);
         }
+        //else if (token == "Coral") {
+        //    std::string name;
+        //    sf::Vector2f pos;
+
+        //    config >> name >> pos.x >> pos.y;
+        //    auto e = m_entityManager.addEntity("coral");
+        //    e->addComponent<CTransform>(pos);
+        //    auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+        //    sprite.setOrigin(0.f, 0.f);
+        //    sprite.setPosition(pos);
+        //}
+        //else if (token == "Island") {
+        //    std::string name;
+        //    sf::Vector2f pos;
+
+        //    config >> name >> pos.x >> pos.y;
+        //    auto e = m_entityManager.addEntity("Island");
+        //    e->addComponent<CTransform>(pos);
+        //    auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+        //    sprite.setOrigin(0.f, 0.f);
+        //    sprite.setPosition(pos);
+        //}
         else if (token == "Special") {
             std::string name;
             sf::Vector2f pos;
@@ -358,12 +360,18 @@ void Scene_Cuba::registerActions() {
     registerAction(sf::Keyboard::S, "DOWN");
     registerAction(sf::Keyboard::Down, "DOWN");
 }
+#pragma endregion
+
+#pragma region GameStatus
 void Scene_Cuba::onEnd() {
     m_game->changeScene("MENU", nullptr, false);
 }
 void Scene_Cuba::update(sf::Time dt) {
     sUpdate(dt);
 }
+#pragma endregion
+
+#pragma region Movement
 void Scene_Cuba::entityMovement() {
 
 }
@@ -383,11 +391,39 @@ void Scene_Cuba::playerMovement() {
     }
 
 }
+void Scene_Cuba::mapMovement() {
+    auto worldViewBounds = getViewBounds();
+
+    for (auto e : m_entityManager.getEntities("lvl1")) {
+
+        auto& sprite = e->getComponent<CSprite>().sprite;
+
+        sf::Vector2f spritePosition = sprite.getPosition();
+        sf::FloatRect spriteBounds = sprite.getLocalBounds();
+
+        // Calculate the position of the right side edge of the sprite
+        float rightEdgeX = spritePosition.x + spriteBounds.width;
+
+        if (worldViewBounds.contains(rightEdgeX, 0.f)) {
+            m_config.scrollSpeed = 0;
+            m_hasEnd = true;
+
+            auto& pVel = m_player->getComponent<CTransform>().pos;
+            m_player->removeComponent<CBoundingBox>();
+            pVel.x += 3.f;
+        }
+    }
+}
+#pragma endregion
+
+#pragma region System
 void Scene_Cuba::sRender() {
 
     m_game->window().setView(m_worldView);
 
     sf::RenderWindow& window = m_game->window();
+
+    std::vector<std::pair<std::shared_ptr<Entity>, float>> entitiesWithY;
 
     for (auto& e : m_entityManager.getEntities("lvl1")) {
 
@@ -396,62 +432,255 @@ void Scene_Cuba::sRender() {
             auto& sprite = e->getComponent<CSprite>().sprite;
             m_game->window().draw(sprite);
         }
+
     }
+
     for (auto& e : m_entityManager.getEntities("player")) {
+        // Calculate the Y-coordinate of the entity's bottom (assuming origin at the center)
+        float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
 
-        if (!e->hasComponent<CSprite>())
-            continue;
-
-        if (m_drawAABB) {
-            if (e->hasComponent<CBoundingBox>()) {
-                auto box = e->getComponent<CBoundingBox>();
-                sf::RectangleShape rect;
-                rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
-                centerOrigin(rect);
-                rect.setPosition(e->getComponent<CTransform>().pos);
-                rect.setFillColor(sf::Color(0, 0, 0, 0));
-                rect.setOutlineColor(sf::Color{ 0, 255, 0 });
-                rect.setOutlineThickness(2.f);
-                m_game->window().draw(rect);
-            }
-        }
-        auto& sprite = e->getComponent<CSprite>().sprite;
-        if (e->hasComponent<CTransform>()) {
-            auto& tfm = e->getComponent<CTransform>();
-            sprite.setPosition(tfm.pos);
-            sprite.setRotation(tfm.angle);
-        }
-        m_game->window().draw(sprite);
+        // Store the entity and its bottom Y-coordinate in the vector
+        entitiesWithY.push_back(std::make_pair(e, bottomY));
     }
-    for (auto& e : m_entityManager.getEntities("enemy")) {
+    for (auto& e : m_entityManager.getEntities("enemyBoat")) {
+        // Calculate the Y-coordinate of the entity's bottom (assuming origin at the center)
+        float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
 
-        if (!e->hasComponent<CSprite>())
-            continue;
-
-        if (m_drawAABB) {
-            if (e->hasComponent<CBoundingBox>()) {
-                auto box = e->getComponent<CBoundingBox>();
-                sf::RectangleShape rect;
-                rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
-                centerOrigin(rect);
-                rect.setPosition(e->getComponent<CTransform>().pos);
-                rect.setFillColor(sf::Color(0, 0, 0, 0));
-                rect.setOutlineColor(sf::Color{ 0, 255, 0 });
-                rect.setOutlineThickness(2.f);
-                m_game->window().draw(rect);
-            }
-        }
-        auto& sprite = e->getComponent<CSprite>().sprite;
-        if (e->hasComponent<CTransform>()) {
-            auto& anim = e->getComponent<CAnimation>().animation;
-            auto& tfm = e->getComponent<CTransform>();
-            anim.getSprite().setPosition(tfm.pos);
-            anim.getSprite().setRotation(tfm.angle);
-
-            m_game->window().draw(anim.getSprite());
-        }
-
+        // Store the entity and its bottom Y-coordinate in the vector
+        entitiesWithY.push_back(std::make_pair(e, bottomY));
     }
+    for (auto& e : m_entityManager.getEntities("enemyIsland")) {
+        // Calculate the Y-coordinate of the entity's bottom (assuming origin at the center)
+        float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
+
+        // Store the entity and its bottom Y-coordinate in the vector
+        entitiesWithY.push_back(std::make_pair(e, bottomY));
+    }
+    for (auto& e : m_entityManager.getEntities("enemyShark")) {
+        // Calculate the Y-coordinate of the entity's bottom (assuming origin at the center)
+        float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
+
+        // Store the entity and its bottom Y-coordinate in the vector
+        entitiesWithY.push_back(std::make_pair(e, bottomY));
+    }
+    for (auto& e : m_entityManager.getEntities("enemyCoral")) {
+        // Calculate the Y-coordinate of the entity's bottom (assuming origin at the center)
+        float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
+
+        // Store the entity and its bottom Y-coordinate in the vector
+        entitiesWithY.push_back(std::make_pair(e, bottomY));
+    }
+
+    // Sort the entities based on their Y-coordinate in descending order
+    std::sort(entitiesWithY.begin(), entitiesWithY.end(), [](const auto& a, const auto& b) {
+        return a.second < b.second;
+        });
+
+    // Render entities in sorted order
+    for (const auto& pair : entitiesWithY) {
+        auto& e = pair.first;
+        if (e->hasComponent<CSprite>()) {
+            auto& sprite = e->getComponent<CSprite>().sprite;
+
+            if (e->hasComponent<CAnimation>()) {
+                auto& anim = e->getComponent<CAnimation>().animation;
+                auto& tfm = e->getComponent<CTransform>();
+                anim.getSprite().setPosition(tfm.pos);
+                anim.getSprite().setRotation(tfm.angle);
+                m_game->window().draw(anim.getSprite());
+            }
+            else {
+                auto& tfm = e->getComponent<CTransform>();
+                sprite.setPosition(tfm.pos);
+                sprite.setRotation(tfm.angle);
+                m_game->window().draw(sprite);
+            }
+
+        }
+    }
+
+
+
+#pragma region Temp
+    //for (auto& e : m_entityManager.getEntities("player")) {
+
+//    if (!e->hasComponent<CSprite>())
+//        continue;
+
+//    if (m_drawAABB) {
+//        if (e->hasComponent<CBoundingBox>()) {
+//            auto abb = e->getComponent<CBoundingBox>();
+//            auto atx = e->getComponent<CTransform>();
+//            float bottom = atx.pos.y + abb.halfSize.y;
+//            float left = atx.pos.x - abb.halfSize.x;
+//            float right = atx.pos.x + abb.halfSize.x;
+
+//            // Calculate the bottom section of the bounding box
+//            float bottomSectionHeight = 5.f;
+//            float bottomSectionWidth = 133.f;
+//            float bottomSectionLeft = std::max(left + 45.f, left); // Ensure the left edge is at least 45 units from the original left edge
+//            float bottomSectionRight = std::min(left + 45.f + bottomSectionWidth, right); // Ensure the right edge is within the original bounds
+
+//            // Draw the bottom section of the bounding box
+//            sf::RectangleShape rect;
+//            rect.setSize(sf::Vector2f{ bottomSectionRight - bottomSectionLeft, bottomSectionHeight });
+//            centerOrigin(rect);
+//            rect.setPosition(bottomSectionLeft + (bottomSectionRight - bottomSectionLeft) / 2.f, bottom - bottomSectionHeight / 2.f);
+//            rect.setFillColor(sf::Color(0, 0, 0, 0));
+//            rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+//            rect.setOutlineThickness(2.f);
+//            m_game->window().draw(rect);
+//        }
+//    }
+//    auto& sprite = e->getComponent<CSprite>().sprite;
+//    if (e->hasComponent<CTransform>()) {
+//        auto& anim = e->getComponent<CAnimation>().animation;
+//        auto& tfm = e->getComponent<CTransform>();
+//        anim.getSprite().setPosition(tfm.pos);
+//        anim.getSprite().setRotation(tfm.angle);
+
+//        m_game->window().draw(anim.getSprite());
+//    }
+//}
+
+//for (auto& e : m_entityManager.getEntities("enemyBoat")) {
+
+//    if (!e->hasComponent<CSprite>())
+//        continue;
+
+//    if (m_drawAABB) {
+//        if (e->hasComponent<CBoundingBox>()) {
+//            auto box = e->getComponent<CBoundingBox>();
+//            sf::RectangleShape rect;
+//            rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
+//            centerOrigin(rect);
+//            rect.setPosition(e->getComponent<CTransform>().pos);
+//            rect.setFillColor(sf::Color(0, 0, 0, 0));
+//            rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+//            rect.setOutlineThickness(2.f);
+//            m_game->window().draw(rect);
+//        }
+//    }
+//    auto& sprite = e->getComponent<CSprite>().sprite;
+//    if (e->hasComponent<CTransform>()) {
+//        auto& anim = e->getComponent<CAnimation>().animation;
+//        auto& tfm = e->getComponent<CTransform>();
+//        anim.getSprite().setPosition(tfm.pos);
+//        anim.getSprite().setRotation(tfm.angle);
+
+//        m_game->window().draw(anim.getSprite());
+//    }
+
+//}
+//for (auto& e : m_entityManager.getEntities("enemyCoral")) {
+
+//    if (!e->hasComponent<CSprite>())
+//        continue;
+
+//    if (m_drawAABB) {
+//        if (e->hasComponent<CBoundingBox>()) {
+//            auto box = e->getComponent<CBoundingBox>();
+//            sf::RectangleShape rect;
+//            rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
+//            centerOrigin(rect);
+//            rect.setPosition(e->getComponent<CTransform>().pos);
+//            rect.setFillColor(sf::Color(0, 0, 0, 0));
+//            rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+//            rect.setOutlineThickness(2.f);
+//            m_game->window().draw(rect);
+//        }
+//    }
+//    auto& sprite = e->getComponent<CSprite>().sprite;
+//    if (e->hasComponent<CTransform>()) {
+//        auto& tfm = e->getComponent<CTransform>();
+//        sprite.setPosition(tfm.pos);
+//        sprite.setRotation(tfm.angle);
+
+//        m_game->window().draw(sprite);
+//    }
+
+//}
+//for (auto& e : m_entityManager.getEntities("enemyShark")) {
+
+//    if (!e->hasComponent<CSprite>())
+//        continue;
+
+//    if (m_drawAABB) {
+//        if (e->hasComponent<CBoundingBox>()) {
+//            auto box = e->getComponent<CBoundingBox>();
+//            sf::RectangleShape rect;
+//            rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
+//            centerOrigin(rect);
+//            rect.setPosition(e->getComponent<CTransform>().pos);
+//            rect.setFillColor(sf::Color(0, 0, 0, 0));
+//            rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+//            rect.setOutlineThickness(2.f);
+//            m_game->window().draw(rect);
+
+//            //auto abb = e->getComponent<CBoundingBox>();
+//            //auto atx = e->getComponent<CTransform>();
+//            //float bottom = atx.pos.y + abb.halfSize.y;
+//            //float left = atx.pos.x - abb.halfSize.x;
+//            //float right = atx.pos.x + abb.halfSize.x;
+
+//            //// Calculate the bottom section of the bounding box
+//            //float bottomSectionHeight = 5.f;
+//            //float bottomSectionWidth = 133.f;
+//            //float bottomSectionLeft = std::max(left + 45.f, left); // Ensure the left edge is at least 45 units from the original left edge
+//            //float bottomSectionRight = std::min(left + 45.f + bottomSectionWidth, right); // Ensure the right edge is within the original bounds
+
+//            //// Draw the bottom section of the bounding box
+//            //sf::RectangleShape rect;
+//            //rect.setSize(sf::Vector2f{ bottomSectionRight - bottomSectionLeft, bottomSectionHeight });
+//            //centerOrigin(rect);
+//            //rect.setPosition(bottomSectionLeft + (bottomSectionRight - bottomSectionLeft) / 2.f, bottom - bottomSectionHeight / 2.f);
+//            //rect.setFillColor(sf::Color(0, 0, 0, 0));
+//            //rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+//            //rect.setOutlineThickness(2.f);
+//            //m_game->window().draw(rect);
+//        }
+//    }
+//    
+//    auto& sprite = e->getComponent<CSprite>().sprite;
+//    if (e->hasComponent<CTransform>()) {
+//        auto& anim = e->getComponent<CAnimation>().animation;
+//        auto& tfm = e->getComponent<CTransform>();
+//        anim.getSprite().setPosition(tfm.pos);
+//        anim.getSprite().setRotation(tfm.angle);
+
+//        m_game->window().draw(anim.getSprite());
+//    }
+
+//}
+//for (auto& e : m_entityManager.getEntities("enemyIsland")) {
+
+//    if (!e->hasComponent<CSprite>())
+//        continue;
+
+//    if (m_drawAABB) {
+//        if (e->hasComponent<CBoundingBox>()) {
+//            auto box = e->getComponent<CBoundingBox>();
+//            sf::RectangleShape rect;
+//            rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
+//            centerOrigin(rect);
+//            rect.setPosition(e->getComponent<CTransform>().pos);
+//            rect.setFillColor(sf::Color(0, 0, 0, 0));
+//            rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+//            rect.setOutlineThickness(2.f);
+//            m_game->window().draw(rect);
+//        }
+//    }
+//    auto& sprite = e->getComponent<CSprite>().sprite;
+//    if (e->hasComponent<CTransform>()) {
+//        auto& tfm = e->getComponent<CTransform>();
+//        sprite.setPosition(tfm.pos);
+//        sprite.setRotation(tfm.angle);
+
+//        m_game->window().draw(sprite);
+//    }
+
+//}
+#pragma endregion
 
     sf::View view1;
     view1.reset(sf::FloatRect(0.f, 0.f, 900.f, 512.f));
@@ -508,7 +737,7 @@ void Scene_Cuba::sRender() {
             }
             if (e1->hasComponent<CSprite>()) {
                 auto& sprite1 = e1->getComponent<CSprite>().sprite;
-                auto overlap = Physics::getOverlap(viewMousePos, e1);
+                auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
                 auto& tfm = e1->getComponent<CTransform>();
                 sprite1.setPosition(tfm.pos);
                 sprite1.setRotation(tfm.angle);
@@ -551,7 +780,7 @@ void Scene_Cuba::sRender() {
             }
             if (e1->hasComponent<CSprite>()) {
                 auto& sprite1 = e1->getComponent<CSprite>().sprite;
-                auto overlap = Physics::getOverlap(viewMousePos, e1);
+                auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
                 auto& tfm = e1->getComponent<CTransform>();
                 sprite1.setPosition(tfm.pos);
                 sprite1.setRotation(tfm.angle);
@@ -614,7 +843,7 @@ void Scene_Cuba::sRender() {
             auto& sprite = e->getComponent<CSprite>().sprite;
             auto test = e->getComponent<CTransform>();
 
-            auto overlap = Physics::getOverlap(viewMousePos, e);
+            auto overlap = Physics::getOverlapMouse(viewMousePos, e);
             if (e->hasComponent<CTransform>()) {
                 auto& tfm = e->getComponent<CTransform>();
                 sprite.setPosition(tfm.pos);
@@ -650,7 +879,7 @@ void Scene_Cuba::sRender() {
             auto& sprite = e->getComponent<CSprite>().sprite;
             auto test = e->getComponent<CTransform>();
 
-            auto overlap = Physics::getOverlap(viewMousePos, e);
+            auto overlap = Physics::getOverlapMouse(viewMousePos, e);
             if (e->hasComponent<CTransform>()) {
                 auto& tfm = e->getComponent<CTransform>();
                 sprite.setPosition(tfm.pos);
@@ -685,7 +914,7 @@ void Scene_Cuba::sRender() {
             auto& sprite = e->getComponent<CSprite>().sprite;
             auto test = e->getComponent<CTransform>();
 
-            auto overlap = Physics::getOverlap(viewMousePos, e);
+            auto overlap = Physics::getOverlapMouse(viewMousePos, e);
             if (e->hasComponent<CTransform>()) {
                 auto& tfm = e->getComponent<CTransform>();
                 sprite.setPosition(tfm.pos);
@@ -798,22 +1027,6 @@ void Scene_Cuba::sRender() {
     m_game->window().setView(m_worldView);
 
 }
-sf::FloatRect Scene_Cuba::getViewBounds() {
-    auto view = m_game->window().getView();
-    return sf::FloatRect(
-        (view.getCenter().x - view.getSize().x / 2.f), (view.getCenter().y - view.getSize().y / 2.f),
-        view.getSize().x, view.getSize().y);
-}
-sf::FloatRect Scene_Cuba::getPlayBounds() const {
-    auto center = m_worldView.getCenter();
-    auto size = m_worldView.getSize();
-    auto rightTop = center + sf::Vector2f(size.x / 2.f, -size.y / 2.f);
-
-    rightTop.x += size.x / 2.f;
-    size.x += size.x;
-
-    return sf::FloatRect(rightTop, size);
-}
 void Scene_Cuba::sDestroyOutsideBounds() {
     auto playBounds = getViewBounds();
     for (auto e : m_entityManager.getEntities()) {
@@ -857,86 +1070,20 @@ void Scene_Cuba::sMovement(sf::Time dt) {
             tfm.pos += tfm.vel * dt.asSeconds();
         }
     }
-    for (auto& e : m_entityManager.getEntities("enemy")) {
+    for (auto& e : m_entityManager.getEntities("enemyBoat")) {
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
 
             tfm.pos -= tfm.vel * dt.asSeconds();
         }
     }
-    /* for (auto& e : m_entityManager.getEntities("ui")) {
-         if (e->hasComponent<CTransform>()) {
-             auto& tfm = e->getComponent<CTransform>();
+    for (auto& e : m_entityManager.getEntities("enemyShark")) {
+        if (e->hasComponent<CTransform>()) {
+            auto& tfm = e->getComponent<CTransform>();
 
-             tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-         }
-     }*/
-     //for (auto& e : m_entityManager.getEntities("chapter1")) {
-     //    if (e->hasComponent<CTransform>()) {
-     //        auto& tfm = e->getComponent<CTransform>();
-
-     //        tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //    }
-     //}
-     //for (auto& e : m_entityManager.getEntities("pause_button")) {
-     //    if (e->hasComponent<CTransform>()) {
-     //        auto& tfm = e->getComponent<CTransform>();
-
-     //        tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //    }
-     //}
-     //for (auto& e : m_entityManager.getEntities("play_button")) {
-     //    if (e->hasComponent<CTransform>()) {
-     //        auto& tfm = e->getComponent<CTransform>();
-
-     //        tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //    }
-     //}
-     //for (auto& e : m_entityManager.getEntities("exit_button")) {
-     //    if (e->hasComponent<CTransform>()) {
-     //        auto& tfm = e->getComponent<CTransform>();
-
-     //        tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //    }
-     //}
-     //for (auto& e : m_entityManager.getEntities("uihp3")) {
-     //    if (e->hasComponent<CTransform>()) {
-     //        auto& tfm = e->getComponent<CTransform>();
-     //        tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //    }
-     //    for (auto& e : m_entityManager.getEntities("uihp2")) {
-     //        if (e->hasComponent<CTransform>()) {
-     //            auto& tfm = e->getComponent<CTransform>();
-     //            tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //        }
-     //        for (auto& e : m_entityManager.getEntities("uihp1")) {
-     //            if (e->hasComponent<CTransform>()) {
-     //                auto& tfm = e->getComponent<CTransform>();
-     //                tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //            }
-
-     //        }
-     //    }
-     //}
-     //for (auto& e : m_entityManager.getEntities("uispecial3")) {
-     //    if (e->hasComponent<CTransform>()) {
-     //        auto& tfm = e->getComponent<CTransform>();
-     //        tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //    }
-     //    for (auto& e : m_entityManager.getEntities("uispecial2")) {
-     //        if (e->hasComponent<CTransform>()) {
-     //            auto& tfm = e->getComponent<CTransform>();
-     //            tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //        }
-     //        for (auto& e : m_entityManager.getEntities("uispecial1")) {
-     //            if (e->hasComponent<CTransform>()) {
-     //                auto& tfm = e->getComponent<CTransform>();
-     //                tfm.pos += sf::Vector2f{ m_config.scrollSpeed, 0.f } *dt.asSeconds();
-     //            }
-
-     //        }
-     //    }
-     //}
+            tfm.pos -= tfm.vel * dt.asSeconds();
+        }
+    }
 }
 void Scene_Cuba::sCollisions() {
 
@@ -952,14 +1099,9 @@ void Scene_Cuba::sUpdate(sf::Time dt) {
     m_elapsedTime += dt.asSeconds();
     m_worldView.move(m_config.scrollSpeed * dt.asSeconds() * 1, 0.f);
     m_entityManager.update();
+
     adjustPlayerPosition();
     mapMovement();
-
-
-    //float scrollSpeed = m_config.scrollSpeed * dt.asSeconds() * 1;
-    //sf::Vector2f textPosition = m_score_text.getPosition();
-    //textPosition.x += scrollSpeed;
-    //m_score_text.setPosition(textPosition);
     sAnimation(dt);
     sEnemySpawner(dt);
     checkCollisions();
@@ -975,118 +1117,6 @@ void Scene_Cuba::sAnimation(sf::Time dt) {
             anim.animation.update(dt);
         }
     }
-}
-void Scene_Cuba::resetEntities() {
-
-}
-void Scene_Cuba::initLife() {
-
-}
-void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
-
-    m_player = m_entityManager.addEntity("player");
-    m_player->addComponent<CTransform>(pos);
-
-    m_player->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
-    m_player->addComponent<CInput>();
-
-    auto& sprite = m_player->addComponent<CSprite>().sprite;
-    auto& spriteName = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Start01")).sprite;
-    sprite.setTexture(Assets::getInstance().getTexture("Start01"));
-    auto spriteSize = sprite.getLocalBounds().getSize();
-
-    m_player->addComponent<CBoundingBox>(spriteSize);
-    sf::Vector2f spriteOrigin = sprite.getOrigin();
-    std::cout << "spawn called";
-    centerOrigin(sprite);
-
-}
-void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
-
-    auto raceCarL = m_entityManager.addEntity("enemy");
-
-    raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
-    raceCarL->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
-    auto& sprite = raceCarL->addComponent<CSprite>().sprite;
-    auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Start02")).sprite;
-    raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Military_Left"));
-    sprite.setTexture(Assets::getInstance().getTexture("Start02"));
-    auto spriteSize = sprite.getLocalBounds().getSize();
-
-    raceCarL->addComponent<CBoundingBox>(spriteSize);
-    sf::Vector2f spriteOrigin = sprite.getOrigin();
-
-    centerOrigin(sprite);
-
-}
-void Scene_Cuba::spawnBoat(sf::Vector2f pos){
-
-    //auto raceCarL = m_entityManager.addEntity("enemy");
-
-    //raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
-    //raceCarL->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
-    //auto& sprite = raceCarL->addComponent<CSprite>().sprite;
-    //auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Start02")).sprite;
-    //raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Military_Left"));
-    //sprite.setTexture(Assets::getInstance().getTexture("Start02"));
-    //auto spriteSize = sprite.getLocalBounds().getSize();
-
-    //raceCarL->addComponent<CBoundingBox>(spriteSize);
-    //sf::Vector2f spriteOrigin = sprite.getOrigin();
-
-    //centerOrigin(sprite);
-}
-void Scene_Cuba::spawnCoral(sf::Vector2f pos){
-
-    //auto raceCarL = m_entityManager.addEntity("enemy");
-
-    //raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
-    //raceCarL->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
-    //auto& sprite = raceCarL->addComponent<CSprite>().sprite;
-    //auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Start02")).sprite;
-    //raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Military_Left"));
-    //sprite.setTexture(Assets::getInstance().getTexture("Start02"));
-    //auto spriteSize = sprite.getLocalBounds().getSize();
-
-    //raceCarL->addComponent<CBoundingBox>(spriteSize);
-    //sf::Vector2f spriteOrigin = sprite.getOrigin();
-
-    //centerOrigin(sprite);
-}
-void Scene_Cuba::spawnIsland(sf::Vector2f pos){
-
-    //auto raceCarL = m_entityManager.addEntity("enemy");
-
-    //raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
-    //raceCarL->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
-    //auto& sprite = raceCarL->addComponent<CSprite>().sprite;
-    //auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Start02")).sprite;
-    //raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Military_Left"));
-    //sprite.setTexture(Assets::getInstance().getTexture("Start02"));
-    //auto spriteSize = sprite.getLocalBounds().getSize();
-
-    //raceCarL->addComponent<CBoundingBox>(spriteSize);
-    //sf::Vector2f spriteOrigin = sprite.getOrigin();
-
-    //centerOrigin(sprite);
-}
-void Scene_Cuba::spawnShark(sf::Vector2f pos) {
-
-    //auto raceCarL = m_entityManager.addEntity("enemy");
-
-    //raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
-    //raceCarL->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
-    //auto& sprite = raceCarL->addComponent<CSprite>().sprite;
-    //auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Start02")).sprite;
-    //raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Military_Left"));
-    //sprite.setTexture(Assets::getInstance().getTexture("Start02"));
-    //auto spriteSize = sprite.getLocalBounds().getSize();
-
-    //raceCarL->addComponent<CBoundingBox>(spriteSize);
-    //sf::Vector2f spriteOrigin = sprite.getOrigin();
-
-    //centerOrigin(sprite);
-
 }
 void Scene_Cuba::sEnemySpawner(sf::Time dt) {
 
@@ -1109,6 +1139,119 @@ void Scene_Cuba::sEnemySpawner(sf::Time dt) {
     }
 
 }
+#pragma endregion
+
+#pragma region Undecided
+void Scene_Cuba::resetEntities() {
+
+}
+void Scene_Cuba::initLife() {
+
+}
+#pragma endregion
+
+#pragma region Spawn
+void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
+
+    m_player = m_entityManager.addEntity("player");
+    m_player->addComponent<CTransform>(pos);
+
+    m_player->addComponent<CBoundingBox>(sf::Vector2f(48.f, 64.f));
+    m_player->addComponent<CInput>();
+
+    auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tony_Idle")).sprite;
+    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tony_Idle_Right"));
+
+    auto spriteSize = sprite.getLocalBounds().getSize();
+
+    m_player->addComponent<CBoundingBox>(spriteSize);
+}
+void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
+
+    std::uniform_int_distribution<int> intDist(1, 4);
+    int randomInt = intDist(rng);
+
+    switch (randomInt) {
+    case 1:
+        spawnBoat(pos);
+        break;
+    case 2:
+        spawnShark(pos);
+        break;
+    case 3:
+        spawnIsland(pos);
+        break;
+    case 4:
+        spawnCoral(pos);
+        break;
+    default:
+        break;
+    }
+
+}
+void Scene_Cuba::spawnBoat(sf::Vector2f pos) {
+    auto raceCarL = m_entityManager.addEntity("enemyBoat");
+
+    raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
+    auto& sprite = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Military")).sprite;
+    raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Military_Left"));
+    sprite.setTexture(Assets::getInstance().getTexture("Military"));
+    auto spriteSize = sprite.getLocalBounds().getSize();
+    raceCarL->addComponent<CBoundingBox>(spriteSize);
+}
+void Scene_Cuba::spawnCoral(sf::Vector2f pos) {
+
+    auto raceCarL = m_entityManager.addEntity("enemyIsland");
+
+    raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
+    auto& sprite = raceCarL->addComponent<CSprite>().sprite;
+    auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Coral")).sprite;
+    sprite.setTexture(Assets::getInstance().getTexture("Coral"));
+    auto spriteSize = sprite.getLocalBounds().getSize();
+    raceCarL->addComponent<CBoundingBox>(spriteSize);
+}
+void Scene_Cuba::spawnIsland(sf::Vector2f pos) {
+
+    auto raceCarL = m_entityManager.addEntity("enemyIsland");
+
+    raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
+    auto& sprite = raceCarL->addComponent<CSprite>().sprite;
+    auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Island")).sprite;
+    sprite.setTexture(Assets::getInstance().getTexture("Island"));
+    auto spriteSize = sprite.getLocalBounds().getSize();
+    raceCarL->addComponent<CBoundingBox>(spriteSize);
+
+}
+void Scene_Cuba::spawnShark(sf::Vector2f pos) {
+
+    auto raceCarL = m_entityManager.addEntity("enemyShark");
+
+    raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_config.enemySpeed, 0.f });
+    auto& sprite = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Shark")).sprite;
+    raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Left"));
+    sprite.setTexture(Assets::getInstance().getTexture("Shark"));
+    auto spriteSize = sprite.getLocalBounds().getSize();
+    raceCarL->addComponent<CBoundingBox>(spriteSize);
+}
+#pragma endregion
+
+#pragma region Bounds
+sf::FloatRect Scene_Cuba::getViewBounds() {
+    auto view = m_game->window().getView();
+    return sf::FloatRect(
+        (view.getCenter().x - view.getSize().x / 2.f), (view.getCenter().y - view.getSize().y / 2.f),
+        view.getSize().x, view.getSize().y);
+}
+sf::FloatRect Scene_Cuba::getPlayBounds() const {
+    auto center = m_worldView.getCenter();
+    auto size = m_worldView.getSize();
+    auto rightTop = center + sf::Vector2f(size.x / 2.f, -size.y / 2.f);
+
+    rightTop.x += size.x / 2.f;
+    size.x += size.x;
+
+    return sf::FloatRect(rightTop, size);
+}
 void Scene_Cuba::adjustPlayerPosition() {
 
     auto center = m_worldView.getCenter();
@@ -1130,9 +1273,39 @@ void Scene_Cuba::adjustPlayerPosition() {
         player_pos.y = std::min(player_pos.y, bot - halfSize.y);
     }
 }
+#pragma endregion
+
+#pragma region Checkers
 void Scene_Cuba::checkCollisions() {
-    for (auto e : m_entityManager.getEntities("enemy")) {
-        auto overlap = Physics::getOverlap(m_player, e);
+    for (auto e : m_entityManager.getEntities("enemyShark")) {
+        auto overlap = Physics::getOverlapEntity(m_player, e, "shark");
+        if (overlap.x > 0 and overlap.y > 0) {
+            m_player->addComponent<CState>().state = "dead";
+            e->destroy();
+
+            checkPlayerState();
+        }
+    }
+    for (auto e : m_entityManager.getEntities("enemyBoat")) {
+        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        if (overlap.x > 0 and overlap.y > 0) {
+            m_player->addComponent<CState>().state = "dead";
+            e->destroy();
+
+            checkPlayerState();
+        }
+    }
+    for (auto e : m_entityManager.getEntities("enemyCoral")) {
+        auto overlap = Physics::getOverlapEntity(m_player, e, "coral");
+        if (overlap.x > 0 and overlap.y > 0) {
+            m_player->addComponent<CState>().state = "dead";
+            e->destroy();
+
+            checkPlayerState();
+        }
+    }
+    for (auto e : m_entityManager.getEntities("enemyIsland")) {
+        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->addComponent<CState>().state = "dead";
             e->destroy();
@@ -1160,3 +1333,5 @@ void Scene_Cuba::checkPlayerState() {
 
 
 }
+#pragma endregion
+

@@ -92,7 +92,7 @@ void Scene_Menu::sRender()
 			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
-				auto overlap = Physics::getOverlap(viewMousePos, e1);
+				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
 
 
@@ -131,7 +131,7 @@ void Scene_Menu::sRender()
 			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
-				auto overlap = Physics::getOverlap(viewMousePos, e1);
+				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
 
 
@@ -171,7 +171,7 @@ void Scene_Menu::sRender()
 			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
-				auto overlap = Physics::getOverlap(viewMousePos, e1);
+				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
 
 				for (auto e2 : m_entityManager.getEntities("quit2")) {
@@ -218,7 +218,7 @@ void Scene_Menu::sRender()
 			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
-				auto overlap = Physics::getOverlap(viewMousePos, e1);
+				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
 
 				for (auto e2 : m_entityManager.getEntities("back2")) {

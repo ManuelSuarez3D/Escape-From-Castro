@@ -16,8 +16,8 @@
 
 namespace Physics
 {
-	sf::Vector2f getOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
-	sf::Vector2f getOverlap(sf::Vector2f a, std::shared_ptr<Entity> b);
+	sf::Vector2f getOverlapEntity(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b, std::string entityName);
+	sf::Vector2f getOverlapMouse(sf::Vector2f a, std::shared_ptr<Entity> b);
 	sf::Vector2f getPreviousOverlap(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b);
 };
 

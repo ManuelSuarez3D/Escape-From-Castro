@@ -39,8 +39,13 @@ Texture 	Exit          	../assets/Textures/exit_button.png
 Texture 	Chapter01       ../assets/Textures/chapter_01.png
 Texture 	GameOver        ../assets/Textures/gameover.png
 Texture 	MilitaryAtlas   ../assets/Textures/Sprites/Military_Atlas.png
-Texture 	Tony_Idle_Atlas   ../assets/Textures/Sprites/Tony_Idle_Atlas.png
-Texture 	Shark_Atlas   ../assets/Textures/Sprites/Shark_Atlas.png
+Texture 	Military   	../assets/Textures/Sprites/Military_01.png
+Texture 	Tony_Idle_Atlas ../assets/Textures/Sprites/Tony_Idle_Atlas.png
+Texture 	Tony_Idle 	../assets/Textures/Sprites/Tony_Idle_01.png
+Texture 	Shark_Atlas  	../assets/Textures/Sprites/Shark_Atlas.png
+Texture 	Shark   	../assets/Textures/Sprites/Shark_01.png
+Texture 	Coral       	../assets/Textures/Sprites/Coral_01.png
+Texture 	Island        	../assets/Textures/Sprites/Island_01.png
 
 # Sprites
 Sprite Menu       		Menu   		0 0 
@@ -72,6 +77,11 @@ Sprite Special01         	Special01	0 0
 Sprite Special02         	Special01	0 0
 Sprite Special03         	Special01	0 0
 Sprite Chapter01         	Chapter01	0 0
+Sprite Island  		       	Island		0 0
+Sprite Coral	         	Coral		0 0
+Sprite Military       		Military	0 0
+Sprite Shark       		Shark		0 0
+Sprite Tony_Idle       		Tony_Idle	0 0
 
 #
 # SOUNDS
@@ -86,4 +96,4 @@ JSON                    ../assets/Textures/Sprites/Shark_Atlas.json
 #  Animation    Name            Texture     	Speed   Repeats
 Animation       Military_Left    MilitaryAtlas    12        yes
 Animation       Tony_Idle_Right  Tony_Idle_Atlas  12        yes
-Animation       Shark_Left  		Shark_Atlas  12        yes
+Animation       Shark_Left  	Shark_Atlas  12        yes
