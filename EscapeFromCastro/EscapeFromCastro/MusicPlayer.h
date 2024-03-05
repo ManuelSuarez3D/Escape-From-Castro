@@ -27,6 +27,7 @@ public:
     void							stop();
     void							setPaused(bool paused);
     void							setVolume(float volume);
+    bool                            getPaused();
 
 
 private:

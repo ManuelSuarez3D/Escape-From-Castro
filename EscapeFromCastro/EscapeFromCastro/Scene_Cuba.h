@@ -40,7 +40,9 @@ private:
     sf::Text        m_pos_text;
     float           m_playerLastPos{ 0.f };
     float           m_elapsedTime = 0.0f;
+    float           m_deathTime = 0.0f;
     bool            m_hasEnd{ false };
+    bool            m_isSpecial{ false };
     int             m_score{ 0 };
     sf::Text		m_hiscore_text;
     sf::Text		m_score_text;
@@ -48,7 +50,6 @@ private:
     int             m_special{ 0 };
     int             m_life{ 3 };
     int             m_frogScore{ 0 };
-
     bool			m_drawTextures{ true };
     bool			m_drawAABB{ false };
     bool			m_drawGrid{ false };
@@ -78,13 +79,15 @@ private:
     void            spawnCoral(sf::Vector2f pos);
     void            spawnIsland(sf::Vector2f pos);
     void            spawnShark(sf::Vector2f pos);
+    void            spawnCoca(sf::Vector2f pos);
     void            sEnemySpawner(sf::Time dt);
     void            initLife();
-    void            initSpecial();
+    void            specialAbility();
     void            loadLevel(const std::string& path);
     void            sDestroyOutsideBounds();
     sf::FloatRect   getViewBounds();
-    sf::FloatRect   getPlayBounds() const;
+    sf::FloatRect   getPlayBounds();
+    float           randomSpawn(float min, float max);
 
 public:
 

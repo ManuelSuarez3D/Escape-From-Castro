@@ -1,5 +1,14 @@
 { "frames": [
    {
+    "filename": "Military_Left (0).aseprite",
+    "frame": { "x": 0, "y": 0, "w": 327, "h": 89 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
+    "sourceSize": { "w": 327, "h": 89 },
+    "duration": 100
+   },
+   {
     "filename": "Military_Left (1).aseprite",
     "frame": { "x": 0, "y": 0, "w": 327, "h": 89 },
     "rotated": false,
@@ -19,7 +28,7 @@
    },
    {
     "filename": "Military_Left (3).aseprite",
-    "frame": { "x": 0, "y": 0, "w": 327, "h": 89 },
+    "frame": { "x": 327, "y": 0, "w": 327, "h": 89 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
@@ -46,7 +55,7 @@
    },
    {
     "filename": "Military_Left (6).aseprite",
-    "frame": { "x": 327, "y": 0, "w": 327, "h": 89 },
+    "frame": { "x": 0, "y": 0, "w": 327, "h": 89 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
@@ -73,7 +82,7 @@
    },
    {
     "filename": "Military_Left (9).aseprite",
-    "frame": { "x": 0, "y": 0, "w": 327, "h": 89 },
+    "frame": { "x": 654, "y": 0, "w": 327, "h": 89 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
@@ -82,7 +91,7 @@
    },
    {
     "filename": "Military_Left (10).aseprite",
-    "frame": { "x": 0, "y": 89, "w": 327, "h": 89 },
+    "frame": { "x": 654, "y": 0, "w": 327, "h": 89 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
@@ -91,16 +100,7 @@
    },
    {
     "filename": "Military_Left (11).aseprite",
-    "frame": { "x": 0, "y": 89, "w": 327, "h": 89 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
-    "sourceSize": { "w": 327, "h": 89 },
-    "duration": 100
-   },
-   {
-    "filename": "Military_Left (12).aseprite",
-    "frame": { "x": 0, "y": 89, "w": 327, "h": 89 },
+    "frame": { "x": 654, "y": 0, "w": 327, "h": 89 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 327, "h": 89 },
@@ -113,7 +113,7 @@
   "version": "1.x-dev",
   "image": "Military_Atlas.png",
   "format": "RGBA8888",
-  "size": { "w": 654, "h": 178 },
+  "size": { "w": 981, "h": 89 },
   "scale": "1",
   "frameTags": [
    { "name": "Military_Left", "from": 0, "to": 11, "direction": "forward", "color": "#000000ff" }

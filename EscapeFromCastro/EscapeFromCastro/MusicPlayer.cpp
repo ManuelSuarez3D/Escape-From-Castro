@@ -39,10 +39,14 @@ void MusicPlayer::stop() {
 void MusicPlayer::setPaused(bool paused) {
     if (paused)
         m_music.pause();
+    
     else
         m_music.play();
 }
 
+bool MusicPlayer::getPaused() {
+    return m_music.getStatus() == sf::Music::Paused;
+}
 
 void MusicPlayer::setVolume(float volume) {
     m_volume = volume;

@@ -20,6 +20,14 @@ struct CAnimation : public Component {
     CAnimation() = default;
     CAnimation(const Animation& a) : animation(a) {}
 
+        sf::Color getColor() {
+        return animation.getSprite().getColor();
+    }
+
+    // Setter for the color of the sprite
+    void setColor(const sf::Color& color) {
+        animation.getSprite().setColor(color);
+    }
 };
 
 struct CShape : public Component
@@ -49,6 +57,7 @@ struct CSprite : public Component {
         : sprite(t) {
         centerOrigin(sprite);
     }
+
 
 
     CSprite(const sf::Texture& t, sf::IntRect r)
@@ -117,6 +126,17 @@ struct CInput : public Component
     unsigned char dir{ 0 };
 
     CInput() = default;
+};
+
+struct CType : public Component
+{
+    int boat{ 0 };
+    int shark{ 0 };
+    int island{ 0 };
+    int coral{ 0 };
+    int coca{ 0 };
+
+    CType() = default;
 };
 
 struct CScore : public Component
