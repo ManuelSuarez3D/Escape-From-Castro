@@ -57,6 +57,12 @@ Level 3
 The crystal blue waters of Cuba and blue skies for level one, with the deep dark vast ocean with storms for level 2, and the waters off the coast of Florida for level 3. Not much variation other than shades of blue and level two being during stormy waters.
 
 # Sketch of World
+## Cuba
+![Cuba](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/10804ccf-6d83-4f01-8f6a-d159ab6d29a5)
+## Ocean
+![Ocean](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/af8d9c99-407a-4adc-91b2-84d307503e95)
+## Florida
+![Florida](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/e19a194f-5bd2-4736-b42a-4c3660d87c9b)
 
 # Menus
 - Initial Menu Screen with the option to start, see instructions or quit
