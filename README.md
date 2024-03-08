@@ -15,7 +15,13 @@ You must travel the ocean on Fony's boat, avoiding wildlife, and security and su
 The main character is a middle-aged Cuban man named Fony Tontana, 30 years of age, with short dark brown hair and 5"7. His only power is picking up floating bags filled with a white powdered substance floating in the waters. He enters "The Limit" mode where he brings out his special little M16A1 friend he brought from Cuba which fires 5.56×45mm NATO. The game is a third-person view side scroller.
 
 # Sketch of Main Character
+![Fony](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/6575ac6f-07af-4d47-88bf-491eab4a56b0)
+![Fony_Boat](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/6cf11341-ae72-49eb-bb25-a42f98d7369f)
+![Tontana](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/ae6688aa-a899-4c4c-8ccb-e23d3e4e018c)
+![Tontana_Boat](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/8979dc9a-1287-49f7-b41e-3d694e166078)
 
+# Sketch of Items
+![Coca](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/047d5e0f-533d-4914-9888-02e7d0f230f4)
 
 # Opponents
 Level 1
@@ -37,7 +43,15 @@ Level 3
 - Florida Man
 
 # Sketch of Opponents
-
+![CoastGuard](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/6d0d061c-d976-486f-ad55-f87d01a19e01)
+![Coral](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/58dea687-525d-4a27-881c-b11ba81699bf)
+![FloridaMan](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/d2217c0c-bdf6-4b18-a761-d99e28157cb6)
+![Island](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/c22e160f-a6d3-473e-beb5-97820e749413)
+![MilitaryGuard](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/9c62dd8d-553e-48da-b8c6-cd92e4354ad2)
+![Shark](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/a3903195-1757-4adc-b171-7f8a903ad8b6)
+![Squid](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/5b662be8-02d7-4f15-bb37-e6c572b97317)
+![Tornado](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/63cf1121-9bd0-4573-8e5d-2a48d59ec1b1)
+![Whirpool](https://github.com/ManuelSuarez3D/Escape-From-Castro/assets/82544173/dfd7213c-d1d2-47a7-9eda-f90694e804b7)
 
 # Environment
 The crystal blue waters of Cuba and blue skies for level one, with the deep dark vast ocean with storms for level 2, and the waters off the coast of Florida for level 3. Not much variation other than shades of blue and level two being during stormy waters.
