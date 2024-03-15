@@ -1,2 +1,8 @@
-﻿  Physics.cpp
+﻿  Scene_Cuba.cpp
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1207,48): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1209,46): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1461,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1467,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1492,36): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1503,36): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
   EscapeFromCastro.vcxproj -> C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\x64\Debug\EscapeFromCastro.exe

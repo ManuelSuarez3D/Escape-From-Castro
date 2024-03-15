@@ -40,11 +40,13 @@ private:
     sf::Text        m_pos_text;
     float           m_playerLastPos{ 0.f };
     float           m_elapsedTime = 0.0f;
+    float           m_timeScore = 0.0f;
     float           m_deathTime = 0.0f;
     bool            m_hasEnd{ false };
     bool            m_isSpecial{ false };
-    int             m_score{ 0 };
-    sf::Text		m_hiscore_text;
+    int             m_playScore{ 0 };
+    int             m_finalScore{ 0 };
+
     sf::Text		m_score_text;
 
     int             m_special{ 0 };
@@ -81,7 +83,7 @@ private:
     void            spawnShark(sf::Vector2f pos);
     void            spawnCoca(sf::Vector2f pos);
     void            sEnemySpawner(sf::Time dt);
-    void            initLife();
+    void            sInit();
     void            specialAbility();
     void            loadLevel(const std::string& path);
     void            sDestroyOutsideBounds();

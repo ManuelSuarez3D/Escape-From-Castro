@@ -24,30 +24,43 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 void Scene_Menu::sDoAction(const Command& action) {
 
 	if (action.type() == "START") {
-		//if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
-		//else if (action.name() == "QUIT") { m_game->quitLevel(); }
-		//else if (action.name() == "BACK") { m_game->backLevel(); }
 		if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
+		if (action.name() == "MOUSE_CLICK") {
+			
+			if (m_menu_overlap[0])
+				m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, m_levelPaths[0]));
+
+			else if (m_menu_overlap[1]){
+				m_isGuide = true;
+
+				if (m_menu_overlap[2]) {
+
+					m_menu_overlap[2] = false;
+					m_menu_overlap[1] = false;
+					m_isGuide = false;
+				}
+			}
+			else if (m_menu_overlap[3]){
+				onEnd();
+			}
+		}
 	}
 }
 
 void Scene_Menu::init()
 {
-	//registerAction(sf::Keyboard::P, "PAUSE");
-	//registerAction(sf::Keyboard::Escape, "BACK");
-	//registerAction(sf::Keyboard::Q, "QUIT");
+	// Start
+	m_menu_overlap.push_back(false);
+	// How to Play
+	m_menu_overlap.push_back(false);
+	// Back, How to Play
+	m_menu_overlap.push_back(false);
+	// Quit
+	m_menu_overlap.push_back(false);
+
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
-	//registerAction(sf::Keyboard::A, "LEFT");
-	//registerAction(sf::Keyboard::Left, "LEFT");
-	//registerAction(sf::Keyboard::D, "RIGHT");
-	//registerAction(sf::Keyboard::Right, "RIGHT");
-	//registerAction(sf::Keyboard::W, "UP");
-	//registerAction(sf::Keyboard::Up, "UP");
-	//registerAction(sf::Keyboard::S, "DOWN");
-	//registerAction(sf::Keyboard::Down, "DOWN");
-	//m_game->currentScene("MENU", std::make_shared<Scene_EscapeFromCastro>(m_game, "../assets/menu.txt"));
-	//m_levelPaths.push_back("../assets/menu.txt");
 	m_levelPaths.push_back("../assets/level1.txt");
+	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
 
 }
 
@@ -59,7 +72,7 @@ void Scene_Menu::update(sf::Time dt)
 void Scene_Menu::sRender()
 {
 	sf::RenderWindow& window = m_game->window();
-
+	sf::Event event;
 	sf::View view = window.getView();
 	view.setCenter(window.getSize().x / 2.f, window.getSize().y / 2.f);
 	window.setView(view);
@@ -102,12 +115,10 @@ void Scene_Menu::sRender()
 
 						if (overlap.x > 0 && overlap.y > 0) {
 							m_game->window().draw(sprite2);
-
-							if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-								m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, m_levelPaths[0]));
-							}
+							m_menu_overlap[0] = true;
 						}
 						else {
+							m_menu_overlap[0] = false;
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -141,12 +152,11 @@ void Scene_Menu::sRender()
 
 						if (overlap.x > 0 && overlap.y > 0) {
 							m_game->window().draw(sprite2);
+							m_menu_overlap[1] = true;
 
-							if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-								m_isGuide = true;
-							}
 						}
 						else {
+							m_menu_overlap[1] = false;
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -180,12 +190,11 @@ void Scene_Menu::sRender()
 
 						if (overlap.x > 0 && overlap.y > 0) {
 							m_game->window().draw(sprite2);
+							m_menu_overlap[3] = true;
 
-							if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-								onEnd();
-							}
 						}
 						else {
+							m_menu_overlap[3] = false;
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -227,12 +236,10 @@ void Scene_Menu::sRender()
 
 						if (overlap.x > 0 && overlap.y > 0) {
 							m_game->window().draw(sprite2);
-
-							if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-								m_isGuide = false;
-							}
+							m_menu_overlap[2] = true;
 						}
 						else {
+							m_menu_overlap[2] = false;
 							m_game->window().draw(sprite1);
 						}
 					}

@@ -83,6 +83,12 @@ void GameEngine::sUserInput()
 				currentScene()->doAction(Command(currentScene()->getActionMap().at(event.key.code), actionType));
 			}
 		}
+		if (event.type == sf::Event::MouseButtonPressed) {
+			if (currentScene()->getActionMap().contains(event.mouseButton.button)) {
+				const std::string actionType = (event.type == sf::Event::MouseButtonPressed) ? "START" : "END";
+				currentScene()->doAction(Command(currentScene()->getActionMap().at(event.mouseButton.button), actionType));
+			}
+		}
 	}
 
 

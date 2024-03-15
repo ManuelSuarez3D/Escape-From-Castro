@@ -15,6 +15,7 @@ private:
 	void loadMenu(const std::string& path);
 	void init();
 	void onEnd() override;
+	std::vector<bool>			m_menu_overlap;
 public:
 
 	Scene_Menu(GameEngine* gameEngine);
