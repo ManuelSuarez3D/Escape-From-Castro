@@ -415,19 +415,21 @@ void Scene_Cuba::entityMovement() {
             if (e->hasComponent<CType>()) {
                 if (!worldViewBounds.intersects(entityBounds)) {
                     if (transform.pos.x < worldViewBounds.left) {
-                        spawnPos = sf::Vector2f(worldViewBounds.left + worldViewBounds.width + boundingBox.size.x / 2.0f,
-                            randomSpawn(worldViewBounds.top + 150.f, worldViewBounds.top + worldViewBounds.height - 20.f));
-                        transform.pos = spawnPos;
+                       /* spawnPos = sf::Vector2f(worldViewBounds.left + worldViewBounds.width + boundingBox.size.x / 2.0f,
+                            randomSpawn(worldViewBounds.top + 150.f, worldViewBounds.top + worldViewBounds.height - 20.f))*/;
+                       //transform.pos = spawnPos;
+                       e->destroy();
                     }
                     else if (transform.pos.x > worldViewBounds.left + worldViewBounds.width) {
-                        transform.pos.x = worldViewBounds.left - boundingBox.size.x / 2.0f;
+                       // transform.pos.x = worldViewBounds.left - boundingBox.size.x / 2.0f;
+
                     }
 
                     if (transform.pos.y < worldViewBounds.top) {
-                        transform.pos.y = worldViewBounds.top + worldViewBounds.height + boundingBox.size.y / 2.0f;
+                       // transform.pos.y = worldViewBounds.top + worldViewBounds.height + boundingBox.size.y / 2.0f;
                     }
                     else if (transform.pos.y > worldViewBounds.top + worldViewBounds.height) {
-                        transform.pos.y = worldViewBounds.top - boundingBox.size.y / 2.0f;
+                        //transform.pos.y = worldViewBounds.top - boundingBox.size.y / 2.0f;
                     }
                 }
             }
@@ -1188,37 +1190,32 @@ void Scene_Cuba::sAnimation(sf::Time dt) {
 void Scene_Cuba::sEnemySpawner(sf::Time dt) {
     sf::FloatRect field = getPlayBounds();
 
-    std::exponential_distribution<float> exp(1.f / 1.f);
+    std::exponential_distribution<float> exp(0.5f);
 
-    std::vector<float> spawnLanes{ 478.f };
-    while (spawnLanes.size() < 9) {
-        for (int j = 0; j < spawnLanes.size(); j++) {
-            float lane = spawnLanes[j] - 34.f;
-            spawnLanes.push_back(lane);
-            if (spawnLanes.size() >= 9) {
-                break;
-            }
-        }
-    }
-    
-    std::uniform_real_distribution<float> laneDis(0.f, 9.f);
-    static std::unordered_set<float> occupiedLanes; // Is unordered and has member functions like find.
+    static std::vector<float> spawnLanes{ 478.f };
 
-    float spawnLane = (float)spawnLanes[laneDis(rng)];
-    while (occupiedLanes.find(spawnLane) != occupiedLanes.end()) {
-        spawnLane = (float)spawnLanes[laneDis(rng)];
+    while (spawnLanes.size() < 10) {
+        float lane = spawnLanes.back() - 34.f;
+        spawnLanes.push_back(lane);
     }
 
-    occupiedLanes.insert(spawnLane);
+    std::uniform_int_distribution<int> laneDis(0, 9);
+    static std::unordered_set<int> occupiedLanes; // Is unordered and has member functions like find.
 
-    if (occupiedLanes.size() == 9)
+    if (occupiedLanes.size() == 10) {
         occupiedLanes.clear();
-   
+    }
+
+    int laneNumber = laneDis(rng);
+    while (occupiedLanes.find(laneNumber) != occupiedLanes.end()) {
+        laneNumber = laneDis(rng);
+    }
+    occupiedLanes.insert(laneNumber);
+
     std::uniform_real_distribution<float> xDis(field.left + field.width, field.left + field.width);
-    //if (spawnLane > 478.f) {
-    //    spawnLane += 34.f;
-    //}
-    std::uniform_real_distribution<float> yDis(spawnLane, spawnLane + 120.f);
+
+    std::uniform_real_distribution<float> yDis(spawnLanes[laneNumber], spawnLanes[laneNumber] + 34.f);
+
 
     float x = xDis(rng);
     float y = yDis(rng);
@@ -1311,11 +1308,9 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
     {
         case 1:
         {
-            if (m_entityManager.getEntities("enemyBoat").size() < 2) {
-                std::cout << "\n This is the spawn of location Y of the boat entity: " << pos.y << std::endl;
-
+            if (m_entityManager.getEntities("enemyBoat").size() < 3) {
                 float eHalfHeight = 41.f;
-                if (pos.y > field.top + field.height - eHalfHeight) {
+                if ((pos.y + eHalfHeight) > field.top + field.height) {
                     pos.y = field.top + field.height - eHalfHeight;
                 }
                 spawnBoat(pos);
@@ -1324,14 +1319,10 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
         }
         case 2:
         {
-            if (m_entityManager.getEntities("enemyShark").size() < 2) {
-                std::cout << "\n This is the spawn of location Y of the shark entity: " << pos.y << std::endl;
+            if (m_entityManager.getEntities("enemyShark").size() < 3) {
 
                 float eHalfHeight = 11.5f;
-                if (pos.y > field.top + field.height - eHalfHeight) {
-                    pos.y = field.top + field.height - eHalfHeight;
-                }
-                if (pos.y > field.top + field.height - eHalfHeight) {
+                if ((pos.y + eHalfHeight) > field.top + field.height) {
                     pos.y = field.top + field.height - eHalfHeight;
                 }
                 spawnShark(pos);
@@ -1340,24 +1331,22 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
         }
         case 3: 
         {
-            if (m_entityManager.getEntities("enemyIsland").size() < 4) {
-                std::cout << "\n This is the spawn of location Y of the island entity: " << pos.y << std::endl;
-
-                float eHalfHeight = 74.f;
-                if (pos.y > field.top + field.height - eHalfHeight) {
+            if (m_entityManager.getEntities("enemyIsland").size() < 6) {
+                float eHalfHeight = 148.f;
+                if ((pos.y + eHalfHeight) > field.top + field.height) {
                     pos.y = field.top + field.height - eHalfHeight;
                 }
+
                 spawnIsland(pos);
             }
             break;
         }
         case 4: 
         {
-            if (m_entityManager.getEntities("enemyCoral").size() < 4) {
-                std::cout << "\n This is the spawn of location Y of the coral entity: " << pos.y << std::endl;
+            if (m_entityManager.getEntities("enemyCoral").size() < 6) {
 
                 float eHalfHeight = 26.f;
-                if (pos.y > field.top + field.height - eHalfHeight) {
+                if ((pos.y + eHalfHeight) > field.top + field.height) {
                     pos.y = field.top + field.height - eHalfHeight;
                 }
                 spawnCoral(pos);
@@ -1367,10 +1356,9 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
         case 5:
         {
             if (m_entityManager.getEntities("coca").size() < 1) {
-                std::cout << "\n This is the spawn of location Y of the coca entity: " << pos.y << std::endl;
 
                 float eHalfHeight = 8.f;
-                if (pos.y > field.top + field.height - eHalfHeight) {
+                if ((pos.y + eHalfHeight) > field.top + field.height) {
                     pos.y = field.top + field.height - eHalfHeight;
                 }
                 spawnCoca(pos);
