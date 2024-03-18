@@ -40,10 +40,13 @@ private:
     sf::Text        m_pos_text;
     float           m_playerLastPos{ 0.f };
     float           m_elapsedTime = 0.0f;
+    float           m_introTime = 5.0f;
     float           m_timeScore = 0.0f;
     float           m_deathTime = 0.0f;
-    bool            m_hasEnd{ false };
+    bool            m_isEnd{ false };
+    bool            m_isIntro{ false };
     bool            m_isSpecial{ false };
+    bool            m_isFiring{ false };
     int             m_playScore{ 0 };
     int             m_finalScore{ 0 };
 
@@ -88,7 +91,8 @@ private:
     void            loadLevel(const std::string& path);
     void            sDestroyOutsideBounds();
     sf::FloatRect   getViewBounds();
-    sf::FloatRect   getPlayBounds();
+    sf::FloatRect   getEnemySpawnBounds();
+    sf::FloatRect   getPlayerSpawnBounds();
     float           randomSpawn(float min, float max);
 
 public:

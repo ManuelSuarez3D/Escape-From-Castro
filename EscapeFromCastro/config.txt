@@ -42,8 +42,9 @@ Texture 	Coca_Atlas   		../assets/Textures/Sprites/Coca_Atlas.png
 Texture 	Coca			../assets/Textures/Sprites/Coca_01.png
 Texture 	Military_Atlas   	../assets/Textures/Sprites/Military_Atlas.png
 Texture 	Military   		../assets/Textures/Sprites/Military_01.png
-Texture 	Montana_Atlas   	../assets/Textures/Sprites/Montana_Atlas.png
-Texture 	Montana_Boat   		../assets/Textures/Sprites/Boat_01.png
+Texture 	Tontana_Idle_Atlas   	../assets/Textures/Sprites/Tontana_Idle_Atlas.png
+Texture 	Tontana_Fire_Atlas   	../assets/Textures/Sprites/Tontana_Fire_Atlas.png
+Texture 	Tontana_Boat   		../assets/Textures/Sprites/Boat_01.png
 Texture 	Tony_Idle_Atlas 	../assets/Textures/Sprites/Tony_Idle_Atlas.png
 Texture 	Tony_Idle 		../assets/Textures/Sprites/Tony_Idle_01.png
 Texture 	Shark_Atlas  		../assets/Textures/Sprites/Shark_Atlas.png
@@ -87,7 +88,7 @@ Sprite Military       		Military	0 0
 Sprite Shark       		Shark		0 0
 Sprite Tony_Idle       		Tony_Idle	0 0
 Sprite Coca       		Coca		0 0
-Sprite Montana_Boat       	Montana_Boat  	0 0
+Sprite Tontana_Boat       	Tontana_Boat  	0 0
 
 #
 # SOUNDS
@@ -98,12 +99,14 @@ JSON                    ../assets/Textures/Sprites/Military_Atlas.json
 JSON                    ../assets/Textures/Sprites/Tony_Idle_Atlas.json
 JSON                    ../assets/Textures/Sprites/Shark_Atlas.json
 JSON			../assets/Textures/Sprites/Coca_Atlas.json
-JSON			../assets/Textures/Sprites/Montana_Atlas.json
+JSON			../assets/Textures/Sprites/Tontana_Idle_Atlas.json
+JSON			../assets/Textures/Sprites/Tontana_Fire_Atlas.json
 
 #
-#  Animation    Name            Texture     		Speed   Repeats
-Animation       Military_Left    Military_Atlas    	12        yes
-Animation       Tony_Idle_Right  Tony_Idle_Atlas  	12        yes
-Animation       Shark_Left  	 Shark_Atlas  		12        yes
-Animation       Coca_Left  	 Coca_Atlas  	  	12        yes
-Animation	Montana_Right	 Montana_Atlas		8 	  yes
+#  Animation    Name            	Texture     		Speed   Repeats
+Animation       Military_Left    	Military_Atlas    	12        yes
+Animation       Tony_Idle_Right  	Tony_Idle_Atlas  	12        yes
+Animation       Shark_Left  	 	Shark_Atlas  		12        yes
+Animation       Coca_Left  	 	Coca_Atlas  	  	12        yes
+Animation	Tontana_Idle_Right	Tontana_Idle_Atlas	9 	  yes
+Animation	Tontana_Fire_Right	Tontana_Fire_Atlas	9 	  yes
