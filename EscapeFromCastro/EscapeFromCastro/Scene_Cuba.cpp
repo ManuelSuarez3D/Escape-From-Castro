@@ -328,6 +328,45 @@ void Scene_Cuba::loadLevel(const std::string& path) {
             sprite.setPosition(pos);
 
         }
+        else if (token == "CurtainTop") {
+            std::string name;
+            sf::Vector2f pos;
+
+            config >> name >> pos.x >> pos.y;
+            auto e = m_entityManager.addEntity("curtaintop");
+            e->addComponent<CTransform>(pos);
+            auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+            sprite.setOrigin(0.f, 0.f);
+            sprite.setPosition(pos);
+
+            }
+        else if (token == "Curtain") {
+            std::string name;
+            sf::Vector2f pos;
+
+            config >> name >> pos.x >> pos.y;
+            auto e = m_entityManager.addEntity("curtain");
+            e->addComponent<CTransform>(pos);
+            auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+            sprite.setOrigin(0.f, 0.f);
+            sprite.setPosition(pos);
+
+        }
+        else if (token == "Frame") {
+            std::string name;
+            sf::Vector2f pos;
+
+            config >> name >> pos.x >> pos.y;
+            auto e = m_entityManager.addEntity("frame");
+            e->addComponent<CTransform>(pos);
+            auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+            sprite.setOrigin(0.f, 0.f);
+            sprite.setPosition(pos);
+
+            }
         else if (token == "World") {
             config >> m_worldBounds.width >> m_worldBounds.height;
         }
@@ -762,7 +801,35 @@ void Scene_Cuba::sRender() {
     sf::Vector2f viewCenter = view.getCenter();
     sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view);
 
+    //for (auto& e : m_entityManager.getEntities("frame")) {
+    //
+    //    if (e->getComponent<CSprite>().has) {
+    //        auto& sprite = e->getComponent<CSprite>().sprite;
+    //        if (e->hasComponent<CTransform>()) {
+    //            auto& tfm = e->getComponent<CTransform>();
+    //            sprite.setPosition(tfm.pos);
+    //            sprite.setRotation(tfm.angle);
+    //        }
+    //        m_game->window().draw(sprite);
+    //    }
+    //}
+
     if (m_isIntro) {
+
+
+        for (auto& e : m_entityManager.getEntities("curtain")) {
+
+            if (e->getComponent<CSprite>().has) {
+                auto& sprite = e->getComponent<CSprite>().sprite;
+                if (e->hasComponent<CTransform>()) {
+                    auto& tfm = e->getComponent<CTransform>();
+                    sprite.setPosition(tfm.pos);
+                    sprite.setRotation(tfm.angle);
+                }
+                m_game->window().draw(sprite);
+            }
+        }
+
         for (auto& e : m_entityManager.getEntities("chapter1")) {
 
             if (e->getComponent<CSprite>().has) {
@@ -774,6 +841,21 @@ void Scene_Cuba::sRender() {
                 }
                 m_game->window().draw(sprite);
             }
+        }
+
+
+    }
+
+    for (auto& e : m_entityManager.getEntities("curtaintop")) {
+
+        if (e->getComponent<CSprite>().has) {
+            auto& sprite = e->getComponent<CSprite>().sprite;
+            if (e->hasComponent<CTransform>()) {
+                auto& tfm = e->getComponent<CTransform>();
+                sprite.setPosition(tfm.pos);
+                sprite.setRotation(tfm.angle);
+            }
+            m_game->window().draw(sprite);
         }
     }
 
@@ -1116,7 +1198,7 @@ void Scene_Cuba::sDoAction(const Command& action) {
                 m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
                 auto spriteSize = sprite.getLocalBounds().getSize();
                 m_player->addComponent<CBoundingBox>(spriteSize);
-                MusicPlayer::getInstance().play("menuTheme");
+                MusicPlayer::getInstance().play("specialTheme");
                 MusicPlayer::getInstance().setVolume(50);
                 m_isSpecial = true;
                 m_special -= 1;
@@ -1186,6 +1268,22 @@ void Scene_Cuba::sMovement(sf::Time dt) {
             auto& tfm = e->getComponent<CTransform>();
 
             tfm.pos -= tfm.vel * dt.asSeconds();
+        }
+    }
+    for (auto& e : m_entityManager.getEntities("curtain")) {
+        if (e->hasComponent<CTransform>()) {
+            auto& tfm = e->getComponent<CTransform>();
+
+            tfm.pos.y -= 100.f * dt.asSeconds();
+        }
+    }
+    if (!m_isIntro) {
+        for (auto& e : m_entityManager.getEntities("curtaintop")) {
+            if (e->hasComponent<CTransform>()) {
+                auto& tfm = e->getComponent<CTransform>();
+    
+                tfm.pos.y -= 50.f * dt.asSeconds();
+            }
         }
     }
 }

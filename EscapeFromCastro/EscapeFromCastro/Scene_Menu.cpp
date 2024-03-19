@@ -17,7 +17,7 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	init();
 
 	MusicPlayer::getInstance().play("menuTheme");
-	MusicPlayer::getInstance().setVolume(50);
+	MusicPlayer::getInstance().setVolume(60);
 
 }
 
@@ -32,9 +32,8 @@ void Scene_Menu::sDoAction(const Command& action) {
 
 			else if (m_menu_overlap[1]){
 				m_isGuide = true;
-
+				//m_menu_overlap[1] = false;
 				if (m_menu_overlap[2]) {
-
 					m_menu_overlap[2] = false;
 					m_menu_overlap[1] = false;
 					m_isGuide = false;
@@ -76,7 +75,7 @@ void Scene_Menu::sRender()
 	sf::View view = window.getView();
 	view.setCenter(window.getSize().x / 2.f, window.getSize().y / 2.f);
 	window.setView(view);
-
+	static bool pingSoundLimit = false;
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view);
 
@@ -114,6 +113,12 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+
+							if (pingSoundLimit != true) {
+								pingSoundLimit = true;
+								SoundPlayer::getInstance().play("menuPing");
+							}
+
 							m_game->window().draw(sprite2);
 							m_menu_overlap[0] = true;
 						}
@@ -151,11 +156,17 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+
+							if (pingSoundLimit != true) {
+								pingSoundLimit = true;
+								SoundPlayer::getInstance().play("menuPing");
+							}
 							m_game->window().draw(sprite2);
 							m_menu_overlap[1] = true;
 
 						}
 						else {
+							SoundPlayer::getInstance().removeStoppedSounds();
 							m_menu_overlap[1] = false;
 							m_game->window().draw(sprite1);
 						}
@@ -189,6 +200,11 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+
+							if (pingSoundLimit != true) {
+								pingSoundLimit = true;
+								SoundPlayer::getInstance().play("menuPing");
+							}
 							m_game->window().draw(sprite2);
 							m_menu_overlap[3] = true;
 
@@ -235,6 +251,11 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+
+							if (pingSoundLimit != true) {
+								pingSoundLimit = true;
+								SoundPlayer::getInstance().play("menuPing");
+							}
 							m_game->window().draw(sprite2);
 							m_menu_overlap[2] = true;
 						}
@@ -248,6 +269,10 @@ void Scene_Menu::sRender()
 		}
 	}
 
+	if (pingSoundLimit == 1 && m_menu_overlap[0] == false && m_menu_overlap[1] == false && m_menu_overlap[2] == false && m_menu_overlap[3] == false) {
+		pingSoundLimit = 0;
+	} else if (m_isGuide && m_menu_overlap[2] == false)
+		pingSoundLimit = 0;
 
 }
 
