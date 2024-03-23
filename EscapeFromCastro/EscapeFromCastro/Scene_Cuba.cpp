@@ -53,33 +53,12 @@ void Scene_Cuba::loadLevel(const std::string& path) {
             auto e = m_entityManager.addEntity("lvl1");
 
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+            e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Cuba_Map"));
+            e->addComponent<CTransform>(sf::Vector2f(pos.x + 1400.f, pos.y + 256.f));
+
             sprite.setOrigin(0.f, 0.f);
             sprite.setPosition(pos);
         }
-        //else if (token == "Coral") {
-        //    std::string name;
-        //    sf::Vector2f pos;
-
-        //    config >> name >> pos.x >> pos.y;
-        //    auto e = m_entityManager.addEntity("coral");
-        //    e->addComponent<CTransform>(pos);
-        //    auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
-
-        //    sprite.setOrigin(0.f, 0.f);
-        //    sprite.setPosition(pos);
-        //}
-        //else if (token == "Island") {
-        //    std::string name;
-        //    sf::Vector2f pos;
-
-        //    config >> name >> pos.x >> pos.y;
-        //    auto e = m_entityManager.addEntity("Island");
-        //    e->addComponent<CTransform>(pos);
-        //    auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
-
-        //    sprite.setOrigin(0.f, 0.f);
-        //    sprite.setPosition(pos);
-        //}
         else if (token == "Special") {
             std::string name;
             sf::Vector2f pos;
@@ -410,8 +389,8 @@ void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
     std::cout << "player pos " << pos;
     m_player->addComponent<CInput>();
 
-    auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tony_Idle")).sprite;
-    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tony_Idle_Right"));
+    auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Fony_Sprite")).sprite;
+    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
 
 
     auto spriteSize = sprite.getLocalBounds().getSize();
@@ -496,10 +475,10 @@ void Scene_Cuba::playerMovement() {
         auto& pPos = m_player->getComponent<CTransform>().pos;
         sf::Vector2f pv{ 0.f,0.f };
         auto& pInput = m_player->getComponent<CInput>();
-        if (pInput.LEFT) pv.x -= 1;
-        if (pInput.RIGHT) pv.x += 1;
-        if (pInput.UP) pv.y -= 1;
-        if (pInput.DOWN) pv.y += 1;
+        if (pInput.LEFT) pv.x -= 1.f;
+        if (pInput.RIGHT) pv.x += 1.f;
+        if (pInput.UP) pv.y -= 0.1f;
+        if (pInput.DOWN) pv.y += 0.1f;
         pv = normalize(pv);
 
         if(pv.x == 0 && pv.y == 0){
@@ -527,7 +506,7 @@ void Scene_Cuba::playerMovement() {
 
 #pragma region System
 void Scene_Cuba::sInit() {
-    resetEntities();
+
 }
 void Scene_Cuba::sRender() {
 
@@ -537,17 +516,33 @@ void Scene_Cuba::sRender() {
 
     std::vector<std::pair<std::shared_ptr<Entity>, float>> entitiesY;
 
-    for (auto& e : m_entityManager.getEntities("lvl1")) {
+   for (auto& e : m_entityManager.getEntities("lvl1")) {
+   
+       if (e->hasComponent<CAnimation>()) {
+           auto& anim = e->getComponent<CAnimation>().animation;
+           auto& tfm = e->getComponent<CTransform>();
+           anim.getSprite().setPosition(tfm.pos);
+           anim.getSprite().setRotation(tfm.angle);
+           m_game->window().draw(anim.getSprite());
+       }
 
-        if (e->getComponent<CSprite>().has) {
+   }
+   for (auto& e : m_entityManager.getEntities("water")) {
 
-            auto& sprite = e->getComponent<CSprite>().sprite;
-            m_game->window().draw(sprite);
-        }
-
-    }
+       if (e->hasComponent<CAnimation>()) {
+           auto& anim = e->getComponent<CAnimation>().animation;
+           auto& tfm = e->getComponent<CTransform>();
+           anim.getSprite().setPosition(tfm.pos);
+           anim.getSprite().setRotation(tfm.angle);
+           m_game->window().draw(anim.getSprite());
+       }
+   }
 
     for (auto& e : m_entityManager.getEntities("player")) {
+        float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
+        entitiesY.push_back(std::make_pair(e, bottomY));
+    }
+    for (auto& e : m_entityManager.getEntities("bullet")) {
         float bottomY = e->getComponent<CTransform>().pos.y + e->getComponent<CBoundingBox>().halfSize.y;
         entitiesY.push_back(std::make_pair(e, bottomY));
     }
@@ -813,51 +808,6 @@ void Scene_Cuba::sRender() {
     //        m_game->window().draw(sprite);
     //    }
     //}
-
-    if (m_isIntro) {
-
-
-        for (auto& e : m_entityManager.getEntities("curtain")) {
-
-            if (e->getComponent<CSprite>().has) {
-                auto& sprite = e->getComponent<CSprite>().sprite;
-                if (e->hasComponent<CTransform>()) {
-                    auto& tfm = e->getComponent<CTransform>();
-                    sprite.setPosition(tfm.pos);
-                    sprite.setRotation(tfm.angle);
-                }
-                m_game->window().draw(sprite);
-            }
-        }
-
-        for (auto& e : m_entityManager.getEntities("chapter1")) {
-
-            if (e->getComponent<CSprite>().has) {
-                auto& sprite = e->getComponent<CSprite>().sprite;
-                if (e->hasComponent<CTransform>()) {
-                    auto& tfm = e->getComponent<CTransform>();
-                    sprite.setPosition(tfm.pos);
-                    sprite.setRotation(tfm.angle);
-                }
-                m_game->window().draw(sprite);
-            }
-        }
-
-
-    }
-
-    for (auto& e : m_entityManager.getEntities("curtaintop")) {
-
-        if (e->getComponent<CSprite>().has) {
-            auto& sprite = e->getComponent<CSprite>().sprite;
-            if (e->hasComponent<CTransform>()) {
-                auto& tfm = e->getComponent<CTransform>();
-                sprite.setPosition(tfm.pos);
-                sprite.setRotation(tfm.angle);
-            }
-            m_game->window().draw(sprite);
-        }
-    }
 
     if (m_life == 0) {
 
@@ -1178,6 +1128,51 @@ void Scene_Cuba::sRender() {
 
     m_score_text.setFillColor(sf::Color::Yellow);
     m_game->window().draw(m_score_text);
+
+    if (m_isIntro) {
+
+
+        for (auto& e : m_entityManager.getEntities("curtain")) {
+
+            if (e->getComponent<CSprite>().has) {
+                auto& sprite = e->getComponent<CSprite>().sprite;
+                if (e->hasComponent<CTransform>()) {
+                    auto& tfm = e->getComponent<CTransform>();
+                    sprite.setPosition(tfm.pos);
+                    sprite.setRotation(tfm.angle);
+                }
+                m_game->window().draw(sprite);
+            }
+        }
+
+        for (auto& e : m_entityManager.getEntities("chapter1")) {
+
+            if (e->getComponent<CSprite>().has) {
+                auto& sprite = e->getComponent<CSprite>().sprite;
+                if (e->hasComponent<CTransform>()) {
+                    auto& tfm = e->getComponent<CTransform>();
+                    sprite.setPosition(tfm.pos);
+                    sprite.setRotation(tfm.angle);
+                }
+                m_game->window().draw(sprite);
+            }
+        }
+
+
+    }
+
+    for (auto& e : m_entityManager.getEntities("curtaintop")) {
+
+        if (e->getComponent<CSprite>().has) {
+            auto& sprite = e->getComponent<CSprite>().sprite;
+            if (e->hasComponent<CTransform>()) {
+                auto& tfm = e->getComponent<CTransform>();
+                sprite.setPosition(tfm.pos);
+                sprite.setRotation(tfm.angle);
+            }
+            m_game->window().draw(sprite);
+        }
+    }
     m_game->window().setView(m_worldView);
 
 }
@@ -1194,7 +1189,7 @@ void Scene_Cuba::sDoAction(const Command& action) {
             { 
                 // Make a function?
                 m_config.scrollSpeed += 50.f;
-                auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tontana_Boat")).sprite;
+                auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tontana_Sprite")).sprite;
                 m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
                 auto spriteSize = sprite.getLocalBounds().getSize();
                 m_player->addComponent<CBoundingBox>(spriteSize);
@@ -1202,21 +1197,29 @@ void Scene_Cuba::sDoAction(const Command& action) {
                 MusicPlayer::getInstance().setVolume(50);
                 m_isSpecial = true;
                 m_special -= 1;
-                auto& pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
-                std::cout << "Before shooting Frame: " << pFrame << std::endl;
+                //auto& pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
+                //std::cout << "Before shooting Frame: " << pFrame << std::endl;
             } 
         }
         else if (action.name() == "SHOOT")
         {
-            if (m_isSpecial == true && !m_isFiring)
-            {
-                m_isFiring = true;
-                // Make a function?
-                auto& pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
-                std::cout << "Current frame: " << pFrame << std::endl;
+
+            if (m_isSpecial == true && m_player->getComponent<CInput>().canShoot) {
+                spawnBullet(m_player);
+                m_player->getComponent<CInput>().shoot = true;
+                m_player->getComponent<CInput>().canShoot = false;
                 m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Fire_Right")).animation.m_currentFrame += m_player->getComponent<CAnimation>().animation.m_currentFrame;
-                std::cout << "After shooting frame: " << pFrame << std::endl;
             }
+
+            //m_isFiring = true;
+            // Make a function?
+            //auto& pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
+            //std::cout << "Current frame: " << pFrame << std::endl;
+            //m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Fire_Right")).animation.m_currentFrame += m_player->getComponent<CAnimation>().animation.m_currentFrame;
+            //pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
+
+            //std::cout << "After shooting frame: " << pFrame << std::endl;
+            
         }
         else if (action.name() == "LEFT") { m_player->getComponent<CInput>().LEFT = true; }
         else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().RIGHT = true; }
@@ -1229,14 +1232,15 @@ void Scene_Cuba::sDoAction(const Command& action) {
         if (action.name() == "LEFT") { m_player->getComponent<CInput>().LEFT = false; }
         else if (action.name() == "SHOOT") { 
             
-            if (m_isSpecial == true && m_isFiring)
-            {
-                m_isFiring = false;
-                auto& pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
-                std::cout << "Current shooting frame: " << pFrame << std::endl;
+                m_player->getComponent<CInput>().canShoot = true;
+
+               // m_isFiring = false;
+               // auto& pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
+               // std::cout << "Current shooting frame: " << pFrame << std::endl;
                 m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right")).animation.m_currentFrame += m_player->getComponent<CAnimation>().animation.m_currentFrame;
-                std::cout << "After end shooting frame: " << pFrame << std::endl;
-            }
+                //pFrame = m_player->getComponent<CAnimation>().animation.m_currentFrame;
+               // std::cout << "After end shooting frame: " << pFrame << std::endl;
+            
             
         }
         else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().RIGHT = false; }
@@ -1270,11 +1274,20 @@ void Scene_Cuba::sMovement(sf::Time dt) {
             tfm.pos -= tfm.vel * dt.asSeconds();
         }
     }
+    for (auto& e : m_entityManager.getEntities("bullet")) {
+        if (e->hasComponent<CTransform>()) {
+            auto& tfm = e->getComponent<CTransform>();
+
+            if (m_elapsedTime > 1.f)
+                tfm.pos += tfm.vel * dt.asSeconds();
+        }
+    }
     for (auto& e : m_entityManager.getEntities("curtain")) {
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
 
-            tfm.pos.y -= 100.f * dt.asSeconds();
+            if (m_elapsedTime > 1.f)
+            tfm.pos.y -= 145.f * dt.asSeconds();
         }
     }
     if (!m_isIntro) {
@@ -1320,7 +1333,7 @@ void Scene_Cuba::sUpdate(sf::Time dt) {
     //
 
     sAnimation(dt);
-    sEnemySpawner(dt);
+    sEntitySpawner(dt);
     sCollisions();
     sMovement(dt);
 
@@ -1331,11 +1344,14 @@ void Scene_Cuba::sAnimation(sf::Time dt) {
 
         if (e->hasComponent<CAnimation>()) {
             auto& anim = e->getComponent<CAnimation>();
-            anim.animation.update(dt);
+            if(!anim.animation.m_isRepeating && !anim.animation.isLastFrame())
+                anim.animation.update(dt);
+            else if (anim.animation.m_isRepeating)
+                anim.animation.update(dt);
         }
     }
 }
-void Scene_Cuba::sEnemySpawner(sf::Time dt) {
+void Scene_Cuba::sEntitySpawner(sf::Time dt) {
     sf::FloatRect field = getEnemySpawnBounds();
 
     std::exponential_distribution<float> exp(1.f);
@@ -1378,6 +1394,20 @@ void Scene_Cuba::sEnemySpawner(sf::Time dt) {
             spawnEnemy(spawnPos);
     }
 }
+void Scene_Cuba::sLifespan() {
+    // move all entities
+    for (auto e : m_entityManager.getEntities("bullet")) {
+        auto& lifespan = e->getComponent<CLifespan>();
+        if (lifespan.has) {
+            lifespan.remaining -= 1;
+            if (lifespan.remaining < 0) {
+                //e->addComponent<CAnimation>(m_game->assets().getAnimation("Explosion"), false);
+                e->getComponent<CLifespan>().has = false;
+                e->getComponent<CTransform>().vel.x *= 0.1f;
+            }
+        }
+    }
+}
 #pragma endregion
 
 #pragma region Utility
@@ -1389,8 +1419,8 @@ void Scene_Cuba::specialAbility() {
     float elapsedTime = flashClock.getElapsedTime().asSeconds();
 
     if (elapsedTime > flashDuration) {
-       auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tony_Idle")).sprite;
-       m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tony_Idle_Right"));
+       auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Fony_Sprite")).sprite;
+       m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
        auto spriteSize = sprite.getLocalBounds().getSize();
        m_player->addComponent<CBoundingBox>(spriteSize);
 
@@ -1439,7 +1469,7 @@ void Scene_Cuba::resetEntities() {
 }
 #pragma endregion
 
-#pragma region sEnemySpawner
+#pragma region sEntitySpawner
 float Scene_Cuba::randomSpawn(float min, float max) {
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -1542,8 +1572,8 @@ void Scene_Cuba::spawnBoat(sf::Vector2f pos) {
     sprite.setTexture(Assets::getInstance().getTexture("Military"));
     auto spriteSize = sprite.getLocalBounds().getSize();
     raceCarL->addComponent<CBoundingBox>(spriteSize);
-    std::cout << "Boat created at: " << pos << std::endl;
-    raceCarL->addComponent<CType>().boat += 1;
+
+
 }
 void Scene_Cuba::spawnCoral(sf::Vector2f pos) {
     auto raceCarL = m_entityManager.addEntity("enemyCoral");
@@ -1554,8 +1584,15 @@ void Scene_Cuba::spawnCoral(sf::Vector2f pos) {
     sprite.setTexture(Assets::getInstance().getTexture("Coral"));
     auto spriteSize = sprite.getLocalBounds().getSize();
     raceCarL->addComponent<CBoundingBox>(spriteSize);
-    std::cout << "Coral created at: " << pos << std::endl;
-    raceCarL->addComponent<CType>().coral += 1;
+
+
+    auto waterAnim = m_entityManager.addEntity("water");
+    auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Coral_Sprite")).sprite;
+    auto waterSpriteSize = waterSprite.getLocalBounds().getSize();
+    waterAnim->addComponent<CTransform>(sf::Vector2f(pos.x, pos.y + (spriteSize.y / 2) + waterSpriteSize.y / 4), sf::Vector2f{ m_config.enemySpeed, 0.f });
+    waterAnim->addComponent<CAnimation>(Assets::getInstance().getAnimation("Water_Coral"));
+    waterAnim->addComponent<CBoundingBox>(waterSpriteSize);
+    waterAnim->addComponent<CType>().coral = true;
 
 }
 void Scene_Cuba::spawnIsland(sf::Vector2f pos) {
@@ -1567,11 +1604,13 @@ void Scene_Cuba::spawnIsland(sf::Vector2f pos) {
     auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Island")).sprite;
     sprite.setTexture(Assets::getInstance().getTexture("Island"));
     auto spriteSize = sprite.getLocalBounds().getSize();
-
     raceCarL->addComponent<CBoundingBox>(spriteSize);
 
-    std::cout << "Island created at: " << pos << std::endl;
-    raceCarL->addComponent<CType>().island += 1;
+    auto waterAnim = m_entityManager.addEntity("water");
+    auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Tree_Sprite")).sprite;
+    auto waterSpriteSize = waterSprite.getLocalBounds().getSize();
+    waterAnim->addComponent<CTransform>(sf::Vector2f(pos.x, pos.y + (spriteSize.y / 2) + waterSpriteSize.y / 4), sf::Vector2f{ m_config.enemySpeed, 0.f });
+    waterAnim->addComponent<CAnimation>(Assets::getInstance().getAnimation("Water_Tree"));
 
 }
 void Scene_Cuba::spawnShark(sf::Vector2f pos) {
@@ -1584,8 +1623,7 @@ void Scene_Cuba::spawnShark(sf::Vector2f pos) {
     sprite.setTexture(Assets::getInstance().getTexture("Shark"));
     auto spriteSize = sprite.getLocalBounds().getSize();
     raceCarL->addComponent<CBoundingBox>(spriteSize);
-    std::cout << "Shark created at: " << pos << std::endl;
-    raceCarL->addComponent<CType>().shark += 1;
+
 }
 void Scene_Cuba::spawnCoca(sf::Vector2f pos) {
 
@@ -1596,24 +1634,55 @@ void Scene_Cuba::spawnCoca(sf::Vector2f pos) {
     sprite.setTexture(Assets::getInstance().getTexture("Coca"));
     auto spriteSize = sprite.getLocalBounds().getSize();
     raceCarL->addComponent<CBoundingBox>(spriteSize);
-    std::cout << "Coca created at: " << pos << std::endl;
-    raceCarL->addComponent<CType>().coca += 1;
+
+
+    auto waterAnim = m_entityManager.addEntity("water");
+    auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Coca_Sprite")).sprite;
+    auto waterSpriteSize = waterSprite.getLocalBounds().getSize();
+    waterAnim->addComponent<CTransform>(sf::Vector2f(pos.x, pos.y + (spriteSize.y / 2) + waterSpriteSize.y / 5), sf::Vector2f{ m_config.enemySpeed, 0.f });
+    waterAnim->addComponent<CAnimation>(Assets::getInstance().getAnimation("Water_Coca"));
+    waterAnim->addComponent<CBoundingBox>(waterSpriteSize);
+    waterAnim->addComponent<CType>().coca = true;
+}
+void Scene_Cuba::spawnBullet(std::shared_ptr<Entity> e) {
+    auto tx = e->getComponent<CTransform>();
+    sf::Vector2f bPos { tx.pos.x + 20.f, tx.pos.y };
+    if (tx.has) {
+        auto bullet = m_entityManager.addEntity("bullet");
+        auto& sprite = bullet->addComponent<CSprite>().sprite;
+        bullet->addComponent<CSprite>(Assets::getInstance().getTexture("Bullet")).sprite;
+        bullet->addComponent<CTransform>(bPos);
+        sprite.setTexture(Assets::getInstance().getTexture("Bullet"));
+        auto spriteSize = sprite.getLocalBounds().getSize();
+
+        bullet->addComponent<CBoundingBox>(spriteSize);
+        bullet->addComponent<CLifespan>(50);
+        bullet->getComponent<CTransform>().vel.x = 1.5 * m_config.bulletspeed; 
+        bullet->getComponent<CTransform>().vel.y = 0;
+        std::cout << "Bullet spawned at : " << tx.pos << std::endl;
+    }
 }
 #pragma endregion
 
 #pragma region sCollisions
 void Scene_Cuba::checkCollisions() {
-    for (auto e : m_entityManager.getEntities("enemyShark")) {
+    for (auto& e : m_entityManager.getEntities("enemyShark")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "shark");
         if (overlap.x > 0 and overlap.y > 0) {
             if (m_isSpecial) {
-                e->destroy();
+                //e->destroy();
+                e->getComponent<CTransform>().vel.x = 0.f;
+                e->removeComponent<CBoundingBox>();
+                e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Death"));
                 m_playScore += 10.f;
             }
             else {
+                e->getComponent<CTransform>().vel.x = 0.f;
+                e->removeComponent<CBoundingBox>();
+                e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Death"));
                 m_player->removeComponent<CBoundingBox>();
                 m_player->addComponent<CState>().state = "dead";
-                e->destroy();
+                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
                 m_playScore += 10.f;
                 if (m_life != 0) {
                     m_life -= 1;
@@ -1622,10 +1691,11 @@ void Scene_Cuba::checkCollisions() {
             checkPlayerState();
         }
     }
-    for (auto e : m_entityManager.getEntities("enemyBoat")) {
+    for (auto& e : m_entityManager.getEntities("enemyBoat")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
+            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
             if (m_life != 0) {
                 m_life -= 1;
@@ -1633,10 +1703,19 @@ void Scene_Cuba::checkCollisions() {
             checkPlayerState();
         }
     }
-    for (auto e : m_entityManager.getEntities("enemyCoral")) {
+    for (auto& e : m_entityManager.getEntities("enemyCoral")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "coral");
         if (overlap.x > 0 and overlap.y > 0) {
             if (m_isSpecial) {
+
+                for (auto& e2 : m_entityManager.getEntities("water")) {
+                    auto overlap = Physics::getOverlapEntity(e2, e);
+                    if (overlap.x > 0 and overlap.y > 0) {
+                        if (e2->getComponent<CType>().coral) {
+                            e2->destroy();
+                        }
+                    }
+                }
                 e->destroy();
                 if (m_playScore >= 5) {
                     m_playScore -= 5.f;
@@ -1647,7 +1726,16 @@ void Scene_Cuba::checkCollisions() {
             }
             else {
                 m_player->removeComponent<CBoundingBox>();
+                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
                 m_player->addComponent<CState>().state = "dead";
+                for (auto& e2 : m_entityManager.getEntities("water")) {
+                    auto overlap = Physics::getOverlapEntity(e2, e);
+                    if (overlap.x > 0 and overlap.y > 0) {
+                        if (e2->getComponent<CType>().coral) {
+                            e2->destroy();
+                        }
+                    }
+                }
                 e->destroy();
                 if (m_playScore >= 5) {
                     m_playScore -= 5.f;
@@ -1662,10 +1750,11 @@ void Scene_Cuba::checkCollisions() {
             checkPlayerState();
         }
     }
-    for (auto e : m_entityManager.getEntities("enemyIsland")) {
+    for (auto& e : m_entityManager.getEntities("enemyIsland")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "island");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
+            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
 
             if (m_life != 0) {
@@ -1675,12 +1764,20 @@ void Scene_Cuba::checkCollisions() {
             checkPlayerState();
         }
     }
-    for (auto e : m_entityManager.getEntities("coca")) {
+    for (auto& e : m_entityManager.getEntities("coca")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "coca");
         if (overlap.x > 0 and overlap.y > 0) {
 
             if (m_special != 3) {
                 m_special += 1;
+                for (auto& e2 : m_entityManager.getEntities("water")) {
+                    auto overlap = Physics::getOverlapEntity(e2, e);
+                    if (overlap.x > 0 and overlap.y > 0) {
+                        if (e2->getComponent<CType>().coral) {
+                            e2->destroy();
+                        }
+                    }
+                }
                 e->destroy();
             }
 
@@ -1694,31 +1791,19 @@ void Scene_Cuba::checkPlayerState() {
     sf::Vector2f spawnPos{ m_worldView.getSize().x / 2.f, m_worldView.getSize().y / 2.f };
 
     if (pST == "dead") {
+
+        if (m_life == 0)
+            m_player->destroy();
+        
         const float flashDuration = 5.0f;
         static sf::Clock flashClock;
 
         float elapsedTime = flashClock.getElapsedTime().asSeconds();
-        auto& anim = m_player->getComponent<CAnimation>();
         m_player->removeComponent<CBoundingBox>();
 
-        if (elapsedTime < flashDuration) {
-            if (static_cast<int>(elapsedTime * 5) % 2 == 0) {
-                sf::Color color = anim.getColor();
-                color.a = 128;
-                anim.setColor(color);
-            }
-            else {
-                sf::Color color = anim.getColor();
-                color.a = 255;
-                anim.setColor(color);
-            }
-        }
-        else {
-            sf::Color color = anim.getColor();
-            color.a = 255;
-            anim.setColor(color);
+        if (elapsedTime >  flashDuration) {
             flashClock.restart();
-
+            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
             auto& sprite = m_player->getComponent<CSprite>().sprite;
             auto spriteSize = sprite.getLocalBounds().getSize();
 

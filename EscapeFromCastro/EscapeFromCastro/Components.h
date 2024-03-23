@@ -122,21 +122,34 @@ struct CInput : public Component
     bool LEFT{ false };
     bool RIGHT{ false };
     bool DOWN{ false };
+    bool shoot{ false };
+    bool canShoot{ true };
 
     unsigned char dir{ 0 };
 
     CInput() = default;
 };
 
+// Not necessary?
 struct CType : public Component
 {
-    int boat{ 0 };
-    int shark{ 0 };
-    int island{ 0 };
-    int coral{ 0 };
-    int coca{ 0 };
+    bool boat{ false };
+    bool shark{ false };
+    bool island{ false };
+    bool coral{ false };
+    bool coca{ false };
 
     CType() = default;
+};
+
+struct CLifespan : public Component
+{
+    int total{ 0 };
+    int remaining{ 0 };
+
+    CLifespan() = default;
+    CLifespan(int t) : total(t), remaining{ t } {}
+
 };
 
 struct CScore : public Component

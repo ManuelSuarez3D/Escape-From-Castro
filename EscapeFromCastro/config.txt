@@ -44,16 +44,27 @@ Texture 	Military_Atlas   	../assets/Textures/Sprites/Military_Atlas.png
 Texture 	Military   		../assets/Textures/Sprites/Military_01.png
 Texture 	Tontana_Idle_Atlas   	../assets/Textures/Sprites/Tontana_Idle_Atlas.png
 Texture 	Tontana_Fire_Atlas   	../assets/Textures/Sprites/Tontana_Fire_Atlas.png
-Texture 	Tontana_Boat   		../assets/Textures/Sprites/Boat_01.png
-Texture 	Tony_Idle_Atlas 	../assets/Textures/Sprites/Tony_Idle_Atlas.png
-Texture 	Tony_Idle 		../assets/Textures/Sprites/Tony_Idle_01.png
+Texture 	Tontana_Sprite   	../assets/Textures/Sprites/Tontana_Sprite.png
+Texture 	Fony_Idle_Atlas 	../assets/Textures/Sprites/Fony_Idle_Atlas.png
+Texture 	Fony_Hit_Atlas 		../assets/Textures/Sprites/Fony_Hit_Atlas.png
+Texture 	Fony_Sprite 		../assets/Textures/Sprites/Fony_Sprite.png
 Texture 	Shark_Atlas  		../assets/Textures/Sprites/Shark_Atlas.png
+Texture 	Shark_Death_Atlas  	../assets/Textures/Sprites/Shark_Death_Atlas.png
+Texture		Cuba_Map_Atlas		../assets/Textures/Sprites/Cuba_Map_Atlas.png
 Texture 	Shark   		../assets/Textures/Sprites/Shark_01.png
 Texture 	Coral       		../assets/Textures/Sprites/Coral_01.png
 Texture 	Island        		../assets/Textures/Sprites/Island_01.png
+Texture 	Water_Tree_Atlas        ../assets/Textures/Sprites/Water_Tree_Atlas.png
+Texture 	Water_Tree_Sprite        ../assets/Textures/Sprites/Water_Tree_01.png
+Texture 	Water_Coral_Atlas        ../assets/Textures/Sprites/Water_Coral_Atlas.png
+Texture 	Water_Coral_Sprite        ../assets/Textures/Sprites/Water_Coral_01.png
+Texture 	Water_Coca_Atlas        ../assets/Textures/Sprites/Water_Coca_Atlas.png
+Texture 	Water_Coca_Sprite        ../assets/Textures/Sprites/Water_Coca_01.png
 Texture 	Curtain			../assets/Textures/curtain.png
 Texture 	CurtainTop		../assets/Textures/curtain_top.png
 Texture 	Frame			../assets/Textures/frame.png
+Texture 	Bullet			../assets/Textures/bullet.png
+
 
 # Sprites
 Sprite Menu       		Menu   		0 0 
@@ -89,26 +100,40 @@ Sprite Island  		       	Island		0 0
 Sprite Coral	         	Coral		0 0
 Sprite Military       		Military	0 0
 Sprite Shark       		Shark		0 0
-Sprite Tony_Idle       		Tony_Idle	0 0
+Sprite Fony_Sprite       	Fony_Sprite	0 0
 Sprite Coca       		Coca		0 0
-Sprite Tontana_Boat       	Tontana_Boat  	0 0
-
+Sprite Tontana_Sprite       	Tontana_Sprite  0 0
+Sprite Water_Tree_Sprite       	Water_Tree_Sprite  	0 0
+Sprite Water_Coral_Sprite       Water_Coral_Sprite  	0 0
+Sprite Water_Coca_Sprite       Water_Coca_Sprite  	0 0
 #
 # SOUNDS
 Sound menuPing               ../assets/Sound/wav_menuPing.wav
 
 JSON                    ../assets/Textures/Sprites/Military_Atlas.json
-JSON                    ../assets/Textures/Sprites/Tony_Idle_Atlas.json
+JSON			../assets/Textures/Sprites/Cuba_Map_Atlas.json
 JSON                    ../assets/Textures/Sprites/Shark_Atlas.json
+JSON                    ../assets/Textures/Sprites/Shark_Death_Atlas.json
 JSON			../assets/Textures/Sprites/Coca_Atlas.json
 JSON			../assets/Textures/Sprites/Tontana_Idle_Atlas.json
 JSON			../assets/Textures/Sprites/Tontana_Fire_Atlas.json
+JSON			../assets/Textures/Sprites/Fony_Idle_Atlas.json
+JSON			../assets/Textures/Sprites/Fony_Hit_Atlas.json
+JSON			../assets/Textures/Sprites/Water_Tree_Atlas.json
+JSON			../assets/Textures/Sprites/Water_Coral_Atlas.json
+JSON			../assets/Textures/Sprites/Water_Coca_Atlas.json
 
 #
 #  Animation    Name            	Texture     		Speed   Repeats
 Animation       Military_Left    	Military_Atlas    	12        yes
-Animation       Tony_Idle_Right  	Tony_Idle_Atlas  	12        yes
 Animation       Shark_Left  	 	Shark_Atlas  		12        yes
-Animation       Coca_Left  	 	Coca_Atlas  	  	12        yes
+Animation      Shark_Death  	 	Shark_Death_Atlas  	9        no	
+Animation       Coca_Left  	 	Coca_Atlas  	  	3        yes
+Animation	Cuba_Map		Cuba_Map_Atlas		3	yes
 Animation	Tontana_Idle_Right	Tontana_Idle_Atlas	9 	  yes
 Animation	Tontana_Fire_Right	Tontana_Fire_Atlas	9 	  yes
+Animation	Fony_Idle_Right		Fony_Idle_Atlas		12 	  yes
+Animation	Fony_Hit_Right		Fony_Hit_Atlas		12 	  yes
+Animation	Water_Tree		Water_Tree_Atlas	3	yes
+Animation	Water_Coral		Water_Coral_Atlas	3	yes
+Animation	Water_Coca		Water_Coca_Atlas	3	yes

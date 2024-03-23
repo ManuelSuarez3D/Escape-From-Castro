@@ -10,7 +10,7 @@
 
 class EntityManager;
 
-using ComponentTuple = std::tuple<CShape, CAnimation, CType, CSprite, CState, CTransform, CBoundingBox, CInput, CScore, CGun, CMissiles>;
+using ComponentTuple = std::tuple<CShape, CAnimation, CType, CSprite, CState, CTransform, CBoundingBox, CInput, CScore, CGun, CMissiles, CLifespan>;
 
 class Entity {
 private:

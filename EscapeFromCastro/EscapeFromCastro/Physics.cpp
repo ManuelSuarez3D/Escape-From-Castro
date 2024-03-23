@@ -35,7 +35,16 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
     if (abb.has && bbb.has)
     {
-        if (entityName == "shark") {
+        if (entityName == "default") {
+
+            if (abb.has && bbb.has)
+            {
+                float dx = std::abs(atx.pos.x - btx.pos.x);
+                float dy = std::abs(atx.pos.y - btx.pos.y);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, abb.halfSize.y + bbb.halfSize.y - dy);
+            }
+        }
+        else if (entityName == "shark") {
 
             float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;

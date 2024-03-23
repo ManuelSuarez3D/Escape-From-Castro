@@ -17,6 +17,7 @@ struct LevelConfig {
     float       scrollSpeed{ 100.f };
     float       enemySpeed{ 200.f };
     float       playerSpeed{ 200.f };
+    float       bulletspeed{ 300.f };
 
     std::map<std::string,
         std::vector<std::pair<float, sf::Time>>> directions;
@@ -85,8 +86,10 @@ private:
     void            spawnIsland(sf::Vector2f pos);
     void            spawnShark(sf::Vector2f pos);
     void            spawnCoca(sf::Vector2f pos);
-    void            sEnemySpawner(sf::Time dt);
+    void            spawnBullet(std::shared_ptr<Entity> e);
+    void            sEntitySpawner(sf::Time dt);
     void            sInit();
+    void            sLifespan();
     void            specialAbility();
     void            loadLevel(const std::string& path);
     void            sDestroyOutsideBounds();

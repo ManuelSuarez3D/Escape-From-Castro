@@ -1,6 +1,2 @@
-﻿  Scene_Cuba.cpp
-C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1611,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1617,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1642,36): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1653,36): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-  EscapeFromCastro.vcxproj -> C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\x64\Debug\EscapeFromCastro.exe
+﻿  Physics.cpp
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Physics.cpp(43,60): error C2059: syntax error: '.'

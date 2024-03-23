@@ -1,6 +1,6 @@
 { "frames": [
    {
-    "filename": "Coca_Left (0).aseprite",
+    "filename": "Coca_Left (1).aseprite",
     "frame": { "x": 0, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
@@ -9,7 +9,7 @@
     "duration": 100
    },
    {
-    "filename": "Coca_Left (1).aseprite",
+    "filename": "Coca_Left (2).aseprite",
     "frame": { "x": 20, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
@@ -18,17 +18,8 @@
     "duration": 100
    },
    {
-    "filename": "Coca_Left (2).aseprite",
-    "frame": { "x": 40, "y": 0, "w": 20, "h": 16 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
-    "sourceSize": { "w": 20, "h": 16 },
-    "duration": 100
-   },
-   {
     "filename": "Coca_Left (3).aseprite",
-    "frame": { "x": 60, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 40, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -46,7 +37,7 @@
    },
    {
     "filename": "Coca_Left (5).aseprite",
-    "frame": { "x": 60, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 80, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -55,7 +46,7 @@
    },
    {
     "filename": "Coca_Left (6).aseprite",
-    "frame": { "x": 40, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 100, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -64,7 +55,7 @@
    },
    {
     "filename": "Coca_Left (7).aseprite",
-    "frame": { "x": 40, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 120, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -73,7 +64,7 @@
    },
    {
     "filename": "Coca_Left (8).aseprite",
-    "frame": { "x": 40, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 140, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -82,7 +73,7 @@
    },
    {
     "filename": "Coca_Left (9).aseprite",
-    "frame": { "x": 80, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 160, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -91,7 +82,7 @@
    },
    {
     "filename": "Coca_Left (10).aseprite",
-    "frame": { "x": 80, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 180, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -100,7 +91,16 @@
    },
    {
     "filename": "Coca_Left (11).aseprite",
-    "frame": { "x": 80, "y": 0, "w": 20, "h": 16 },
+    "frame": { "x": 200, "y": 0, "w": 20, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
+    "sourceSize": { "w": 20, "h": 16 },
+    "duration": 100
+   },
+   {
+    "filename": "Coca_Left (12).aseprite",
+    "frame": { "x": 220, "y": 0, "w": 20, "h": 16 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 16 },
@@ -113,15 +113,10 @@
   "version": "1.x-dev",
   "image": "Coca_Atlas.png",
   "format": "RGBA8888",
-  "size": { "w": 100, "h": 16 },
+  "size": { "w": 240, "h": 16 },
   "scale": "1",
   "frameTags": [
    { "name": "Coca_Left", "from": 0, "to": 11, "direction": "forward", "color": "#000000ff" }
-  ],
-  "layers": [
-   { "name": "Layer", "opacity": 255, "blendMode": "normal" }
-  ],
-  "slices": [
   ]
  }
 }
