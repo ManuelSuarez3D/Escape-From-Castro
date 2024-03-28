@@ -6,7 +6,7 @@ Window  900 512
 # Font    main            ../assets/fonts/Sansation.ttf
 Font    Arcade          ../assets/fonts/arcadeclassic.regular.ttf
 
-# Music gameTheme         ../assets/Music/menu.ogg
+Music gameTheme         ../assets/Music/menu.ogg
 # Music missionTheme      ../assets/Music/tweener.ogg
 
 # Textures
@@ -14,57 +14,41 @@ Texture 	Menu      		../assets/Textures/menu.png
 Texture 	Level1      		../assets/Textures/cuba.png
 Texture 	Start01         	../assets/Textures/start_01.png
 Texture 	Start02         	../assets/Textures/start_02.png
-Texture 	HowToPlay01     	../assets/Textures/howtoplay_01.png
-Texture 	HowToPlay02     	../assets/Textures/howtoplay_02.png
+Texture 	Controls01     		../assets/Textures/controls_01.png
+Texture 	Controls02     		../assets/Textures/controls_02.png
 Texture 	Quit01          	../assets/Textures/quit_01.png
 Texture 	Quit02          	../assets/Textures/quit_02.png
 Texture 	Restart01       	../assets/Textures/restart_01.png
 Texture 	Restart02       	../assets/Textures/restart_02.png
 Texture 	Back01          	../assets/Textures/back_01.png
 Texture 	Back02          	../assets/Textures/back_02.png
-Texture 	Back03          	../assets/Textures/back_03.png
-Texture 	Back04          	../assets/Textures/back_04.png
-Texture 	Instructions    	../assets/Textures/instructions.png
-Texture 	Special      		../assets/Textures/ui_special.png
-Texture 	Score          		../assets/Textures/ui_score.png
-Texture 	Hp01          		../assets/Textures/ui_hp01.png
-Texture 	Hp02          		../assets/Textures/ui_hp02.png
-Texture 	Hp03          		../assets/Textures/ui_hp03.png
-Texture 	Special01     		../assets/Textures/ui_special01.png
-Texture 	Special02     		../assets/Textures/ui_special02.png
-Texture 	Special03     		../assets/Textures/ui_special03.png
-Texture 	Pause          		../assets/Textures/pause_button.png
-Texture 	Play          		../assets/Textures/play_button.png
-Texture 	Exit          		../assets/Textures/exit_button.png
-Texture 	Chapter01       	../assets/Textures/chapter_01.png
-Texture 	GameOver        	../assets/Textures/gameover.png
-Texture 	Coca_Atlas   		../assets/Textures/Sprites/Coca_Atlas.png
+Texture 	Instructions    	../assets/Textures/instructions_01.png
+Texture 	UiSpecial      		../assets/Textures/ui_special.png
+Texture 	UiScore          	../assets/Textures/ui_score.png
+Texture 	UiHp01          	../assets/Textures/ui_hp01.png
+Texture 	UiHp02          	../assets/Textures/ui_hp02.png
+Texture 	UiHp03          	../assets/Textures/ui_hp03.png
+Texture 	UiCocaine01     	../assets/Textures/ui_cocaine01.png
+Texture 	UiCocaine02     	../assets/Textures/ui_cocaine02.png
+Texture 	UiCocaine03    		../assets/Textures/ui_cocaine03.png
+Texture 	Chapter1a       	../assets/Textures/chapter_01a.png
+Texture 	Chapter1b       	../assets/Textures/chapter_01b.png
+Texture 	GameOverT        	../assets/Textures/gameover_01.png
+Texture 	Menu01        		../assets/Textures/menu_01.png
+Texture 	Menu02       		../assets/Textures/menu_02.png
+Texture 	MenuT        		../assets/Textures/menutitle.png
 Texture 	Coca			../assets/Textures/Sprites/Coca_01.png
+<<<<<<< Updated upstream
 Texture 	Military_Atlas   	../assets/Textures/Sprites/Military_Atlas.png
 Texture 	Military   		../assets/Textures/Sprites/Military_01.png
-Texture 	Tontana_Idle_Atlas   	../assets/Textures/Sprites/Tontana_Idle_Atlas.png
-Texture 	Tontana_Fire_Atlas   	../assets/Textures/Sprites/Tontana_Fire_Atlas.png
-Texture 	Tontana_Sprite   	../assets/Textures/Sprites/Tontana_Sprite.png
-Texture 	Fony_Idle_Atlas 	../assets/Textures/Sprites/Fony_Idle_Atlas.png
-Texture 	Fony_Hit_Atlas 		../assets/Textures/Sprites/Fony_Hit_Atlas.png
-Texture 	Fony_Sprite 		../assets/Textures/Sprites/Fony_Sprite.png
+Texture 	Montana_Atlas   	../assets/Textures/Sprites/Montana_Atlas.png
+Texture 	Montana_Boat   		../assets/Textures/Sprites/Boat_01.png
+Texture 	Tony_Idle_Atlas 	../assets/Textures/Sprites/Tony_Idle_Atlas.png
+Texture 	Tony_Idle 		../assets/Textures/Sprites/Tony_Idle_01.png
 Texture 	Shark_Atlas  		../assets/Textures/Sprites/Shark_Atlas.png
-Texture 	Shark_Death_Atlas  	../assets/Textures/Sprites/Shark_Death_Atlas.png
-Texture		Cuba_Map_Atlas		../assets/Textures/Sprites/Cuba_Map_Atlas.png
 Texture 	Shark   		../assets/Textures/Sprites/Shark_01.png
 Texture 	Coral       		../assets/Textures/Sprites/Coral_01.png
 Texture 	Island        		../assets/Textures/Sprites/Island_01.png
-Texture 	Water_Tree_Atlas        ../assets/Textures/Sprites/Water_Tree_Atlas.png
-Texture 	Water_Tree_Sprite        ../assets/Textures/Sprites/Water_Tree_01.png
-Texture 	Water_Coral_Atlas        ../assets/Textures/Sprites/Water_Coral_Atlas.png
-Texture 	Water_Coral_Sprite        ../assets/Textures/Sprites/Water_Coral_01.png
-Texture 	Water_Coca_Atlas        ../assets/Textures/Sprites/Water_Coca_Atlas.png
-Texture 	Water_Coca_Sprite        ../assets/Textures/Sprites/Water_Coca_01.png
-Texture 	Curtain			../assets/Textures/curtain.png
-Texture 	CurtainTop		../assets/Textures/curtain_top.png
-Texture 	Frame			../assets/Textures/frame.png
-Texture 	Bullet			../assets/Textures/bullet.png
-
 
 # Sprites
 Sprite Menu       		Menu   		0 0 
@@ -100,40 +84,109 @@ Sprite Island  		       	Island		0 0
 Sprite Coral	         	Coral		0 0
 Sprite Military       		Military	0 0
 Sprite Shark       		Shark		0 0
-Sprite Fony_Sprite       	Fony_Sprite	0 0
+Sprite Tony_Idle       		Tony_Idle	0 0
 Sprite Coca       		Coca		0 0
-Sprite Tontana_Sprite       	Tontana_Sprite  0 0
+Sprite Montana_Boat       	Montana_Boat  	0 0
+=======
+Texture 	Shark   		../assets/Textures/Sprites/Shark_01.png
+Texture 	Coral       		../assets/Textures/Sprites/Coral_01.png
+Texture 	Island        		../assets/Textures/Sprites/Island_01.png
+Texture 	Bullet			../assets/Textures/Sprites/bullet.png
+Texture 	Military   		../assets/Textures/Sprites/Military_01.png
+Texture 	Tontana_Sprite   	../assets/Textures/Sprites/Tontana_Sprite.png
+Texture 	Fony_Sprite 		../assets/Textures/Sprites/Fony_Sprite.png
+Texture 	Water_Tree_Sprite       ../assets/Textures/Sprites/Water_Tree_01.png
+Texture 	Water_Coral_Sprite      ../assets/Textures/Sprites/Water_Coral_01.png
+Texture 	Water_Coca_Sprite       ../assets/Textures/Sprites/Water_Coca_01.png
+Texture 	Shark_Atlas  		../assets/Textures/Sprites/Shark_Atlas.png
+Texture 	Shark_Death_Atlas  	../assets/Textures/Sprites/Shark_Death_Atlas.png
+Texture		Cuba_Map_Atlas		../assets/Textures/Sprites/Cuba_Map_Atlas.png
+Texture 	Water_Tree_Atlas        ../assets/Textures/Sprites/Water_Tree_Atlas.png
+Texture 	Water_Coral_Atlas       ../assets/Textures/Sprites/Water_Coral_Atlas.png
+Texture 	Fony_Idle_Atlas 	../assets/Textures/Sprites/Fony_Idle_Atlas.png
+Texture 	Fony_Hit_Atlas 		../assets/Textures/Sprites/Fony_Hit_Atlas.png
+Texture 	Water_Coca_Atlas        ../assets/Textures/Sprites/Water_Coca_Atlas.png
+Texture 	Tontana_Idle_Atlas   	../assets/Textures/Sprites/Tontana_Idle_Atlas.png
+Texture 	Tontana_Fire_Atlas   	../assets/Textures/Sprites/Tontana_Fire_Atlas.png
+Texture 	Military_Atlas   	../assets/Textures/Sprites/Military_Atlas.png
+Texture 	Coca_Atlas   		../assets/Textures/Sprites/Coca_Atlas.png
+Texture 	Curtain			../assets/Textures/curtain.png
+Texture 	CurtainTop		../assets/Textures/curtain_top.png
+
+# Sprites
+Sprite Menu       		Menu   			0 0 
+Sprite Level1       		Level1   		0 0
+Sprite Start01         		Start01			0 0
+Sprite Start02         		Start02			0 0
+Sprite Controls01         	Controls01		0 0
+Sprite Controls02         	Controls02		0 0 
+Sprite Quit01          		Quit01			0 0 
+Sprite Quit02        		Quit02			0 0
+Sprite Back01          		Back01			0 0 
+Sprite Back02        		Back02			0 0
+Sprite Restart01          	Restart01		0 0 
+Sprite Restart02        	Restart02		0 0
+Sprite Instructions		Instructions		0 0
+Sprite GameOverT          	GameOverT		0 0
+Sprite Chapter1a         	Chapter1a		0 0
+Sprite Chapter1b         	Chapter1b		0 0
+Sprite Menu01			Menu01			0 0
+Sprite Menu02			Menu02			0 0
+Sprite MenuT			MenuT			0 0
+Sprite UiSpecial       		UiSpecial		0 0
+Sprite UiScore       		UiScore			0 0
+Sprite UiHp01          		Hp01			0 0
+Sprite UiHp02          		Hp02			0 0
+Sprite UiHp03          		Hp03			0 0
+Sprite UiCocaine01         	UiCocaine01		0 0
+Sprite UiCocaine02         	UiCocaine02		0 0
+Sprite UiCocaine03         	UiCocaine03		0 0
+
+Sprite Island  		       	Island			0 0
+Sprite Coral	         	Coral			0 0
+Sprite Military       		Military		0 0
+Sprite Shark       		Shark			0 0
+Sprite Coca       		Coca			0 0
+Sprite Bullet       		Bullet			0 0
+
+Sprite Fony_Sprite       	Fony_Sprite		0 0
+Sprite Tontana_Sprite       	Tontana_Sprite  	0 0
 Sprite Water_Tree_Sprite       	Water_Tree_Sprite  	0 0
 Sprite Water_Coral_Sprite       Water_Coral_Sprite  	0 0
-Sprite Water_Coca_Sprite       Water_Coca_Sprite  	0 0
+Sprite Water_Coca_Sprite      	Water_Coca_Sprite  	0 0
+>>>>>>> Stashed changes
+
 #
 # SOUNDS
-Sound menuPing               ../assets/Sound/wav_menuPing.wav
+# Sound death             ../assets/Sound/froggerDie.wav
+# Sound hop               ../assets/Sound/froggerMove.wav
 
 JSON                    ../assets/Textures/Sprites/Military_Atlas.json
-JSON			../assets/Textures/Sprites/Cuba_Map_Atlas.json
+JSON                    ../assets/Textures/Sprites/Tony_Idle_Atlas.json
 JSON                    ../assets/Textures/Sprites/Shark_Atlas.json
-JSON                    ../assets/Textures/Sprites/Shark_Death_Atlas.json
 JSON			../assets/Textures/Sprites/Coca_Atlas.json
-JSON			../assets/Textures/Sprites/Tontana_Idle_Atlas.json
-JSON			../assets/Textures/Sprites/Tontana_Fire_Atlas.json
-JSON			../assets/Textures/Sprites/Fony_Idle_Atlas.json
-JSON			../assets/Textures/Sprites/Fony_Hit_Atlas.json
-JSON			../assets/Textures/Sprites/Water_Tree_Atlas.json
-JSON			../assets/Textures/Sprites/Water_Coral_Atlas.json
-JSON			../assets/Textures/Sprites/Water_Coca_Atlas.json
+JSON			../assets/Textures/Sprites/Montana_Atlas.json
 
 #
+<<<<<<< Updated upstream
+#  Animation    Name            Texture     		Speed   Repeats
+Animation       Military_Left    Military_Atlas    	12        yes
+Animation       Tony_Idle_Right  Tony_Idle_Atlas  	12        yes
+Animation       Shark_Left  	 Shark_Atlas  		12        yes
+Animation       Coca_Left  	 Coca_Atlas  	  	12        yes
+Animation	Montana_Right	 Montana_Atlas		8 	  yes
+=======
 #  Animation    Name            	Texture     		Speed   Repeats
-Animation       Military_Left    	Military_Atlas    	12        yes
-Animation       Shark_Left  	 	Shark_Atlas  		12        yes
-Animation      Shark_Death  	 	Shark_Death_Atlas  	9        no	
-Animation       Coca_Left  	 	Coca_Atlas  	  	3        yes
+Animation       Military_Left    	Military_Atlas    	12      yes
+Animation       Shark_Left  	 	Shark_Atlas  		12      yes
+Animation      	Shark_Death  	 	Shark_Death_Atlas  	9       no	
+Animation       Coca_Left  	 	Coca_Atlas  	  	3       yes
 Animation	Cuba_Map		Cuba_Map_Atlas		3	yes
-Animation	Tontana_Idle_Right	Tontana_Idle_Atlas	9 	  yes
-Animation	Tontana_Fire_Right	Tontana_Fire_Atlas	9 	  yes
-Animation	Fony_Idle_Right		Fony_Idle_Atlas		12 	  yes
-Animation	Fony_Hit_Right		Fony_Hit_Atlas		12 	  yes
+Animation	Tontana_Idle_Right	Tontana_Idle_Atlas	9 	yes
+Animation	Tontana_Fire_Right	Tontana_Fire_Atlas	9 	yes
+Animation	Fony_Idle_Right		Fony_Idle_Atlas		12 	yes
+Animation	Fony_Hit_Right		Fony_Hit_Atlas		12 	yes
 Animation	Water_Tree		Water_Tree_Atlas	3	yes
 Animation	Water_Coral		Water_Coral_Atlas	3	yes
 Animation	Water_Coca		Water_Coca_Atlas	3	yes
+>>>>>>> Stashed changes

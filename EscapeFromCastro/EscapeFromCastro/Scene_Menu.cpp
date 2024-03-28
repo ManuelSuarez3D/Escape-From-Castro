@@ -5,11 +5,8 @@
 #include "Scene_Cuba.h"
 #include <memory>
 
-void Scene_Menu::onEnd()
-{
-	m_game->window().close();
-}
 
+#pragma region SceneLoad
 Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	: Scene(gameEngine)
 {
@@ -17,57 +14,66 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	init();
 
 	MusicPlayer::getInstance().play("menuTheme");
-	MusicPlayer::getInstance().setVolume(60);
+	MusicPlayer::getInstance().setVolume(50);
 
 }
+void Scene_Menu::init() {
 
+	m_menu_menu.push_back(std::make_pair("START", false));
+	m_menu_menu.push_back(std::make_pair("CONTROLS", false));
+	m_menu_menu.push_back(std::make_pair("BACK", false));
+	m_menu_menu.push_back(std::make_pair("QUIT", false));
+
+	m_levelPaths.push_back("../assets/level1.txt");
+
+	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
+	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
+
+}
+void Scene_Menu::update(sf::Time dt)
+{
+	m_entityManager.update();
+}
+#pragma endregion
+
+#pragma region Utility
+void Scene_Menu::onEnd()
+{
+	m_game->window().close();
+}
+#pragma endregion
+
+#pragma region System
 void Scene_Menu::sDoAction(const Command& action) {
 
 	if (action.type() == "START") {
 		if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
 		if (action.name() == "MOUSE_CLICK") {
 			
-			if (m_menu_overlap[0])
+			if (menuState("START"))
 				m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, m_levelPaths[0]));
 
-			else if (m_menu_overlap[1]){
+			else if (menuState("CONTROLS")) {
 				m_isGuide = true;
-				//m_menu_overlap[1] = false;
+
+<<<<<<< Updated upstream
 				if (m_menu_overlap[2]) {
+
 					m_menu_overlap[2] = false;
 					m_menu_overlap[1] = false;
+=======
+				if (menuState("BACK")) {
+					menuSelection("ALL", false);
+>>>>>>> Stashed changes
 					m_isGuide = false;
 				}
 			}
-			else if (m_menu_overlap[3]){
+			else if (menuState("QUIT")){
 				onEnd();
 			}
 		}
 	}
 }
-
-void Scene_Menu::init()
-{
-	// Start
-	m_menu_overlap.push_back(false);
-	// How to Play
-	m_menu_overlap.push_back(false);
-	// Back, How to Play
-	m_menu_overlap.push_back(false);
-	// Quit
-	m_menu_overlap.push_back(false);
-
-	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
-	m_levelPaths.push_back("../assets/level1.txt");
-	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
-
-}
-
-void Scene_Menu::update(sf::Time dt)
-{
-	m_entityManager.update();
-}
-
 void Scene_Menu::sRender()
 {
 	sf::RenderWindow& window = m_game->window();
@@ -75,7 +81,7 @@ void Scene_Menu::sRender()
 	sf::View view = window.getView();
 	view.setCenter(window.getSize().x / 2.f, window.getSize().y / 2.f);
 	window.setView(view);
-	static bool pingSoundLimit = false;
+
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 	sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view);
 
@@ -86,22 +92,26 @@ void Scene_Menu::sRender()
 		}
 	}
 
-	if (!m_isGuide) {
+	for (auto& e1 : m_entityManager.getEntities()) {
+
+		if (m_drawAABB) {
+			if (e1->hasComponent<CBoundingBox>()) {
+				auto box = e1->getComponent<CBoundingBox>();
+				sf::RectangleShape rect;
+				rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
+				centerOrigin(rect);
+				rect.setPosition(e1->getComponent<CTransform>().pos);
+				rect.setFillColor(sf::Color(0, 0, 0, 0));
+				rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+				rect.setOutlineThickness(2.f);
+				m_game->window().draw(rect);
+			}
+		}
+	}
+
+	if (!menuState("GUIDE")) {
 		for (auto& e1 : m_entityManager.getEntities("start1")) {
 
-			if (m_drawAABB) {
-				if (e1->hasComponent<CBoundingBox>()) {
-					auto box = e1->getComponent<CBoundingBox>();
-					sf::RectangleShape rect;
-					rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
-					centerOrigin(rect);
-					rect.setPosition(e1->getComponent<CTransform>().pos);
-					rect.setFillColor(sf::Color(0, 0, 0, 0));
-					rect.setOutlineColor(sf::Color{ 0, 255, 0 });
-					rect.setOutlineThickness(2.f);
-					m_game->window().draw(rect);
-				}
-			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
@@ -113,61 +123,54 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+<<<<<<< Updated upstream
+=======
 
-							if (pingSoundLimit != true) {
-								pingSoundLimit = true;
-								SoundPlayer::getInstance().play("menuPing");
+							if (!menuSound()) {
+								menuSound(true);
 							}
 
+							menuSelection("START", true);
+>>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
-							m_menu_overlap[0] = true;
 						}
 						else {
-							m_menu_overlap[0] = false;
+							menuSelection("START", false);
 							m_game->window().draw(sprite1);
 						}
 					}
 				}
 			}
 		}
-		for (auto& e1 : m_entityManager.getEntities("htp1")) {
+		for (auto& e1 : m_entityManager.getEntities("ctrls1")) {
 
-			if (m_drawAABB) {
-				if (e1->hasComponent<CBoundingBox>()) {
-					auto box = e1->getComponent<CBoundingBox>();
-					sf::RectangleShape rect;
-					rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
-					centerOrigin(rect);
-					rect.setPosition(e1->getComponent<CTransform>().pos);
-					rect.setFillColor(sf::Color(0, 0, 0, 0));
-					rect.setOutlineColor(sf::Color{ 0, 255, 0 });
-					rect.setOutlineThickness(2.f);
-					m_game->window().draw(rect);
-				}
-			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
 
 
-				for (auto e2 : m_entityManager.getEntities("htp2")) {
+				for (auto e2 : m_entityManager.getEntities("ctrls2")) {
 					if (e2->hasComponent<CSprite>()) {
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+<<<<<<< Updated upstream
+=======
 
-							if (pingSoundLimit != true) {
-								pingSoundLimit = true;
-								SoundPlayer::getInstance().play("menuPing");
+							if (!menuSound()) {
+								menuSound(true);
 							}
+							menuSelection("CONTROLS", true);
+>>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
-							m_menu_overlap[1] = true;
-
 						}
 						else {
-							SoundPlayer::getInstance().removeStoppedSounds();
+<<<<<<< Updated upstream
 							m_menu_overlap[1] = false;
+=======
+							menuSelection("CONTROLS", false);
+>>>>>>> Stashed changes
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -177,19 +180,6 @@ void Scene_Menu::sRender()
 
 		for (auto& e1 : m_entityManager.getEntities("quit1")) {
 
-			if (m_drawAABB) {
-				if (e1->hasComponent<CBoundingBox>()) {
-					auto box = e1->getComponent<CBoundingBox>();
-					sf::RectangleShape rect;
-					rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
-					centerOrigin(rect);
-					rect.setPosition(e1->getComponent<CTransform>().pos);
-					rect.setFillColor(sf::Color(0, 0, 0, 0));
-					rect.setOutlineColor(sf::Color{ 0, 255, 0 });
-					rect.setOutlineThickness(2.f);
-					m_game->window().draw(rect);
-				}
-			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
@@ -200,17 +190,18 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+<<<<<<< Updated upstream
+=======
 
-							if (pingSoundLimit != true) {
-								pingSoundLimit = true;
-								SoundPlayer::getInstance().play("menuPing");
+							if (!menuSound()) {
+								menuSound(true);
 							}
+							menuSelection("QUIT", true);
+>>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
-							m_menu_overlap[3] = true;
-
 						}
 						else {
-							m_menu_overlap[3] = false;
+							menuSelection("QUIT", false);
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -228,19 +219,6 @@ void Scene_Menu::sRender()
 
 		for (auto& e1 : m_entityManager.getEntities("back1")) {
 
-			if (m_drawAABB) {
-				if (e1->hasComponent<CBoundingBox>()) {
-					auto box = e1->getComponent<CBoundingBox>();
-					sf::RectangleShape rect;
-					rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
-					centerOrigin(rect);
-					rect.setPosition(e1->getComponent<CTransform>().pos);
-					rect.setFillColor(sf::Color(0, 0, 0, 0));
-					rect.setOutlineColor(sf::Color{ 0, 255, 0 });
-					rect.setOutlineThickness(2.f);
-					m_game->window().draw(rect);
-				}
-			}
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
@@ -251,16 +229,18 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
+<<<<<<< Updated upstream
+=======
 
-							if (pingSoundLimit != true) {
-								pingSoundLimit = true;
-								SoundPlayer::getInstance().play("menuPing");
+							if (!menuSound()) {
+								menuSound(true);
 							}
+							menuSelection("BACK", true);
+>>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
-							m_menu_overlap[2] = true;
 						}
 						else {
-							m_menu_overlap[2] = false;
+							menuSelection("BACK", false);
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -268,14 +248,58 @@ void Scene_Menu::sRender()
 			}
 		}
 	}
+<<<<<<< Updated upstream
 
-	if (pingSoundLimit == 1 && m_menu_overlap[0] == false && m_menu_overlap[1] == false && m_menu_overlap[2] == false && m_menu_overlap[3] == false) {
-		pingSoundLimit = 0;
-	} else if (m_isGuide && m_menu_overlap[2] == false)
-		pingSoundLimit = 0;
 
+=======
+	menuSound();
+>>>>>>> Stashed changes
 }
+#pragma endregion
 
+#pragma region Menu
+bool Scene_Menu::menuSound(bool check) {
+
+	if (check == true && menuState("ALL"))
+		SoundPlayer::getInstance().play("menuPing");
+
+	else if (check == true && menuState("GUIDE") && !menuState("BACK")){
+		SoundPlayer::getInstance().play("menuPing");
+	}
+
+	return check;
+}
+void Scene_Menu::menuSelection(std::string tag, bool selection) {
+
+	if (tag == "ALL") {
+		for (auto& item : m_menu_menu) {
+			item.second = selection;
+		}
+	}
+
+	for (auto& item : m_menu_menu) {
+		if (item.first == tag) {
+			item.second = selection;
+		}
+	}
+}
+bool Scene_Menu::menuState(std::string tag) {
+
+	if (tag == "ALL") {
+		return std::all_of(m_menu_menu.begin(), m_menu_menu.end(), [](const auto& item) {
+			return !item.second;
+		});
+	}
+	else if (tag == "GUIDE") {
+		return m_isGuide;
+	}
+
+	for (auto& item : m_menu_menu) {
+		if (item.first == tag) {
+			return item.second;
+		}
+	}
+}
 void Scene_Menu::loadMenu(const std::string& path) {
 	std::ifstream config(path);
 
@@ -334,12 +358,12 @@ void Scene_Menu::loadMenu(const std::string& path) {
 			sprite.setOrigin(0.f, 0.f);
 			sprite.setPosition(pos);
 		}
-		else if (token == "Htp1") {
+		else if (token == "Ctrls1") {
 			std::string name;
 			sf::Vector2f pos;
 
 			config >> name >> pos.x >> pos.y;
-			auto e = m_entityManager.addEntity("htp1");
+			auto e = m_entityManager.addEntity("ctrls1");
 
 			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 			auto spriteSize = sprite.getLocalBounds().getSize();
@@ -354,12 +378,12 @@ void Scene_Menu::loadMenu(const std::string& path) {
 			sprite.setPosition(pos);
 
 		}
-		else if (token == "Htp2") {
+		else if (token == "Ctrls2") {
 			std::string name;
 			sf::Vector2f pos;
 
 			config >> name >> pos.x >> pos.y;
-			auto e = m_entityManager.addEntity("htp2");
+			auto e = m_entityManager.addEntity("ctrls2");
 
 			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 			auto spriteSize = sprite.getLocalBounds().getSize();
@@ -457,3 +481,4 @@ void Scene_Menu::loadMenu(const std::string& path) {
 
 	config.close();
 }
+#pragma endregion

@@ -1,2 +1,22 @@
-﻿  Physics.cpp
-C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Physics.cpp(43,60): error C2059: syntax error: '.'
+﻿  Scene_Cuba.cpp
+<<<<<<< Updated upstream
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1207,48): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1209,46): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1461,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1467,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1492,36): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1503,36): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+=======
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1701,56): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1701,56): warning C4244:         with
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1701,56): warning C4244:         [
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1701,56): warning C4244:             T=float
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1701,56): warning C4244:         ]
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1853,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1889,32): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1943,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1959,32): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1986,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(616,1): warning C4715: 'Scene_Cuba::menuState': not all control paths return a value
+>>>>>>> Stashed changes
+  EscapeFromCastro.vcxproj -> C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\x64\Debug\EscapeFromCastro.exe

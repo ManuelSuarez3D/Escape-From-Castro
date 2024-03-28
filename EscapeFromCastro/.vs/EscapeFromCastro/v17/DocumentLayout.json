@@ -3,16 +3,54 @@
   "WorkspaceRootPath": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Physics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Scene_Cuba.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Physics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Scene_Cuba.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+<<<<<<< Updated upstream
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Components.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Components.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\PROGRAM FILES\\MICROSOFT VISUAL STUDIO\\2022\\COMMUNITY\\VC\\TOOLS\\MSVC\\14.39.33519\\INCLUDE\\RANGES||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\GameEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\GameEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Assets.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Assets.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Physics.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Scene_Menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\EntityManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\EntityManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\PROGRAM FILES\\MICROSOFT VISUAL STUDIO\\2022\\COMMUNITY\\VC\\TOOLS\\MSVC\\14.39.33519\\INCLUDE\\RANDOM||{3B902123-F8A7-4915-9F01-361F908088D0}"
+=======
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Scene_Menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|solutionrelative:EscapeFromCastro\\Scene.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BAD83D92-A90D-4B33-BE23-A98D5CF1DC2C}|EscapeFromCastro\\EscapeFromCastro.vcxproj|C:\\PROGRAM FILES\\MICROSOFT VISUAL STUDIO\\2022\\COMMUNITY\\VC\\TOOLS\\MSVC\\14.39.33519\\INCLUDE\\RANGES||{3B902123-F8A7-4915-9F01-361F908088D0}"
+>>>>>>> Stashed changes
     }
   ],
   "DocumentGroupContainers": [
@@ -22,46 +60,189 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+<<<<<<< Updated upstream
+          "SelectedChildIndex": 2,
+=======
+          "SelectedChildIndex": 4,
+>>>>>>> Stashed changes
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ranges",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "ViewState": "AQIAACcAAAAAAAAAAAAQwD0AAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-03-12T16:44:53.429Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Physics.h",
-              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.h",
-              "RelativeDocumentMoniker": "EscapeFromCastro\\Physics.h",
-              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.h",
-              "RelativeToolTip": "EscapeFromCastro\\Physics.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAB5AAAA",
+<<<<<<< Updated upstream
+              "Title": "Components.h",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Components.h",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Components.h",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Components.h",
+              "RelativeToolTip": "EscapeFromCastro\\Components.h",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAFUAAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-03-23T21:11:24.912Z",
+              "WhenOpened": "2024-03-12T16:12:23.479Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Scene_Cuba.cpp",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.cpp",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Scene_Cuba.cpp",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.cpp*",
+              "RelativeToolTip": "EscapeFromCastro\\Scene_Cuba.cpp*",
+              "ViewState": "AQIAACIFAAAAAAAAAAAgwDcFAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-02-29T05:10:51.908Z",
+=======
+              "Title": "Scene_Menu.cpp",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Menu.cpp",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Scene_Menu.cpp",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Menu.cpp",
+              "RelativeToolTip": "EscapeFromCastro\\Scene_Menu.cpp",
+              "ViewState": "AQIAAOcAAAAAAAAAAAAAAPEAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-27T23:38:34.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Scene.h",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene.h",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Scene.h",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene.h",
+              "RelativeToolTip": "EscapeFromCastro\\Scene.h",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAABIAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-27T23:38:33.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ranges",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\ranges",
+              "ViewState": "AQIAACUAAAAAAAAAAIAwwDwAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-03-27T22:41:04.218Z",
+>>>>>>> Stashed changes
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GameEngine.h",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\GameEngine.h",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\GameEngine.h",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\GameEngine.h",
+              "RelativeToolTip": "EscapeFromCastro\\GameEngine.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-12T16:49:29.913Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "random",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\random",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\random",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\random",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\random",
+              "ViewState": "AQIAABILAAAAAAAAAAAqwCgLAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-03-12T23:48:41.453Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Scene_Cuba.h",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.h",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Scene_Cuba.h",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.h",
+              "RelativeToolTip": "EscapeFromCastro\\Scene_Cuba.h",
+<<<<<<< Updated upstream
+              "ViewState": "AQIAAEUAAAAAAAAAAAAQwFsAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-08T13:58:30.458Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "EntityManager.h",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\EntityManager.h",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\EntityManager.h",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\EntityManager.h",
+              "RelativeToolTip": "EscapeFromCastro\\EntityManager.h",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAQwBYAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-08T14:19:24.361Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Scene_Menu.h",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Menu.h",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Scene_Menu.h",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Menu.h",
+              "RelativeToolTip": "EscapeFromCastro\\Scene_Menu.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-08T16:50:16.586Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Physics.cpp",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.cpp",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Physics.cpp",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.cpp",
+              "RelativeToolTip": "EscapeFromCastro\\Physics.cpp",
+              "ViewState": "AQIAACMAAAAAAAAAAAAQwCcAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-05T17:57:14.882Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Assets.cpp",
+              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Assets.cpp",
+              "RelativeDocumentMoniker": "EscapeFromCastro\\Assets.cpp",
+              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Assets.cpp",
+              "RelativeToolTip": "EscapeFromCastro\\Assets.cpp",
+              "ViewState": "AQIAADYAAAAAAAAAAAAqwEkAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-04T01:20:37.66Z"
+=======
+              "ViewState": "AQIAADcAAAAAAAAAAAAAAEgAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-27T22:27:34.984Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Physics.cpp",
-              "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.cpp",
-              "RelativeDocumentMoniker": "EscapeFromCastro\\Physics.cpp",
-              "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Physics.cpp*",
-              "RelativeToolTip": "EscapeFromCastro\\Physics.cpp*",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAACoAAAA8AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-23T21:05:50.98Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Scene_Cuba.cpp",
               "DocumentMoniker": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.cpp",
               "RelativeDocumentMoniker": "EscapeFromCastro\\Scene_Cuba.cpp",
               "ToolTip": "C:\\src\\NBCC\\2ndYear_Term_Winter\\ComprehensiveDevelopmentProject\\Project\\Escape-From-Castro\\EscapeFromCastro\\EscapeFromCastro\\Scene_Cuba.cpp",
               "RelativeToolTip": "EscapeFromCastro\\Scene_Cuba.cpp",
-              "ViewState": "AQIAANEGAAAAAAAAAAAvwPMGAAARAAAA",
+              "ViewState": "AQIAAE0DAAAAAAAAAAAewGgDAAA8AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-03-23T17:58:53.459Z",
+              "WhenOpened": "2024-03-24T01:28:37.788Z",
               "EditorCaption": ""
+>>>>>>> Stashed changes
             }
           ]
         }
