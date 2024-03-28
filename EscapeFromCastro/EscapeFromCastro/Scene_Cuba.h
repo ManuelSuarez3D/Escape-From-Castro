@@ -14,6 +14,7 @@
 #include "GameEngine.h"
 
 struct LevelConfig {
+    float       bulletSpeed{ 100.f };
     float       scrollSpeed{ 100.f };
     float       enemySpeed{ 200.f };
     float       playerSpeed{ 200.f };
@@ -35,7 +36,7 @@ struct SpawnPoint {
 class Scene_Cuba : public Scene {
 private:
     std::vector<std::pair<std::string, bool>> m_menu_cuba;
-    bool						m_isGuide{ false };
+    bool			m_isGuide{ false };
 
     sPtrEntt        m_player{ nullptr };
     sf::View        m_worldView;
@@ -46,10 +47,7 @@ private:
     float           m_elapsedTime = 0.0f;
     float           m_timeScore = 0.0f;
     float           m_deathTime = 0.0f;
-<<<<<<< Updated upstream
-    bool            m_hasEnd{ false };
-    bool            m_isSpecial{ false };
-=======
+    float           m_introTime = 5.f;
 
     bool            m_isEnd{ false };
     bool            m_isIntro{ false };
@@ -59,8 +57,6 @@ private:
     bool            m_isFiring{ false };
     bool            m_isGameOver{ false };
 
-
->>>>>>> Stashed changes
     int             m_playScore{ 0 };
     int             m_finalScore{ 0 };
     sf::Text		m_score_text;
@@ -115,33 +111,22 @@ private:
     void            spawnIsland(sf::Vector2f pos);
     void            spawnShark(sf::Vector2f pos);
     void            spawnCoca(sf::Vector2f pos);
-<<<<<<< Updated upstream
-    void            sEnemySpawner(sf::Time dt);
-    void            sInit();
-    void            specialAbility();
-    void            loadLevel(const std::string& path);
-    void            sDestroyOutsideBounds();
-    sf::FloatRect   getViewBounds();
-    sf::FloatRect   getPlayBounds();
-    float           randomSpawn(float min, float max);
-=======
     void            spawnBullet(std::shared_ptr<Entity> e);
 
     void            renderEntities();
     void            renderUI();
 
-
     void            specialAbility();
     void            loadLevel(const std::string& path);
->>>>>>> Stashed changes
+
 
 public:
 
     Scene_Cuba(GameEngine* gameEngine, const std::string& levelPath);
 
-    bool menuSound(bool check = false);
-    bool menuState(std::string tag);
-    void menuSelection(std::string tag, bool selection);
+    bool            menuSound(bool check = false);
+    bool            menuState(std::string tag);
+    void            menuSelection(std::string tag, bool selection);
     void            resetEntities();
     void		    update(sf::Time dt) override;
 

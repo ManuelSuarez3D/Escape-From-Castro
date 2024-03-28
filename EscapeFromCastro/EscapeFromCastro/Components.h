@@ -122,7 +122,8 @@ struct CInput : public Component
     bool LEFT{ false };
     bool RIGHT{ false };
     bool DOWN{ false };
-
+    bool shoot{ false };
+    bool canShoot{ true };
     unsigned char dir{ 0 };
 
     CInput() = default;
@@ -130,13 +131,6 @@ struct CInput : public Component
 
 struct CType : public Component
 {
-<<<<<<< Updated upstream
-    int boat{ 0 };
-    int shark{ 0 };
-    int island{ 0 };
-    int coral{ 0 };
-    int coca{ 0 };
-=======
     bool boat{ false };
     bool shark{ false };
     bool island{ false };
@@ -146,13 +140,10 @@ struct CType : public Component
 
     bool entity{ false };
     bool player{ false };
->>>>>>> Stashed changes
 
     CType() = default;
 };
 
-<<<<<<< Updated upstream
-=======
 struct CLife : public Component
 {
     int total{ 0 };
@@ -163,7 +154,6 @@ struct CLife : public Component
 
 };
 
->>>>>>> Stashed changes
 struct CScore : public Component
 {
     int score{ 0 };

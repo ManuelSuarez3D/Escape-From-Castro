@@ -10,11 +10,8 @@
 
 class EntityManager;
 
-<<<<<<< Updated upstream
-using ComponentTuple = std::tuple<CShape, CAnimation, CType, CSprite, CState, CTransform, CBoundingBox, CInput, CScore, CGun, CMissiles>;
-=======
+
 using ComponentTuple = std::tuple<CShape, CAnimation, CType, CSprite, CState, CTransform, CBoundingBox, CInput, CScore, CGun, CMissiles, CLife>;
->>>>>>> Stashed changes
 
 class Entity {
 private:

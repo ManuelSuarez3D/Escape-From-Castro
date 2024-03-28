@@ -14,9 +14,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
     if (abb.has && bbb.has)
     {
-<<<<<<< Updated upstream
-        if (entityName == "shark") {
-=======
+
         if (entityName == "default") {
 
             if (abb.has && bbb.has)
@@ -41,7 +39,6 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
             }
         }
         else if (entityName == "shark") {
->>>>>>> Stashed changes
 
             float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;

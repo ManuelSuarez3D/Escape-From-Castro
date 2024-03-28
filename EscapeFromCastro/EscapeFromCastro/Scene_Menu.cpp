@@ -56,15 +56,8 @@ void Scene_Menu::sDoAction(const Command& action) {
 			else if (menuState("CONTROLS")) {
 				m_isGuide = true;
 
-<<<<<<< Updated upstream
-				if (m_menu_overlap[2]) {
-
-					m_menu_overlap[2] = false;
-					m_menu_overlap[1] = false;
-=======
 				if (menuState("BACK")) {
 					menuSelection("ALL", false);
->>>>>>> Stashed changes
 					m_isGuide = false;
 				}
 			}
@@ -123,15 +116,12 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
-<<<<<<< Updated upstream
-=======
 
 							if (!menuSound()) {
 								menuSound(true);
 							}
 
 							menuSelection("START", true);
->>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
 						}
 						else {
@@ -155,22 +145,15 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
-<<<<<<< Updated upstream
-=======
 
 							if (!menuSound()) {
 								menuSound(true);
 							}
 							menuSelection("CONTROLS", true);
->>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
 						}
 						else {
-<<<<<<< Updated upstream
-							m_menu_overlap[1] = false;
-=======
 							menuSelection("CONTROLS", false);
->>>>>>> Stashed changes
 							m_game->window().draw(sprite1);
 						}
 					}
@@ -190,14 +173,11 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
-<<<<<<< Updated upstream
-=======
 
 							if (!menuSound()) {
 								menuSound(true);
 							}
 							menuSelection("QUIT", true);
->>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
 						}
 						else {
@@ -229,14 +209,11 @@ void Scene_Menu::sRender()
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
 
 						if (overlap.x > 0 && overlap.y > 0) {
-<<<<<<< Updated upstream
-=======
 
 							if (!menuSound()) {
 								menuSound(true);
 							}
 							menuSelection("BACK", true);
->>>>>>> Stashed changes
 							m_game->window().draw(sprite2);
 						}
 						else {
@@ -248,12 +225,7 @@ void Scene_Menu::sRender()
 			}
 		}
 	}
-<<<<<<< Updated upstream
-
-
-=======
 	menuSound();
->>>>>>> Stashed changes
 }
 #pragma endregion
 
