@@ -1,27 +1,6 @@
 #include "Physics.h"
 #include <cmath>
 
-//sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b)
-//{
-//    sf::Vector2f overlap(0.f, 0.f);
-//    if (!a->hasComponent<CBoundingBox>() or !b->hasComponent<CBoundingBox>())
-//        return overlap;
-//
-//    auto atx = a->getComponent<CTransform>();
-//    auto abb = a->getComponent<CBoundingBox>();
-//    auto btx = b->getComponent<CTransform>();
-//    auto bbb = b->getComponent<CBoundingBox>();
-//
-//
-//    if (abb.has && bbb.has)
-//    {
-//        float dx = std::abs(atx.pos.x - btx.pos.x);
-//        float dy = std::abs(atx.pos.y - btx.pos.y);
-//        overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, abb.halfSize.y + bbb.halfSize.y - dy);
-//    }
-//    return overlap;
-//}
-
 sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b, std::string entityName)
 {
     sf::Vector2f overlap(0.f, 0.f);
@@ -35,7 +14,34 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
     if (abb.has && bbb.has)
     {
+<<<<<<< Updated upstream
         if (entityName == "shark") {
+=======
+        if (entityName == "default") {
+
+            if (abb.has && bbb.has)
+            {
+                float dx = std::abs(atx.pos.x - btx.pos.x);
+                float dy = std::abs(atx.pos.y - btx.pos.y);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, abb.halfSize.y + bbb.halfSize.y - dy);
+            }
+
+        }
+        if (entityName == "bullet") {
+
+            float bottomA = atx.pos.y + abb.halfSize.y - 57.f;
+            float leftA = atx.pos.x - abb.halfSize.x;
+            float rightA = atx.pos.x + abb.halfSize.x;
+
+            if (abb.has && bbb.has)
+            {
+                float dx = std::abs(atx.pos.x - btx.pos.x);
+                float dy = std::abs(bottomA - btx.pos.y);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, abb.halfSize.y + bbb.halfSize.y - dy);
+            }
+        }
+        else if (entityName == "shark") {
+>>>>>>> Stashed changes
 
             float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;

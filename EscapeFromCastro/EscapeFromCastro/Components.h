@@ -130,15 +130,40 @@ struct CInput : public Component
 
 struct CType : public Component
 {
+<<<<<<< Updated upstream
     int boat{ 0 };
     int shark{ 0 };
     int island{ 0 };
     int coral{ 0 };
     int coca{ 0 };
+=======
+    bool boat{ false };
+    bool shark{ false };
+    bool island{ false };
+    bool coral{ false };
+    bool coca{ false };
+    bool bullet{ false };
+
+    bool entity{ false };
+    bool player{ false };
+>>>>>>> Stashed changes
 
     CType() = default;
 };
 
+<<<<<<< Updated upstream
+=======
+struct CLife : public Component
+{
+    int total{ 0 };
+    int remaining{ 0 };
+
+    CLife() = default;
+    CLife(int t) : total(t), remaining{ t } {}
+
+};
+
+>>>>>>> Stashed changes
 struct CScore : public Component
 {
     int score{ 0 };
