@@ -5,7 +5,6 @@
 #include "Scene_Cuba.h"
 #include <memory>
 
-
 #pragma region SceneLoad
 Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	: Scene(gameEngine)
@@ -28,7 +27,6 @@ void Scene_Menu::init() {
 
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
 	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
-
 }
 void Scene_Menu::update(sf::Time dt)
 {
@@ -160,7 +158,6 @@ void Scene_Menu::sRender()
 				}
 			}
 		}
-
 		for (auto& e1 : m_entityManager.getEntities("quit1")) {
 
 			if (e1->hasComponent<CSprite>()) {

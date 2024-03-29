@@ -6,7 +6,7 @@
 #include <fstream>
 #include <memory>
 #include <cstdlib>
-
+#include <iostream>
 
 GameEngine::GameEngine(const std::string& path)
 {
@@ -83,10 +83,11 @@ void GameEngine::sUserInput()
 				currentScene()->doAction(Command(currentScene()->getActionMap().at(event.key.code), actionType));
 			}
 		}
-		if (event.type == sf::Event::MouseButtonPressed) {
-			if (currentScene()->getActionMap().contains(event.mouseButton.button)) {
+		if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased) {
+			std::cout << sf::Mouse::Left << std::endl;
+			if (currentScene()->getActionMap().contains(sf::Mouse::Left)) {
 				const std::string actionType = (event.type == sf::Event::MouseButtonPressed) ? "START" : "END";
-				currentScene()->doAction(Command(currentScene()->getActionMap().at(event.mouseButton.button), actionType));
+				currentScene()->doAction(Command(currentScene()->getActionMap().at(sf::Mouse::Left), actionType));
 			}
 		}
 	}

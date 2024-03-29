@@ -189,17 +189,13 @@ void Scene_Cuba::loadLevel(const std::string& path) {
             sf::Vector2f pos;
 
             config >> name >> pos.x >> pos.y;
+
             auto e = m_entityManager.addEntity("menut");
-
+            e->addComponent<CTransform>(pos);
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
-            auto spriteSize = sprite.getLocalBounds().getSize();
 
-            e->addComponent<CBoundingBox>(spriteSize);
-            sf::Vector2f spriteOrigin = sprite.getOrigin();
-
-            sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
-
-            e->addComponent<CTransform>(boundingBoxPosition);
+            sprite.setOrigin(0.f, 0.f);
+            sprite.setPosition(pos);
 
         }
         else if (token == "Restart1M") {
@@ -522,7 +518,6 @@ void Scene_Cuba::loadLevel(const std::string& path) {
     config.close();
 }
 void Scene_Cuba::registerActions() {
-    registerAction(sf::Keyboard::P, "PAUSE");
     registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
     registerAction(sf::Keyboard::Escape, "BACK");
     registerAction(sf::Keyboard::Q, "SPECIAL");
@@ -536,6 +531,7 @@ void Scene_Cuba::registerActions() {
     registerAction(sf::Keyboard::Down, "DOWN");
     registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
     registerAction(sf::Keyboard::Space, "SHOOT");
+    registerAction(sf::Mouse::Left, "MOUSE_CLICK");
 }
 void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
 
@@ -754,8 +750,7 @@ void Scene_Cuba::sDoAction(const Command& action) {
     auto& pPos = m_player->getComponent<CTransform>().pos;
 
     if (action.type() == "START") {
-        if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
-        else if (action.name() == "QUIT") { m_game->quitLevel(); }
+        if (action.name() == "QUIT") { m_game->quitLevel(); }
         else if (action.name() == "SPECIAL")
         {
             if (m_special > 0 && !m_isSpecial)
@@ -781,9 +776,10 @@ void Scene_Cuba::sDoAction(const Command& action) {
         else if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
         else if (action.name() == "MOUSE_CLICK") {
 
-            if (menuState("MENU"))
+            if (menuState("MENU")) {
+                setPaused(!m_isPaused);
                 m_isMenu = true;
-
+            }
             else if (menuState("RESTART")) {
                 onEnd();
             }
@@ -1079,18 +1075,22 @@ void Scene_Cuba::renderUI() {
                 for (auto e2 : m_entityManager.getEntities("restart2g")) {
                     if (e2->hasComponent<CSprite>()) {
                         auto& sprite2 = e2->getComponent<CSprite>().sprite;
-                        auto& tfm = e2->getComponent<CTransform>();
-                        sprite2.setPosition(tfm.pos);
-                        sprite2.setRotation(tfm.angle);
-                        if (overlap.x > 0 && overlap.y > 0) {
-                            m_game->window().draw(sprite2);
+                        auto& tfm2 = e1->getComponent<CTransform>();
 
-                            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                                m_game->quitLevel();
+                        sprite2.setPosition(tfm2.pos);
+                        sprite2.setRotation(tfm2.angle);
+
+                        if (overlap.x > 0 && overlap.y > 0) {
+
+                            if (!menuSound()) {
+                                menuSound(true);
                             }
+
+                            menuSelection("RESTART", true);
+                            m_game->window().draw(sprite2);
                         }
                         else {
-
+                            menuSelection("RESTART", false);
                             m_game->window().draw(sprite1);
                         }
                     }
@@ -1106,25 +1106,25 @@ void Scene_Cuba::renderUI() {
                 sprite1.setPosition(tfm.pos);
                 sprite1.setRotation(tfm.angle);
 
-                for (auto e2 : m_entityManager.getEntities("quit1g")) {
+                for (auto e2 : m_entityManager.getEntities("quit2g")) {
                     if (e2->hasComponent<CSprite>()) {
                         auto& sprite2 = e2->getComponent<CSprite>().sprite;
-                        auto& tfm = e2->getComponent<CTransform>();
-                        sprite2.setPosition(tfm.pos);
-                        sprite2.setRotation(tfm.angle);
+                        auto& tfm2 = e1->getComponent<CTransform>();
+
+                        sprite2.setPosition(tfm2.pos);
+                        sprite2.setRotation(tfm2.angle);
+
                         if (overlap.x > 0 && overlap.y > 0) {
-                            m_game->window().draw(sprite2);
 
-                            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-
-                                MusicPlayer::getInstance().play("menuTheme");
-                                MusicPlayer::getInstance().setVolume(50);
-                                m_elapsedTime = 0;
-                                m_game->quitLevel();
+                            if (!menuSound()) {
+                                menuSound(true);
                             }
+
+                            menuSelection("QUIT", true);
+                            m_game->window().draw(sprite2);
                         }
                         else {
-
+                            menuSelection("QUIT", false);
                             m_game->window().draw(sprite1);
                         }
                     }
@@ -1134,18 +1134,36 @@ void Scene_Cuba::renderUI() {
     }
 
     if (m_isMenu) {
+
+        for (auto& e1 : m_entityManager.getEntities("menut")) {
+
+            if (e1->hasComponent<CSprite>()) {
+                auto& sprite1 = e1->getComponent<CSprite>().sprite;
+                auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
+                auto tfm = e1->getComponent<CTransform>();
+                sprite1.setPosition(tfm.pos);
+                sprite1.setRotation(tfm.angle);
+
+                m_game->window().draw(sprite1);
+            }
+        }
+
         if (!menuState("GUIDE")) {
             for (auto& e1 : m_entityManager.getEntities("restart1m")) {
 
                 if (e1->hasComponent<CSprite>()) {
                     auto& sprite1 = e1->getComponent<CSprite>().sprite;
                     auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
-                    auto test = e1->getComponent<CTransform>();
-
+                    auto tfm = e1->getComponent<CTransform>();
+                    sprite1.setPosition(tfm.pos);
+                    sprite1.setRotation(tfm.angle);
 
                     for (auto e2 : m_entityManager.getEntities("restart2m")) {
                         if (e2->hasComponent<CSprite>()) {
                             auto& sprite2 = e2->getComponent<CSprite>().sprite;
+                            auto& tfm2 = e2->getComponent<CTransform>();
+                            sprite2.setPosition(tfm2.pos);
+                            sprite2.setRotation(tfm2.angle);
 
                             if (overlap.x > 0 && overlap.y > 0) {
 
@@ -1169,12 +1187,16 @@ void Scene_Cuba::renderUI() {
                 if (e1->hasComponent<CSprite>()) {
                     auto& sprite1 = e1->getComponent<CSprite>().sprite;
                     auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
-                    auto test = e1->getComponent<CTransform>();
-
+                    auto tfm = e1->getComponent<CTransform>();
+                    sprite1.setPosition(tfm.pos);
+                    sprite1.setRotation(tfm.angle);
 
                     for (auto e2 : m_entityManager.getEntities("ctrls2m")) {
                         if (e2->hasComponent<CSprite>()) {
                             auto& sprite2 = e2->getComponent<CSprite>().sprite;
+                            auto& tfm2 = e2->getComponent<CTransform>();
+                            sprite2.setPosition(tfm2.pos);
+                            sprite2.setRotation(tfm2.angle);
 
                             if (overlap.x > 0 && overlap.y > 0) {
 
@@ -1197,11 +1219,16 @@ void Scene_Cuba::renderUI() {
                 if (e1->hasComponent<CSprite>()) {
                     auto& sprite1 = e1->getComponent<CSprite>().sprite;
                     auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
-                    auto test = e1->getComponent<CTransform>();
+                    auto tfm = e1->getComponent<CTransform>();
+                    sprite1.setPosition(tfm.pos);
+                    sprite1.setRotation(tfm.angle);
 
                     for (auto e2 : m_entityManager.getEntities("quit2m")) {
                         if (e2->hasComponent<CSprite>()) {
                             auto& sprite2 = e2->getComponent<CSprite>().sprite;
+                            auto& tfm2 = e2->getComponent<CTransform>();
+                            sprite2.setPosition(tfm2.pos);
+                            sprite2.setRotation(tfm2.angle);
 
                             if (overlap.x > 0 && overlap.y > 0) {
 
@@ -1221,22 +1248,31 @@ void Scene_Cuba::renderUI() {
             }
         }
         else {
-            for (auto& e : m_entityManager.getEntities("instruction")) {
+            for (auto& e : m_entityManager.getEntities("instrcM")) {
                 if (e->getComponent<CSprite>().has) {
                     auto& sprite = e->getComponent<CSprite>().sprite;
+                    auto tfm = e->getComponent<CTransform>();
+                    sprite.setPosition(tfm.pos);
+                    sprite.setRotation(tfm.angle);
+
                     m_game->window().draw(sprite);
                 }
             }
-            for (auto& e1 : m_entityManager.getEntities("back1")) {
+            for (auto& e1 : m_entityManager.getEntities("back1m")) {
 
                 if (e1->hasComponent<CSprite>()) {
                     auto& sprite1 = e1->getComponent<CSprite>().sprite;
                     auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
-                    auto test = e1->getComponent<CTransform>();
+                    auto tfm = e1->getComponent<CTransform>();
+                    sprite1.setPosition(tfm.pos);
+                    sprite1.setRotation(tfm.angle);
 
-                    for (auto e2 : m_entityManager.getEntities("back2")) {
+                    for (auto e2 : m_entityManager.getEntities("back2m")) {
                         if (e2->hasComponent<CSprite>()) {
                             auto& sprite2 = e2->getComponent<CSprite>().sprite;
+                            auto& tfm2 = e2->getComponent<CTransform>();
+                            sprite2.setPosition(tfm2.pos);
+                            sprite2.setRotation(tfm2.angle);
 
                             if (overlap.x > 0 && overlap.y > 0) {
 
@@ -1269,7 +1305,6 @@ void Scene_Cuba::renderUI() {
             m_game->window().draw(sprite);
         }
     }
-
     for (auto& e1 : m_entityManager.getEntities("menu1")) {
     
         if (e1->hasComponent<CSprite>()) {
@@ -1283,22 +1318,29 @@ void Scene_Cuba::renderUI() {
             for (auto e2 : m_entityManager.getEntities("menu2")) {
                 if (e2->hasComponent<CSprite>()) {
                     auto& sprite2 = e2->getComponent<CSprite>().sprite;
-                    auto& tfm2 = e1->getComponent<CTransform>();
+                    auto& tfm2 = e2->getComponent<CTransform>();
     
                     sprite2.setPosition(tfm2.pos);
                     sprite2.setRotation(tfm2.angle);
-    
-                    if (overlap.x > 0 && overlap.y > 0) {
-    
-                        if (!menuSound()) {
-                            menuSound(true);
+
+                    if (m_isPlay) {
+                        if (overlap.x > 0 && overlap.y > 0) {
+
+                            if (!menuSound()) {
+                                menuSound(true);
+                            }
+
+                            menuSelection("MENU", true);
+                            m_game->window().draw(sprite2);
+
                         }
-    
-                        menuSelection("MENU", true);
-                        m_game->window().draw(sprite2);
+                        else {
+                            menuSelection("MENU", false);
+                            m_game->window().draw(sprite1);
+                        }
+
                     }
                     else {
-                        menuSelection("MENU", false);
                         m_game->window().draw(sprite1);
                     }
                 }
@@ -1393,7 +1435,7 @@ void Scene_Cuba::renderUI() {
     }
 
     m_score_text.setFont(Assets::getInstance().getFont("Arcade"));
-    m_score_text.setPosition(730.f, 1.f);
+    m_score_text.setPosition(70.f, 8.f);
     m_score_text.setCharacterSize(50);
 
     if (!m_isEnd)
@@ -1804,8 +1846,9 @@ void Scene_Cuba::gameState() {
 
     if (m_isIntro)
         m_isPlay = false;
-    else if (m_isPaused)
+    else if (m_isPaused) {
         m_isPlay = false;
+    }
     else if (m_isGameOver) {
         m_config.scrollSpeed = 0;
         m_isPlay = false;
@@ -1814,8 +1857,10 @@ void Scene_Cuba::gameState() {
         m_config.scrollSpeed = 0;
         m_isPlay = false;
     }
-    else
-        m_isPlay = true;
+    else {
+    m_isMenu = false;
+    m_isPlay = true;
+    }
 }
 void Scene_Cuba::specialState() {
 
