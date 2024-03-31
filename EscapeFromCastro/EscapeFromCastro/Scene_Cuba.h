@@ -2,8 +2,8 @@
 // Created by David Burchill on 2023-09-27.
 //
 
-#ifndef BREAKOUT_SCENE_BREAKOUT_H
-#define BREAKOUT_SCENE_BREAKOUT_H
+#ifndef ESCAPEFROMCASTRO_SCENE_CUBA_H
+#define ESCAPEFROMCASTRO_SCENE_CUBA_H
 
 #include <queue>
 #include <SFML/System/Time.hpp>
@@ -23,12 +23,12 @@ struct LevelCubaConfig {
         std::vector<std::pair<float, sf::Time>>> directions;
 };
 
-struct SpawnPoint {
+struct SpawnPointCuba {
     float           y;
     std::string     type;
     unsigned char   number;
     //auto operator<=>(const SpawnPoint& rhs) const = default;
-    auto operator<=>(const SpawnPoint& rhs) const {
+    auto operator<=>(const SpawnPointCuba& rhs) const {
         return y <=> rhs.y;
     }
 };

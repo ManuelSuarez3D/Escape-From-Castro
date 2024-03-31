@@ -29,7 +29,6 @@ void GameEngine::init(const std::string& path)
 
 	changeScene("MENU", std::make_shared<Scene_Menu>(this));
 	//changeScene("LEVEL1", std::make_shared<Scene_Cuba>(this));
-
 }
 
 void GameEngine::loadConfigFromFile(const std::string& path, unsigned int& width, unsigned int& height) const {

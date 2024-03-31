@@ -20,7 +20,7 @@ namespace {
 #pragma region SceneLoad
 Scene_Cuba::Scene_Cuba(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine),
-    m_worldView(gameEngine->window().getView()) {
+    m_worldView(gameEngine->window().getDefaultView()) {
 
     loadLevel(levelPath);
     init();
@@ -43,7 +43,6 @@ void Scene_Cuba::loadLevel(const std::string& path) {
 
             config >> name >> pos.x >> pos.y;
             auto e = m_entityManager.addEntity("lvl1");
-
             e->addComponent<CTransform>(pos);
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
             e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Cuba_Map"));
@@ -78,11 +77,10 @@ void Scene_Cuba::loadLevel(const std::string& path) {
 
             config >> name >> pos.x >> pos.y;
             auto e = m_entityManager.addEntity("uihp1");
-            e->addComponent<CTransform>(pos);
+            e->addComponent<CTransform>();
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 
             sprite.setOrigin(0.f, 0.f);
-            sprite.setPosition(pos);
 
         }
         else if (token == "UiHp2") {
@@ -91,11 +89,10 @@ void Scene_Cuba::loadLevel(const std::string& path) {
 
             config >> name >> pos.x >> pos.y;
             auto e = m_entityManager.addEntity("uihp2");
-            e->addComponent<CTransform>(pos);
+            e->addComponent<CTransform>();
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 
             sprite.setOrigin(0.f, 0.f);
-            sprite.setPosition(pos);
 
         }
         else if (token == "UiHp3") {
@@ -104,11 +101,10 @@ void Scene_Cuba::loadLevel(const std::string& path) {
 
             config >> name >> pos.x >> pos.y;
             auto e = m_entityManager.addEntity("uihp3");
-            e->addComponent<CTransform>(pos);
+            e->addComponent<CTransform>();
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 
             sprite.setOrigin(0.f, 0.f);
-            sprite.setPosition(pos);
 
         }
         else if (token == "UiCocaine1") {
@@ -546,6 +542,22 @@ void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
 
     auto spriteSize = sprite.getLocalBounds().getSize();
     m_player->addComponent<CBoundingBox>(spriteSize);
+
+    for (auto& e1 : m_entityManager.getEntities("hp01")) {
+
+        auto& hp1Pos = e1->getComponent<CTransform>().pos;
+        hp1Pos = sf::Vector2f{ pos };
+    }
+    for (auto& e2 : m_entityManager.getEntities("hp02")) {
+
+        auto& hp2Pos = e2->getComponent<CTransform>().pos;
+        hp2Pos = sf::Vector2f{ pos };
+    }
+    for (auto& e3 : m_entityManager.getEntities("hp03")) {
+
+        auto& hp3Pos = e3->getComponent<CTransform>().pos;
+        hp3Pos = sf::Vector2f{ pos };
+    }
 }
 void Scene_Cuba::init() {
 
@@ -563,7 +575,7 @@ void Scene_Cuba::init() {
 
     MusicPlayer::getInstance().play("gameTheme");
     MusicPlayer::getInstance().setVolume(50);
-
+   
 }
 #pragma endregion
 
@@ -755,23 +767,24 @@ void Scene_Cuba::sDoAction(const Command& action) {
         if (action.name() == "QUIT") { m_game->quitLevel(); }
         else if (action.name() == "SPECIAL")
         {
-            std::cout << "Before: " + m_special;
-            if (m_special > 0 && !m_isSpecial)
-            {
-                std::cout << "In LOOP: " + m_special;
-                specialAbility();
-                m_isSpecial = true;
-                m_special -= 1;
-                std::cout << "After: " + m_special;
+            if (m_player->getComponent<CState>().state != "dead") {
+                if (m_special > 0 && !m_isSpecial)
+                {
+                    specialAbility();
+                    m_isSpecial = true;
+                    m_special -= 1;
+                }
             }
         }
         else if (action.name() == "SHOOT")
         {
-            if (m_isSpecial && m_player->getComponent<CInput>().canShoot) {   
+            if (m_player->getComponent<CState>().state != "dead") {
+                if (m_isSpecial && m_player->getComponent<CInput>().canShoot) {
 
-                m_player->getComponent<CInput>().shoot = true;
-                m_player->getComponent<CInput>().canShoot = false;
-                specialAbility();
+                    m_player->getComponent<CInput>().shoot = true;
+                    m_player->getComponent<CInput>().canShoot = false;
+                    specialAbility();
+                }
             }
         }
         else if (action.name() == "LEFT") { m_player->getComponent<CInput>().LEFT = true; }
@@ -1044,6 +1057,52 @@ void Scene_Cuba::renderEntities() {
                 m_game->window().draw(sprite);
             }
 
+        }
+    }
+
+    if (m_player->getComponent<CState>().state == "dead") {
+
+        if (m_life == 2) {
+            for (auto hp2 : m_entityManager.getEntities("uihp2")) {
+                if (hp2->hasComponent<CSprite>()) {
+                    auto& hp02 = hp2->getComponent<CSprite>().sprite;
+                    auto& hp2Pos = m_player->getComponent<CTransform>().pos;
+
+                    if (hp2->hasComponent<CTransform>()) {
+                        auto& tfm = hp2->getComponent<CTransform>();
+                        hp02.setPosition(hp2Pos.x - 60.f, hp2Pos.y - 80.f);
+                    }
+                    m_game->window().draw(hp02);
+                }
+            }
+        }
+        else if (m_life == 1) {
+            for (auto hp1 : m_entityManager.getEntities("uihp3")) {
+                if (hp1->hasComponent<CSprite>()) {
+                    auto& hp01 = hp1->getComponent<CSprite>().sprite;
+                    auto& hp1Pos = m_player->getComponent<CTransform>().pos;
+
+                    if (hp1->hasComponent<CTransform>()) {
+                        auto& tfm = hp1->getComponent<CTransform>();
+                        hp01.setPosition(hp1Pos.x - 60.f, hp1Pos.y - 80.f);
+                    }
+                    m_game->window().draw(hp01);
+                }
+            }
+        }
+    }
+    else if (m_isIntro) {
+        for (auto hp1 : m_entityManager.getEntities("uihp1")) {
+            if (hp1->hasComponent<CSprite>()) {
+                auto& hp01 = hp1->getComponent<CSprite>().sprite;
+                auto& hp1Pos = m_player->getComponent<CTransform>().pos;
+
+                if (hp1->hasComponent<CTransform>()) {
+                    auto& tfm = hp1->getComponent<CTransform>();
+                    hp01.setPosition(hp1Pos.x - 60.f, hp1Pos.y - 80.f);
+                }
+                m_game->window().draw(hp01);
+            }
         }
     }
 }
@@ -1355,50 +1414,6 @@ void Scene_Cuba::renderUI() {
             }
         }
     }
-
-    /*for (auto& hp3 : m_entityManager.getEntities("uihp3")) {
-        auto& ppos = m_player->getComponent<CTransform>().pos;
-
-        if (hp3->hasComponent<CSprite>()) {
-            auto& hp03 = hp3->getComponent<CSprite>().sprite;
-            if (hp3->hasComponent<CTransform>()) {
-                auto& tfm = hp3->getComponent<CTransform>();
-                hp03.setPosition(ppos.x, ppos.y + 50.f);
-                hp03.setRotation(tfm.angle);
-            }
-            if (m_life == 3) {
-                m_game->window().draw(hp03);
-            }
-            else if (m_life == 2) {
-                for (auto hp2 : m_entityManager.getEntities("uihp2")) {
-                    if (hp2->hasComponent<CSprite>()) {
-                        auto& hp02 = hp2->getComponent<CSprite>().sprite;
-                        if (hp2->hasComponent<CTransform>()) {
-                            auto& tfm = hp2->getComponent<CTransform>();
-                            hp02.setPosition(ppos.x, ppos.y + 50.f);
-                            hp02.setRotation(tfm.angle);
-                        }
-                        m_game->window().draw(hp02);
-                    }
-                }
-            }
-            else {
-                for (auto hp1 : m_entityManager.getEntities("uihp1")) {
-                    if (hp1->hasComponent<CSprite>()) {
-                        auto& hp01 = hp1->getComponent<CSprite>().sprite;
-                        if (hp1->hasComponent<CTransform>()) {
-                            auto& tfm = hp1->getComponent<CTransform>();
-                            hp01.setPosition(ppos.x, ppos.y + 50.f);
-                            hp01.setRotation(tfm.angle);
-                        }
-                        m_game->window().draw(hp01);
-                    }
-                }
-            }
-    
-        }
-    }*/
-
     for (auto& hp3 : m_entityManager.getEntities("uicocaine3")) {
 
         if (hp3->hasComponent<CSprite>()) {
@@ -1567,11 +1582,16 @@ sf::FloatRect Scene_Cuba::getEnemySpawnBounds() {
 }
 sf::FloatRect Scene_Cuba::getPlayerSpawnBounds() {
 
-    auto viewBounds = getViewBounds();
-    float spawnWidth = 700.f;
-    viewBounds.width -= spawnWidth;
+    auto viewBounds = m_game->window().getDefaultView();
 
-    return viewBounds;
+    auto test = sf::FloatRect(
+        (viewBounds.getCenter().x - viewBounds.getSize().x / 2.f), (viewBounds.getCenter().y - viewBounds.getSize().y / 2.f),
+        viewBounds.getSize().x, viewBounds.getSize().y);
+
+    float spawnWidth = 700.f;
+    test.width -= spawnWidth;
+
+    return test;
 }
 #pragma endregion
 
@@ -1810,12 +1830,23 @@ void Scene_Cuba::playerState() {
 
         if (elapsedTime > flashDuration) {
             flashClock.restart();
-            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
-            auto& sprite = m_player->getComponent<CSprite>().sprite;
-            auto spriteSize = sprite.getLocalBounds().getSize();
 
-            m_player->addComponent<CBoundingBox>(spriteSize);
-            m_player->addComponent<CState>().state = "alive";
+            if (m_isSpecial) {
+                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
+                auto& sprite = m_player->getComponent<CSprite>().sprite;
+                auto spriteSize = sprite.getLocalBounds().getSize();
+
+                m_player->addComponent<CBoundingBox>(spriteSize);
+                m_player->addComponent<CState>().state = "alive";
+            }
+            else {
+                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
+                auto& sprite = m_player->getComponent<CSprite>().sprite;
+                auto spriteSize = sprite.getLocalBounds().getSize();
+
+                m_player->addComponent<CBoundingBox>(spriteSize);
+                m_player->addComponent<CState>().state = "alive";
+            }
         }
     }
 }
@@ -2035,7 +2066,7 @@ void Scene_Cuba::checkSpecialCollisions() {
         if (overlap.x > 0 and overlap.y > 0) {
 
             m_player->removeComponent<CBoundingBox>();
-            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right")); // Change animation
+            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
 
             if (m_life != 0) {
@@ -2060,7 +2091,7 @@ void Scene_Cuba::checkSpecialCollisions() {
         auto overlap = Physics::getOverlapEntity(m_player, e, "island");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
-            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right")); // Change Animation
+            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
 
             if (m_life != 0) {

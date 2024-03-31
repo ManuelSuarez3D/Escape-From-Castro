@@ -1,3 +1,5 @@
+#ifndef ESCAPEFROMCASTRO_SCENE_MENU_H
+#define ESCAPEFROMCASTRO_SCENE_MENU_H
 #pragma once
 
 #include "Scene.h"
@@ -45,3 +47,4 @@ public:
 
 };
 
+#endif 

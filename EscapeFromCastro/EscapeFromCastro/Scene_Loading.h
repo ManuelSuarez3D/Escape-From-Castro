@@ -1,3 +1,7 @@
+
+#ifndef ESCAPEFROMCASTRO_SCENE_LOADING_H
+#define ESCAPEFROMCASTRO_SCENE_LOADING_H
+
 #pragma once
 #include "Scene.h"
 
@@ -38,3 +42,4 @@ public:
 
 };
 
+#endif 

@@ -157,7 +157,7 @@
     <ClCompile Include="Scene_Cuba.cpp" />
     <ClCompile Include="Scene_Loading.cpp" />
     <ClCompile Include="Scene_Menu.cpp" />
-    <ClCompile Include="Scene_Miami.cpp" />
+    <ClCompile Include="Scene_USA.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Utilities.cpp" />
@@ -177,7 +177,7 @@
     <ClInclude Include="Scene_Cuba.h" />
     <ClInclude Include="Scene_Loading.h" />
     <ClInclude Include="Scene_Menu.h" />
-    <ClInclude Include="Scene_Miami.h" />
+    <ClInclude Include="Scene_USA.h" />
     <ClInclude Include="SoundPlayer.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>

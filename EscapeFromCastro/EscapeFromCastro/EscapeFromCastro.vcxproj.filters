@@ -66,7 +66,7 @@
     <ClCompile Include="Scene_Bermuda.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_Miami.cpp">
+    <ClCompile Include="Scene_USA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -119,7 +119,7 @@
     <ClInclude Include="Scene_Bermuda.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Miami.h">
+    <ClInclude Include="Scene_USA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -135,8 +135,14 @@ struct CType : public Component
     bool shark{ false };
     bool island{ false };
     bool coral{ false };
+    bool squid{ false };
+    bool tornado{ false };
+    bool whirpool{ false };
     bool coca{ false };
     bool bullet{ false };
+    bool floridaMan{ false };
+    bool police{ false };
+    bool dune{ false };
 
     bool entity{ false };
     bool player{ false };

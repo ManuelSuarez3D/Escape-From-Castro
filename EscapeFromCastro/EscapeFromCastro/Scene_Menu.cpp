@@ -4,6 +4,8 @@
 #include "SoundPlayer.h"
 #include "Scene_Cuba.h"
 #include "Scene_Loading.h"
+#include "Scene_Bermuda.h"
+#include "Scene_USA.h"
 #include <memory>
 
 #pragma region SceneLoad
@@ -24,7 +26,10 @@ void Scene_Menu::init() {
 	m_menu_menu.push_back(std::make_pair("BACK", false));
 	m_menu_menu.push_back(std::make_pair("QUIT", false));
 
-	m_levelPaths.push_back("../assets/loading.txt");
+	//m_levelPaths.push_back("../assets/loading.txt");
+	m_levelPaths.push_back("../assets/level1.txt");
+	//m_levelPaths.push_back("../assets/level2.txt");
+	//m_levelPaths.push_back("../assets/level3.txt");
 
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
 	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
@@ -53,15 +58,15 @@ sf::FloatRect Scene_Menu::getViewBounds() {
 #pragma region System
 void Scene_Menu::sDoAction(const Command& action) {
 
-	if (!m_isCuba) {
+	//if (!m_isCuba) {
 		if (action.type() == "START") {
 			if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
 			if (action.name() == "MOUSE_CLICK") {
 
-				if (menuState("START"))
-					//m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
+				if (menuState("START")) {
+					m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, m_levelPaths[0]));
 					m_isCuba = true;
-
+				}
 				else if (menuState("CONTROLS")) {
 					m_isGuide = true;
 
@@ -75,7 +80,7 @@ void Scene_Menu::sDoAction(const Command& action) {
 				}
 			}
 		}
-	}
+	//}
 }
 void Scene_Menu::sMovement(sf::Time dt) {
 
@@ -83,6 +88,7 @@ void Scene_Menu::sMovement(sf::Time dt) {
 	m_worldView.move(m_menuConfig.scrollSpeed * dt.asSeconds() * 1, 0.f);
 
 	if (m_isCuba) {
+
 		for (auto& e : m_entityManager.getEntities("curtaintop")) {
 			auto ebb = e->getComponent<CBoundingBox>();
 			if (e->hasComponent<CTransform>()) {
@@ -91,7 +97,6 @@ void Scene_Menu::sMovement(sf::Time dt) {
 					tfm.pos.y += 50.f * dt.asSeconds();
 				}
 				else {
-
 					for (auto& e : m_entityManager.getEntities("curtain")) {
 						auto ebb = e->getComponent<CBoundingBox>();
 						if (e->hasComponent<CTransform>()) {
@@ -100,7 +105,9 @@ void Scene_Menu::sMovement(sf::Time dt) {
 								tfm.pos.y += 145.f * dt.asSeconds();
 							}
 							else {
-								m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
+								tfm.pos.y = 0 - 512.f;
+								m_isCuba = false;
+								//m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
 							}
 						}
 					}

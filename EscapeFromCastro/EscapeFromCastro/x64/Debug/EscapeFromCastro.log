@@ -1,2 +1,21 @@
-﻿  Scene_Loading.cpp
+﻿  Scene_Bermuda.cpp
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Bermuda.cpp(2013,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Bermuda.cpp(2049,32): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Bermuda.cpp(2103,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Bermuda.cpp(2119,32): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Bermuda.cpp(2146,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+  Scene_Cuba.cpp
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1939,29): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(1975,33): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(2029,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(2045,32): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(2072,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+  Scene_USA.cpp
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_USA.cpp(2017,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_USA.cpp(2092,28): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_USA.cpp(2116,32): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_USA.cpp(626,1): warning C4715: 'Scene_USA::menuState': not all control paths return a value
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Cuba.cpp(624,1): warning C4715: 'Scene_Cuba::menuState': not all control paths return a value
+C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\EscapeFromCastro\Scene_Bermuda.cpp(626,1): warning C4715: 'Scene_Bermuda::menuState': not all control paths return a value
   EscapeFromCastro.vcxproj -> C:\src\NBCC\2ndYear_Term_Winter\ComprehensiveDevelopmentProject\Project\Escape-From-Castro\EscapeFromCastro\x64\Debug\EscapeFromCastro.exe

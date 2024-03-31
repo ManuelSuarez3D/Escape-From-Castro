@@ -4,7 +4,7 @@
 #include "Scene_Loading.h"
 #include "Scene_Cuba.h"
 #include "Scene_Bermuda.h"
-#include "Scene_Miami.h"
+#include "Scene_USA.h"
 
 #include "Components.h"
 #include "Physics.h"
@@ -15,6 +15,7 @@
 #include "SoundPlayer.h"
 #include <random>
 #include <unordered_set>
+
 
 namespace {
     std::random_device rd;
@@ -99,12 +100,10 @@ void Scene_Loading::onEnd() {
 }
 #pragma endregion
 
-
 #pragma region System
 void Scene_Loading::sDoAction(const Command& action) {
 
 }
-
 void Scene_Loading::sState(sf::Time dt) {
 
     SoundPlayer::getInstance().removeStoppedSounds();
@@ -238,7 +237,6 @@ void Scene_Loading::update(sf::Time dt) {
     sUpdate(dt);
 }
 void Scene_Loading::loadCuba() {
-    m_isCuba = false;
     m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, "../assets/level1.txt"), true);
 }
 void Scene_Loading::loadBermuda() {
@@ -247,11 +245,12 @@ void Scene_Loading::loadBermuda() {
 void Scene_Loading::loadMiami() {
   //  m_game->changeScene("LEVEL3", std::make_shared<Scene_Miami>(m_game, "../assets/level3.txt"), true);
 }
+#pragma endregion
 
 #pragma region sState
 bool Scene_Loading::timeState(sf::Time dt) {
 
-    const float flashDuration = 10.f;
+    const float flashDuration = 6.f;
     m_elapsedTime = m_timeFlashClock.getElapsedTime().asSeconds();
 
     if (m_elapsedTime > flashDuration) {

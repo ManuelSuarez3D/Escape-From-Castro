@@ -3,18 +3,23 @@ Window  900 512
 
 # Font    Arial           ../assets/fonts/arial.ttf
 # Font    main            ../assets/fonts/Sansation.ttf
-Font    Arcade          ../assets/fonts/arcadeclassic.regular.ttf
+Font    Arcade           ../assets/fonts/arcadeclassic.regular.ttf
 
-Music menuTheme         ../assets/Music/dp_menu.flac
-Music level1Theme         ../assets/Music/dp_level1.flac
-Music specialTheme         ../assets/Music/dp_special.flac
-Music loadingTheme         ../assets/Music/dp_loading.flac
-
-# Music missionTheme      ../assets/Music/tweener.ogg
+Music menuTheme         	 ../assets/Music/dp_menu.flac
+Music level1Theme         	 ../assets/Music/dp_level1.flac
+Music specialTheme        	 ../assets/Music/dp_special.flac
+Music loadingTheme        	 ../assets/Music/dp_loading.flac
+Music bermudaTheme        	 ../assets/Music/dp_bermuda.flac
+Music floridaTheme        	 ../assets/Music/dp_florida.flac
+	
+# Music missionTheme     	 ../assets/Music/tweener.ogg
 
 # Textures
 Texture 	Menu      		../assets/Textures/menu.png
 Texture 	Level1      		../assets/Textures/cuba.png
+Texture		Level2			../assets/Textures/bermuda.png
+Texture		Level3			../assets/Textures/florida.png
+
 Texture 	Start01         	../assets/Textures/start_01.png
 Texture 	Start02         	../assets/Textures/start_02.png
 Texture 	Controls01     		../assets/Textures/controls_01.png
@@ -30,9 +35,9 @@ Texture 	Instructions    	../assets/Textures/instructions_01.png
 Texture 	UiSpecial      		../assets/Textures/ui_special.png
 Texture 	UiScore          	../assets/Textures/ui_score.png
 
-Texture 	UiHp01          	../assets/Textures/ui_hp01.png
-Texture 	UiHp02          	../assets/Textures/ui_hp02.png
-Texture 	UiHp03          	../assets/Textures/ui_hp03.png
+Texture 	UiHp01          	../assets/Textures/Sprites/ui_hp01.png
+Texture 	UiHp02          	../assets/Textures/Sprites/ui_hp02.png
+Texture 	UiHp03          	../assets/Textures/Sprites/ui_hp03.png
 
 Texture 	UiCocaine01     	../assets/Textures/ui_cocaine01.png
 Texture 	UiCocaine02     	../assets/Textures/ui_cocaine02.png
@@ -52,6 +57,12 @@ Texture 	Coral       		../assets/Textures/Sprites/Coral_01.png
 Texture 	Island        		../assets/Textures/Sprites/Island_01.png
 Texture 	Bullet			../assets/Textures/Sprites/bullet.png
 Texture 	Military   		../assets/Textures/Sprites/Military_01.png
+Texture 	Squid   		../assets/Textures/Sprites/Squid_01.png
+Texture		Tornado			../assets/Textures/Sprites/Tornado_01.png
+Texture		Whirlpool		../assets/Textures/Sprites/Whirlpool_01.png
+Texture		Police			../assets/Textures/Sprites/Police_01.png
+Texture		FloridaMan		../assets/Textures/Sprites/FloridaMan_01.png
+Texture		Dune			../assets/Textures/Sprites/Dune_01.png
 
 Texture 	Tontana_Sprite   	../assets/Textures/Sprites/Tontana_Sprite.png
 Texture 	Fony_Sprite 		../assets/Textures/Sprites/Fony_Sprite.png
@@ -61,16 +72,26 @@ Texture 	Water_Coca_Sprite       ../assets/Textures/Sprites/Water_Coca_01.png
 
 Texture 	Shark_Atlas  		../assets/Textures/Sprites/Shark_Atlas.png
 Texture 	Shark_Death_Atlas  	../assets/Textures/Sprites/Shark_Death_Atlas.png
+
 Texture		Cuba_Map_Atlas		../assets/Textures/Sprites/Cuba_Map_Atlas.png
+Texture		Bermuda_Map_Atlas	../assets/Textures/Sprites/Bermuda_Map_Atlas.png
+Texture		Florida_Map_Atlas	../assets/Textures/Sprites/Florida_Map_Atlas.png
+
 Texture 	Water_Tree_Atlas        ../assets/Textures/Sprites/Water_Tree_Atlas.png
 Texture 	Water_Coral_Atlas       ../assets/Textures/Sprites/Water_Coral_Atlas.png
 Texture 	Fony_Idle_Atlas 	../assets/Textures/Sprites/Fony_Idle_Atlas.png
 Texture 	Fony_Hit_Atlas 		../assets/Textures/Sprites/Fony_Hit_Atlas.png
 Texture 	Water_Coca_Atlas        ../assets/Textures/Sprites/Water_Coca_Atlas.png
 Texture 	Tontana_Idle_Atlas   	../assets/Textures/Sprites/Tontana_Idle_Atlas.png
+Texture 	Tontana_Hit_Atlas   	../assets/Textures/Sprites/Tontana_Hit_Atlas.png
 Texture 	Tontana_Fire_Atlas   	../assets/Textures/Sprites/Tontana_Fire_Atlas.png
 Texture 	Military_Atlas   	../assets/Textures/Sprites/Military_Atlas.png
+Texture 	Squid_Atlas   		../assets/Textures/Sprites/Squid_Atlas.png
+Texture 	Tornado_Atlas   	../assets/Textures/Sprites/Tornado_Atlas.png
 Texture 	Coca_Atlas   		../assets/Textures/Sprites/Coca_Atlas.png
+Texture		Whirlpool_Atlas		../assets/Textures/Sprites/Whirlpool_Atlas.png
+Texture 	Police_Atlas   		../assets/Textures/Sprites/Police_Atlas.png
+Texture		FloridaMan_Atlas	../assets/Textures/Sprites/FloridaMan_Atlas.png
 
 Texture 	Cuba_Loading_Atlas   	../assets/Textures/Sprites/Cuba_Loading_Atlas.png
 Texture 	Bermuda_Loading_Atlas  	../assets/Textures/Sprites/Bermuda_Loading_Atlas.png
@@ -84,6 +105,8 @@ Texture 	Loading			../assets/Textures/Sprites/loading_01.png
 # Sprites
 Sprite Menu       		Menu   			0 0 
 Sprite Level1       		Level1   		0 0
+Sprite Level2			Level2			0 0
+Sprite Level3			Level3			0 0
 Sprite Start01         		Start01			0 0
 Sprite Start02         		Start02			0 0
 Sprite Controls01         	Controls01		0 0
@@ -114,9 +137,15 @@ Sprite CurtainFull         	CurtainFull		0 0
 Sprite Curtain			Curtain                 0 0
 Sprite CurtainTop		CurtainTop		0 0
 
+Sprite Tornado			Tornado			0 0
+Sprite Whirlpool		Whirlpool		0 0
+Sprite Police       		Police			0 0
+Sprite Dune       		Dune			0 0
+Sprite FloridaMan       	FloridaMan		0 0
 Sprite Island  		       	Island			0 0
 Sprite Coral	         	Coral			0 0
 Sprite Military       		Military		0 0
+Sprite Squid       		Squid			0 0
 Sprite Shark       		Shark			0 0
 Sprite Coca       		Coca			0 0
 Sprite Bullet       		Bullet			0 0
@@ -133,14 +162,24 @@ Sprite Water_Coca_Sprite      	Water_Coca_Sprite  	0 0
 
 Sound 		menuPing               ../assets/Sound/dp_one_beep.flac
 
+JSON            ../assets/Textures/Sprites/Police_Atlas.json
+JSON            ../assets/Textures/Sprites/FloridaMan_Atlas.json
+
 JSON            ../assets/Textures/Sprites/Military_Atlas.json
-JSON       	../assets/Textures/Sprites/Military_Atlas.json
+JSON            ../assets/Textures/Sprites/Squid_Atlas.json
+JSON            ../assets/Textures/Sprites/Tornado_Atlas.json
 JSON      	../assets/Textures/Sprites/Shark_Atlas.json
+JSON		../assets/Textures/Sprites/Whirlpool_Atlas.json
 JSON      	../assets/Textures/Sprites/Shark_Death_Atlas.json
 JSON      	../assets/Textures/Sprites/Coca_Atlas.json
+
 JSON		../assets/Textures/Sprites/Cuba_Map_Atlas.json
+JSON		../assets/Textures/Sprites/Bermuda_Map_Atlas.json
+JSON		../assets/Textures/Sprites/Florida_Map_Atlas.json
+
 JSON		../assets/Textures/Sprites/Tontana_Idle_Atlas.json
 JSON		../assets/Textures/Sprites/Tontana_Fire_Atlas.json
+JSON		../assets/Textures/Sprites/Tontana_Hit_Atlas.json
 JSON		../assets/Textures/Sprites/Fony_Idle_Atlas.json
 JSON		../assets/Textures/Sprites/Fony_Hit_Atlas.json
 JSON		../assets/Textures/Sprites/Water_Tree_Atlas.json
@@ -148,17 +187,23 @@ JSON		../assets/Textures/Sprites/Water_Coral_Atlas.json
 JSON		../assets/Textures/Sprites/Water_Coca_Atlas.json
 
 JSON		../assets/Textures/Sprites/Cuba_Loading_Atlas.json
-#JSON		../assets/Textures/Sprites/Bermuda_Loading_Atlas.json
+JSON		../assets/Textures/Sprites/Bermuda_Loading_Atlas.json
 #JSON		../assets/Textures/Sprites/Miami_Loading_Atlas.json
 
 #
 #  Animation    Name            	Texture     		Speed   Repeats
 Animation       Military_Left    	Military_Atlas    	12      yes
+Animation	Squid_Left		Squid_Atlas		3	yes
+Animation	Whirlpool_Left		Whirlpool_Atlas		6	yes
+Animation	Tornado_Left		Tornado_Atlas		6	yes
 Animation       Shark_Left  	 	Shark_Atlas  		12      yes
 Animation      	Shark_Death  	 	Shark_Death_Atlas  	9       no	
 Animation       Coca_Left  	 	Coca_Atlas  	  	3       yes
 Animation	Cuba_Map		Cuba_Map_Atlas		3	yes
+Animation	Bermuda_Map		Bermuda_Map_Atlas	3	yes
+Animation	Florida_Map		Florida_Map_Atlas	3	yes
 Animation	Tontana_Idle_Right	Tontana_Idle_Atlas	9 	yes
+Animation	Tontana_Hit_Right	Tontana_Hit_Atlas	9 	yes
 Animation	Tontana_Fire_Right	Tontana_Fire_Atlas	9 	yes
 Animation	Fony_Idle_Right		Fony_Idle_Atlas		12 	yes
 Animation	Fony_Hit_Right		Fony_Hit_Atlas		12 	yes
@@ -166,5 +211,9 @@ Animation	Water_Tree		Water_Tree_Atlas	3	yes
 Animation	Water_Coral		Water_Coral_Atlas	3	yes
 Animation	Water_Coca		Water_Coca_Atlas	3	yes
 Animation	Cuba_Loading		Cuba_Loading_Atlas	3	yes
-# Animation	Bermuda_Loading		Bermuda_Loading_Atlas	3	yes
+Animation	Bermuda_Loading		Bermuda_Loading_Atlas	3	yes
+
+Animation	Police_Left		Police_Atlas		8	yes
+Animation	FloridaMan_Left		FloridaMan_Atlas	8	yes
+
 # Animation	Miami_Loading		Miami_Loading_Atlas	3	yes
