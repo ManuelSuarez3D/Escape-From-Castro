@@ -1,0 +1,5 @@
+# EscapeFromCastro Loading
+
+# Level		| Name |	| Values |
+Bkg		CurtainFull 	0 0
+LoadMap		Loading		243 35

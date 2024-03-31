@@ -2,14 +2,15 @@
 
 # Level	| Name |	| Values |
 World 			900 512
-Bkg	Menu 		0 0
-Strt1	Start01 	345 	265
-Strt2	Start02 	308 	256
-Ctrls1	Controls01	282	329
-Ctrls2	Controls02	221	320
-Qut1	Quit01 		374 	395
-Qut2	Quit02 		344 	385
-Instrc	Instructions	169	244
-Bck1	Back01		625	441
-Bck2	Back02		603	428
-	
+Bkg			Menu 		0 0
+Strt1			Start01 	345 	265
+Strt2			Start02 	308 	256
+Ctrls1			Controls01	282	329
+Ctrls2			Controls02	221	320
+Qut1			Quit01 		374 	395
+Qut2			Quit02 		344 	385
+Instrc			Instructions	169	244
+Bck1			Back01		625	441
+Bck2			Back02		603	428
+Curtain 		Curtain		0	12
+CurtainTop 		CurtainTop	0	0	

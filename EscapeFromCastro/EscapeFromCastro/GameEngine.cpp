@@ -28,6 +28,7 @@ void GameEngine::init(const std::string& path)
 	//m_statisticsText.setCharacterSize(15);
 
 	changeScene("MENU", std::make_shared<Scene_Menu>(this));
+	//changeScene("LEVEL1", std::make_shared<Scene_Cuba>(this));
 
 }
 
@@ -84,7 +85,6 @@ void GameEngine::sUserInput()
 			}
 		}
 		if (event.type == sf::Event::MouseButtonPressed || event.type == sf::Event::MouseButtonReleased) {
-			std::cout << sf::Mouse::Left << std::endl;
 			if (currentScene()->getActionMap().contains(sf::Mouse::Left)) {
 				const std::string actionType = (event.type == sf::Event::MouseButtonPressed) ? "START" : "END";
 				currentScene()->doAction(Command(currentScene()->getActionMap().at(sf::Mouse::Left), actionType));

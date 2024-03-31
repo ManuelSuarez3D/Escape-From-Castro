@@ -153,8 +153,11 @@
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene_Bermuda.cpp" />
     <ClCompile Include="Scene_Cuba.cpp" />
+    <ClCompile Include="Scene_Loading.cpp" />
     <ClCompile Include="Scene_Menu.cpp" />
+    <ClCompile Include="Scene_Miami.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Utilities.cpp" />
@@ -170,8 +173,11 @@
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene_Bermuda.h" />
     <ClInclude Include="Scene_Cuba.h" />
+    <ClInclude Include="Scene_Loading.h" />
     <ClInclude Include="Scene_Menu.h" />
+    <ClInclude Include="Scene_Miami.h" />
     <ClInclude Include="SoundPlayer.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>

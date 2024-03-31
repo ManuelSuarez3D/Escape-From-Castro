@@ -40,13 +40,13 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
         }
         else if (entityName == "shark") {
 
-            float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;
 
             float leftB = btx.pos.x - bbb.halfSize.x;
             float rightB = btx.pos.x + bbb.halfSize.x;
 
-            float leftA = atx.pos.x - abb.halfSize.x + 45.f;
+            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
             float rightA = atx.pos.x + abb.halfSize.x;
 
             if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
@@ -58,13 +58,13 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
         }
         else if (entityName == "coral") {
 
-            float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;
 
             float leftB = btx.pos.x - bbb.halfSize.x + 8.f;
             float rightB = btx.pos.x + bbb.halfSize.x - 10.f;
 
-            float leftA = atx.pos.x - abb.halfSize.x + 45.f;
+            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
             float rightA = atx.pos.x + abb.halfSize.x;
 
             if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
@@ -76,13 +76,13 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
         }
         else if (entityName == "boatMilitary") {
 
-            float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 10.f;
 
             float leftB = btx.pos.x - bbb.halfSize.x + 30.f;
             float rightB = btx.pos.x + bbb.halfSize.x - 61.f;
 
-            float leftA = atx.pos.x - abb.halfSize.x + 45.f;
+            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
             float rightA = atx.pos.x + abb.halfSize.x;
 
 
@@ -96,7 +96,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
         }
         else if (entityName == "island") {
             // bottom of a and b
-            float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 15.f;
             // Calculate the left and right edges of the bottom section of b
             float leftB = btx.pos.x - bbb.halfSize.x + 10.f; // 10 from the left

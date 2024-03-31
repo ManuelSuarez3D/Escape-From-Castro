@@ -8,6 +8,7 @@ Font    Arcade          ../assets/fonts/arcadeclassic.regular.ttf
 Music menuTheme         ../assets/Music/dp_menu.flac
 Music level1Theme         ../assets/Music/dp_level1.flac
 Music specialTheme         ../assets/Music/dp_special.flac
+Music loadingTheme         ../assets/Music/dp_loading.flac
 
 # Music missionTheme      ../assets/Music/tweener.ogg
 
@@ -71,8 +72,14 @@ Texture 	Tontana_Fire_Atlas   	../assets/Textures/Sprites/Tontana_Fire_Atlas.png
 Texture 	Military_Atlas   	../assets/Textures/Sprites/Military_Atlas.png
 Texture 	Coca_Atlas   		../assets/Textures/Sprites/Coca_Atlas.png
 
+Texture 	Cuba_Loading_Atlas   	../assets/Textures/Sprites/Cuba_Loading_Atlas.png
+Texture 	Bermuda_Loading_Atlas  	../assets/Textures/Sprites/Bermuda_Loading_Atlas.png
+Texture 	Miami_Loading_Atlas  	../assets/Textures/Sprites/Miami_Loading_Atlas.png
+
 Texture 	Curtain			../assets/Textures/curtain.png
 Texture 	CurtainTop		../assets/Textures/curtain_top.png
+Texture 	CurtainFull		../assets/Textures/curtainFull.png
+Texture 	Loading			../assets/Textures/Sprites/loading_01.png
 
 # Sprites
 Sprite Menu       		Menu   			0 0 
@@ -103,6 +110,10 @@ Sprite UiCocaine01         	UiCocaine01		0 0
 Sprite UiCocaine02         	UiCocaine02		0 0
 Sprite UiCocaine03         	UiCocaine03		0 0
 
+Sprite CurtainFull         	CurtainFull		0 0
+Sprite Curtain			Curtain                 0 0
+Sprite CurtainTop		CurtainTop		0 0
+
 Sprite Island  		       	Island			0 0
 Sprite Coral	         	Coral			0 0
 Sprite Military       		Military		0 0
@@ -110,6 +121,7 @@ Sprite Shark       		Shark			0 0
 Sprite Coca       		Coca			0 0
 Sprite Bullet       		Bullet			0 0
 
+Sprite Loading			Loading			0 0
 Sprite Fony_Sprite       	Fony_Sprite		0 0
 Sprite Tontana_Sprite       	Tontana_Sprite  	0 0
 Sprite Water_Tree_Sprite       	Water_Tree_Sprite  	0 0
@@ -135,6 +147,10 @@ JSON		../assets/Textures/Sprites/Water_Tree_Atlas.json
 JSON		../assets/Textures/Sprites/Water_Coral_Atlas.json
 JSON		../assets/Textures/Sprites/Water_Coca_Atlas.json
 
+JSON		../assets/Textures/Sprites/Cuba_Loading_Atlas.json
+#JSON		../assets/Textures/Sprites/Bermuda_Loading_Atlas.json
+#JSON		../assets/Textures/Sprites/Miami_Loading_Atlas.json
+
 #
 #  Animation    Name            	Texture     		Speed   Repeats
 Animation       Military_Left    	Military_Atlas    	12      yes
@@ -149,3 +165,6 @@ Animation	Fony_Hit_Right		Fony_Hit_Atlas		12 	yes
 Animation	Water_Tree		Water_Tree_Atlas	3	yes
 Animation	Water_Coral		Water_Coral_Atlas	3	yes
 Animation	Water_Coca		Water_Coca_Atlas	3	yes
+Animation	Cuba_Loading		Cuba_Loading_Atlas	3	yes
+# Animation	Bermuda_Loading		Bermuda_Loading_Atlas	3	yes
+# Animation	Miami_Loading		Miami_Loading_Atlas	3	yes

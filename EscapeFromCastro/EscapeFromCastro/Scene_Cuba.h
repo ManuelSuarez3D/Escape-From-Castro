@@ -13,7 +13,7 @@
 #include "Scene.h"
 #include "GameEngine.h"
 
-struct LevelConfig {
+struct LevelCubaConfig {
     float       bulletSpeed{ 100.f };
     float       scrollSpeed{ 100.f };
     float       enemySpeed{ 200.f };
@@ -48,6 +48,8 @@ private:
     float           m_timeScore = 0.0f;
     float           m_deathTime = 0.0f;
     float           m_introTime = 5.f;
+    float           m_specialTime = 0.0f;
+    sf::Clock       m_pecialFlashClock;
 
     bool            m_isEnd{ false };
     bool            m_isIntro{ false };
@@ -66,7 +68,7 @@ private:
 
     bool			m_drawAABB{ false };
 
-    LevelConfig                         m_config;
+    LevelCubaConfig m_cubaConfig;
 
     //systems
     void            sMovement(sf::Time dt);
@@ -96,8 +98,10 @@ private:
     void            entityMovement();
     void            mapMovement();
 
-
     void	        onEnd() override;
+    void            onRestart();
+    void            nextLevel();
+
     sf::FloatRect   getViewBounds();
     sf::FloatRect   getEnemySpawnBounds();
     sf::FloatRect   getPlayerSpawnBounds();

@@ -3,6 +3,7 @@
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
 #include "Scene_Cuba.h"
+#include "Scene_Loading.h"
 #include <memory>
 
 #pragma region SceneLoad
@@ -23,44 +24,87 @@ void Scene_Menu::init() {
 	m_menu_menu.push_back(std::make_pair("BACK", false));
 	m_menu_menu.push_back(std::make_pair("QUIT", false));
 
-	m_levelPaths.push_back("../assets/level1.txt");
+	m_levelPaths.push_back("../assets/loading.txt");
 
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
 	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
+
 }
 void Scene_Menu::update(sf::Time dt)
 {
+	sUpdate(dt);
 	m_entityManager.update();
 }
-#pragma endregion
-
-#pragma region Utility
 void Scene_Menu::onEnd()
 {
 	m_game->window().close();
 }
 #pragma endregion
 
+#pragma region Utility
+sf::FloatRect Scene_Menu::getViewBounds() {
+	auto view = m_game->window().getView();
+	return sf::FloatRect(
+		(view.getCenter().x - view.getSize().x / 2.f), (view.getCenter().y - view.getSize().y / 2.f),
+		view.getSize().x, view.getSize().y);
+}
+#pragma endregion
+
 #pragma region System
 void Scene_Menu::sDoAction(const Command& action) {
 
-	if (action.type() == "START") {
-		if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
-		if (action.name() == "MOUSE_CLICK") {
-			
-			if (menuState("START"))
-				m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, m_levelPaths[0]));
+	if (!m_isCuba) {
+		if (action.type() == "START") {
+			if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
+			if (action.name() == "MOUSE_CLICK") {
 
-			else if (menuState("CONTROLS")) {
-				m_isGuide = true;
+				if (menuState("START"))
+					//m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
+					m_isCuba = true;
 
-				if (menuState("BACK")) {
-					menuSelection("ALL", false);
-					m_isGuide = false;
+				else if (menuState("CONTROLS")) {
+					m_isGuide = true;
+
+					if (menuState("BACK")) {
+						menuSelection("ALL", false);
+						m_isGuide = false;
+					}
+				}
+				else if (menuState("QUIT")) {
+					onEnd();
 				}
 			}
-			else if (menuState("QUIT")){
-				onEnd();
+		}
+	}
+}
+void Scene_Menu::sMovement(sf::Time dt) {
+
+	sf::FloatRect view = getViewBounds();
+	m_worldView.move(m_menuConfig.scrollSpeed * dt.asSeconds() * 1, 0.f);
+
+	if (m_isCuba) {
+		for (auto& e : m_entityManager.getEntities("curtaintop")) {
+			auto ebb = e->getComponent<CBoundingBox>();
+			if (e->hasComponent<CTransform>()) {
+				auto& tfm = e->getComponent<CTransform>();
+				if ((tfm.pos.y + ebb.size.y) < 17.f) {
+					tfm.pos.y += 50.f * dt.asSeconds();
+				}
+				else {
+
+					for (auto& e : m_entityManager.getEntities("curtain")) {
+						auto ebb = e->getComponent<CBoundingBox>();
+						if (e->hasComponent<CTransform>()) {
+							auto& tfm = e->getComponent<CTransform>();
+							if ((tfm.pos.y + ebb.size.y) < 512.f) {
+								tfm.pos.y += 145.f * dt.asSeconds();
+							}
+							else {
+								m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -222,7 +266,38 @@ void Scene_Menu::sRender()
 			}
 		}
 	}
+
+	if (m_isCuba) {
+		for (auto& e : m_entityManager.getEntities("curtain")) {
+
+			if (e->getComponent<CSprite>().has) {
+				auto& sprite = e->getComponent<CSprite>().sprite;
+				if (e->hasComponent<CTransform>()) {
+					auto& tfm = e->getComponent<CTransform>();
+					sprite.setPosition(tfm.pos);
+					sprite.setRotation(tfm.angle);
+				}
+				m_game->window().draw(sprite);
+			}
+		}
+		for (auto& e : m_entityManager.getEntities("curtaintop")) {
+
+			if (e->getComponent<CSprite>().has) {
+				auto& sprite = e->getComponent<CSprite>().sprite;
+				if (e->hasComponent<CTransform>()) {
+					auto& tfm = e->getComponent<CTransform>();
+					sprite.setPosition(tfm.pos);
+					sprite.setRotation(tfm.angle);
+				}
+				m_game->window().draw(sprite);
+			}
+		}
+	}
 	menuSound();
+}
+void Scene_Menu::sUpdate(sf::Time dt) {
+
+	sMovement(dt);
 }
 #pragma endregion
 
@@ -283,7 +358,6 @@ void Scene_Menu::loadMenu(const std::string& path) {
 
 	while (!config.eof()) {
 		if (token == "Bkg") {
-
 			std::string name;
 			sf::Vector2f pos;
 
@@ -441,6 +515,38 @@ void Scene_Menu::loadMenu(const std::string& path) {
 			sprite.setOrigin(0.f, 0.f);
 			sprite.setPosition(pos);
 		}
+		else if (token == "CurtainTop") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("curtaintop");
+			sf::Vector2f adjustedSpawn{ pos.x , pos.y - 17.f };
+			e->addComponent<CTransform>(adjustedSpawn);
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+			e->addComponent<CBoundingBox>(spriteSize);
+
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+			}
+		else if (token == "Curtain") {
+				std::string name;
+				sf::Vector2f pos;
+
+				config >> name >> pos.x >> pos.y;
+				auto e = m_entityManager.addEntity("curtain");
+				sf::Vector2f adjustedSpawn{ pos.x , pos.y - 512.f };
+				e->addComponent<CTransform>(adjustedSpawn);
+				auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+				auto spriteSize = sprite.getLocalBounds().getSize();
+				e->addComponent<CBoundingBox>(spriteSize);
+
+				sprite.setOrigin(0.f, 0.f);
+				sprite.setPosition(pos);
+
+				}
 		else if (token[0] == '#') {
 			std::cout << token;
 		}

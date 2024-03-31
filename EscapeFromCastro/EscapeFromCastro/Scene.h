@@ -16,9 +16,15 @@ class Scene
 
 protected:
 
-	GameEngine* m_game;
+	GameEngine*		m_game;
 	EntityManager	m_entityManager;
 	CommandMap		m_commands;
+
+	bool			m_isCuba{ false };
+	bool			m_isBermuda{ false };
+	bool			m_isMiami{ false };
+
+
 	bool			m_isPaused{ false };
 	bool			m_hasEnded{ false };
 	size_t			m_currentFrame{ 0 };
