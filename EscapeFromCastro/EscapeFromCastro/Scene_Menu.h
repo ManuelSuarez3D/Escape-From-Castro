@@ -22,7 +22,11 @@ private:
 	sf::View					m_worldView;
 
 	bool						m_drawAABB{ false };
+	bool						m_isPlay{ false };
+	bool						m_playSound{ false };
 	bool						m_isGuide{ false };
+	bool						m_isLevels{ false };
+	bool						m_isCredits{ false };
 
 	LevelMenuConfig             m_menuConfig;
 	sf::FloatRect				getViewBounds();

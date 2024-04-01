@@ -22,15 +22,31 @@ Texture		Level3			../assets/Textures/florida.png
 
 Texture 	Start01         	../assets/Textures/start_01.png
 Texture 	Start02         	../assets/Textures/start_02.png
+
+Texture		Levels01		../assets/Textures/levels_01.png
+Texture		Levels02		../assets/Textures/levels_02.png
+Texture		Chapters1a		../assets/Textures/chapter1_01.png
+Texture		Chapters1b		../assets/Textures/chapter1_02.png
+Texture		Chapters2a		../assets/Textures/chapter2_01.png
+Texture		Chapters2b		../assets/Textures/chapter2_02.png
+Texture		Chapters3a		../assets/Textures/chapter3_01.png
+Texture		Chapters3b		../assets/Textures/chapter3_02.png
+
 Texture 	Controls01     		../assets/Textures/controls_01.png
 Texture 	Controls02     		../assets/Textures/controls_02.png
+Texture 	Instructions    	../assets/Textures/instructions_01.png
+
+Texture 	Credits01     		../assets/Textures/credits_01.png
+Texture 	Credits02     		../assets/Textures/credits_02.png
+Texture 	ByMe     		../assets/Textures/byme_01.png
+
 Texture 	Quit01          	../assets/Textures/quit_01.png
 Texture 	Quit02          	../assets/Textures/quit_02.png
+
 Texture 	Restart01       	../assets/Textures/restart_01.png
 Texture 	Restart02       	../assets/Textures/restart_02.png
 Texture 	Back01          	../assets/Textures/back_01.png
 Texture 	Back02          	../assets/Textures/back_02.png
-Texture 	Instructions    	../assets/Textures/instructions_01.png
 
 Texture 	UiSpecial      		../assets/Textures/ui_special.png
 Texture 	UiScore          	../assets/Textures/ui_score.png
@@ -107,16 +123,34 @@ Sprite Menu       		Menu   			0 0
 Sprite Level1       		Level1   		0 0
 Sprite Level2			Level2			0 0
 Sprite Level3			Level3			0 0
+
+Sprite	Levels01		Levels01 		0 0
+Sprite	Levels02		Levels02		0 0
+Sprite	Chapters1a		Chapters1a		0 0
+Sprite	Chapters1b		Chapters1b		0 0
+Sprite	Chapters2a		Chapters2a		0 0
+Sprite	Chapters2b		Chapters2b		0 0
+Sprite	Chapters3a		Chapters3a		0 0
+Sprite	Chapters3b		Chapters3b		0 0
+Sprite	Credits01		Credits01		0 0
+Sprite	Credits02		Credits02		0 0
+Sprite	ByMe			ByMe			0 0
+
 Sprite Start01         		Start01			0 0
 Sprite Start02         		Start02			0 0
+
 Sprite Controls01         	Controls01		0 0
 Sprite Controls02         	Controls02		0 0 
+
 Sprite Quit01          		Quit01			0 0 
 Sprite Quit02        		Quit02			0 0
+
 Sprite Back01          		Back01			0 0 
 Sprite Back02        		Back02			0 0
+
 Sprite Restart01          	Restart01		0 0 
 Sprite Restart02        	Restart02		0 0
+
 Sprite Instructions		Instructions		0 0
 Sprite GameOverT          	GameOverT		0 0
 Sprite Chapter1a         	Chapter1a		0 0

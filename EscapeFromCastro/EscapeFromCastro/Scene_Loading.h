@@ -16,6 +16,7 @@ private:
 	sf::Clock       m_timeFlashClock;
 
 	void			loadLevel(const std::string& path);
+	void			loadSelectedLevel(const std::string& filePath);
 	void            init();
 
 	void            sMovement(sf::Time dt);
@@ -34,11 +35,10 @@ private:
 public:
 
 	Scene_Loading(GameEngine* gameEngine, const std::string& levelPath);
-
-
+			
 	void			loadCuba();
 	void			loadBermuda();
-	void			loadMiami();
+	void			loadUSA();
 
 };
 

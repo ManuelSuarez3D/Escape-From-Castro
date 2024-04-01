@@ -20,14 +20,17 @@ protected:
 	EntityManager	m_entityManager;
 	CommandMap		m_commands;
 
-	bool			m_isCuba{ false };
-	bool			m_isBermuda{ false };
-	bool			m_isMiami{ false };
 
+	void			writeToLoadingFile(std::string level);
 
 	bool			m_isPaused{ false };
-	bool			m_hasEnded{ false };
+
 	size_t			m_currentFrame{ 0 };
+
+	bool			m_isCuba{ false };
+	bool			m_isBermuda{ false };
+	bool			m_isUSA{ false };
+	bool			m_is0ver{ false };
 
 	virtual void	onEnd() = 0;
 	void			setPaused(bool paused);
@@ -39,6 +42,8 @@ public:
 	virtual void		update(sf::Time dt) = 0;
 	virtual void		sDoAction(const Command& action) = 0;
 	virtual void		sRender() = 0;
+
+	bool				getLevelSelection(std::string level);
 
 	void				simulate(int);
 	void				doAction(Command);

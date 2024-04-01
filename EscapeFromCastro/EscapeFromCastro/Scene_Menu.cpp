@@ -2,6 +2,7 @@
 #include "Physics.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
+#include "Scene.h"
 #include "Scene_Cuba.h"
 #include "Scene_Loading.h"
 #include "Scene_Bermuda.h"
@@ -22,12 +23,17 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 void Scene_Menu::init() {
 
 	m_menu_menu.push_back(std::make_pair("START", false));
+	m_menu_menu.push_back(std::make_pair("LEVELS", false));
 	m_menu_menu.push_back(std::make_pair("CONTROLS", false));
+	m_menu_menu.push_back(std::make_pair("CREDITS", false));
+	m_menu_menu.push_back(std::make_pair("CHAPTER1", false));
+	m_menu_menu.push_back(std::make_pair("CHAPTER2", false));
+	m_menu_menu.push_back(std::make_pair("CHAPTER3", false));
 	m_menu_menu.push_back(std::make_pair("BACK", false));
 	m_menu_menu.push_back(std::make_pair("QUIT", false));
 
-	//m_levelPaths.push_back("../assets/loading.txt");
-	m_levelPaths.push_back("../assets/level1.txt");
+	m_levelPaths.push_back("../assets/loading.txt");
+	//m_levelPaths.push_back("../assets/level1.txt");
 	//m_levelPaths.push_back("../assets/level2.txt");
 	//m_levelPaths.push_back("../assets/level3.txt");
 
@@ -58,14 +64,34 @@ sf::FloatRect Scene_Menu::getViewBounds() {
 #pragma region System
 void Scene_Menu::sDoAction(const Command& action) {
 
-	//if (!m_isCuba) {
+	if (!m_isPlay) {
 		if (action.type() == "START") {
 			if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
 			if (action.name() == "MOUSE_CLICK") {
-
 				if (menuState("START")) {
-					m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, m_levelPaths[0]));
-					m_isCuba = true;
+					m_isPlay = true;
+				}
+				else if (menuState("LEVELS")) {
+					m_isLevels = true;
+
+					if (menuState("CHAPTER1")) {
+
+						m_isCuba = true;
+						writeToLoadingFile("CUBA");
+						m_isPlay = true;
+					}
+					else if (menuState("CHAPTER2")) {
+						writeToLoadingFile("BERMUDA");
+						m_isPlay = true;
+					}
+					else if (menuState("CHAPTER3")) {
+						writeToLoadingFile("USA");
+						m_isPlay = true;
+					}
+					else if (menuState("BACK")) {
+						menuSelection("ALL", false);
+						m_isLevels = false;
+					}
 				}
 				else if (menuState("CONTROLS")) {
 					m_isGuide = true;
@@ -75,19 +101,27 @@ void Scene_Menu::sDoAction(const Command& action) {
 						m_isGuide = false;
 					}
 				}
+				else if (menuState("CREDITS")) {
+					m_isCredits = true;
+
+					if (menuState("BACK")) {
+						menuSelection("ALL", false);
+						m_isCredits = false;
+					}
+				}
 				else if (menuState("QUIT")) {
 					onEnd();
 				}
 			}
 		}
-	//}
+	}
 }
 void Scene_Menu::sMovement(sf::Time dt) {
 
 	sf::FloatRect view = getViewBounds();
 	m_worldView.move(m_menuConfig.scrollSpeed * dt.asSeconds() * 1, 0.f);
 
-	if (m_isCuba) {
+	if (m_isPlay) {
 
 		for (auto& e : m_entityManager.getEntities("curtaintop")) {
 			auto ebb = e->getComponent<CBoundingBox>();
@@ -106,8 +140,11 @@ void Scene_Menu::sMovement(sf::Time dt) {
 							}
 							else {
 								tfm.pos.y = 0 - 512.f;
-								m_isCuba = false;
-								//m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
+								m_isPlay = false;
+								m_isLevels = false;
+								m_isGuide = false;
+								m_isCredits = false;
+								m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, m_levelPaths[0]));
 							}
 						}
 					}
@@ -151,7 +188,7 @@ void Scene_Menu::sRender()
 		}
 	}
 
-	if (!menuState("GUIDE")) {
+	if (!m_isGuide && !m_isLevels && !m_isCredits) {
 		for (auto& e1 : m_entityManager.getEntities("start1")) {
 
 			if (e1->hasComponent<CSprite>()) {
@@ -166,8 +203,9 @@ void Scene_Menu::sRender()
 
 						if (overlap.x > 0 && overlap.y > 0) {
 
-							if (!menuSound()) {
-								menuSound(true);
+							if (!m_playSound) {
+								SoundPlayer::getInstance().play("menuPing");
+								m_playSound = true;
 							}
 
 							menuSelection("START", true);
@@ -181,22 +219,53 @@ void Scene_Menu::sRender()
 				}
 			}
 		}
-		for (auto& e1 : m_entityManager.getEntities("ctrls1")) {
-
+		for (auto& e1 : m_entityManager.getEntities("levels1")) {
+		
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
-
-
+		
+		
+				for (auto e2 : m_entityManager.getEntities("levels2")) {
+					if (e2->hasComponent<CSprite>()) {
+						auto& sprite2 = e2->getComponent<CSprite>().sprite;
+		
+						if (overlap.x > 0 && overlap.y > 0) {
+		
+							if (!m_playSound) {
+								SoundPlayer::getInstance().play("menuPing");
+								m_playSound = true;
+							}
+		
+							menuSelection("LEVELS", true);
+							m_game->window().draw(sprite2);
+						}
+						else {
+							menuSelection("LEVELS", false);
+							m_game->window().draw(sprite1);
+						}
+					}
+				}
+			}
+		}
+		for (auto& e1 : m_entityManager.getEntities("ctrls1")) {
+		
+			if (e1->hasComponent<CSprite>()) {
+				auto& sprite1 = e1->getComponent<CSprite>().sprite;
+				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
+				auto test = e1->getComponent<CTransform>();
+		
+		
 				for (auto e2 : m_entityManager.getEntities("ctrls2")) {
 					if (e2->hasComponent<CSprite>()) {
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
-
+		
 						if (overlap.x > 0 && overlap.y > 0) {
-
-							if (!menuSound()) {
-								menuSound(true);
+		
+							if (!m_playSound) {
+								SoundPlayer::getInstance().play("menuPing");
+								m_playSound = true;
 							}
 							menuSelection("CONTROLS", true);
 							m_game->window().draw(sprite2);
@@ -209,21 +278,52 @@ void Scene_Menu::sRender()
 				}
 			}
 		}
-		for (auto& e1 : m_entityManager.getEntities("quit1")) {
-
+		for (auto& e1 : m_entityManager.getEntities("credits1")) {
+		
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
 				auto test = e1->getComponent<CTransform>();
-
+		
+		
+				for (auto e2 : m_entityManager.getEntities("credits2")) {
+					if (e2->hasComponent<CSprite>()) {
+						auto& sprite2 = e2->getComponent<CSprite>().sprite;
+		
+						if (overlap.x > 0 && overlap.y > 0) {
+		
+							if (!m_playSound) {
+								SoundPlayer::getInstance().play("menuPing");
+								m_playSound = true;
+							}
+		
+							menuSelection("CREDITS", true);
+							m_game->window().draw(sprite2);
+						}
+						else {
+							menuSelection("CREDITS", false);
+							m_game->window().draw(sprite1);
+						}
+					}
+				}
+			}
+		}
+		for (auto& e1 : m_entityManager.getEntities("quit1")) {
+		
+			if (e1->hasComponent<CSprite>()) {
+				auto& sprite1 = e1->getComponent<CSprite>().sprite;
+				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
+				auto test = e1->getComponent<CTransform>();
+		
 				for (auto e2 : m_entityManager.getEntities("quit2")) {
 					if (e2->hasComponent<CSprite>()) {
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
-
+		
 						if (overlap.x > 0 && overlap.y > 0) {
-
-							if (!menuSound()) {
-								menuSound(true);
+		
+							if (!m_playSound) {
+								SoundPlayer::getInstance().play("menuPing");
+								m_playSound = true;
 							}
 							menuSelection("QUIT", true);
 							m_game->window().draw(sprite2);
@@ -238,13 +338,116 @@ void Scene_Menu::sRender()
 		}
 	}
 	else {
-		for (auto& e : m_entityManager.getEntities("instruction")) {
-			if (e->getComponent<CSprite>().has) {
-				auto& sprite = e->getComponent<CSprite>().sprite;
-				m_game->window().draw(sprite);
+
+		if (m_isLevels) {
+			for (auto& e1 : m_entityManager.getEntities("chapt1a")) {
+
+				if (e1->hasComponent<CSprite>()) {
+					auto& sprite1 = e1->getComponent<CSprite>().sprite;
+					auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
+					auto test = e1->getComponent<CTransform>();
+
+
+					for (auto e2 : m_entityManager.getEntities("chapt1b")) {
+						if (e2->hasComponent<CSprite>()) {
+							auto& sprite2 = e2->getComponent<CSprite>().sprite;
+
+							if (overlap.x > 0 && overlap.y > 0) {
+
+								if (!m_playSound && menuState("LEVELS")) {
+									SoundPlayer::getInstance().play("menuPing");
+									m_playSound = true;
+								}
+
+								menuSelection("CHAPTER1", true);
+								m_game->window().draw(sprite2);
+							}
+							else {
+								menuSelection("CHAPTER1", false);
+								m_game->window().draw(sprite1);
+							}
+						}
+					}
+				}
+			}
+			for (auto& e1 : m_entityManager.getEntities("chapt2a")) {
+
+				if (e1->hasComponent<CSprite>()) {
+					auto& sprite1 = e1->getComponent<CSprite>().sprite;
+					auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
+					auto test = e1->getComponent<CTransform>();
+
+
+					for (auto e2 : m_entityManager.getEntities("chapt2b")) {
+						if (e2->hasComponent<CSprite>()) {
+							auto& sprite2 = e2->getComponent<CSprite>().sprite;
+
+							if (overlap.x > 0 && overlap.y > 0) {
+
+								if (!m_playSound && menuState("CHAPTER2")) {
+									SoundPlayer::getInstance().play("menuPing");
+									m_playSound = true;
+								}
+
+								menuSelection("CHAPTER2", true);
+								m_game->window().draw(sprite2);
+							}
+							else {
+								menuSelection("CHAPTER2", false);
+								m_game->window().draw(sprite1);
+							}
+						}
+					}
+				}
+			}
+			for (auto& e1 : m_entityManager.getEntities("chapt3a")) {
+
+				if (e1->hasComponent<CSprite>()) {
+					auto& sprite1 = e1->getComponent<CSprite>().sprite;
+					auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
+					auto test = e1->getComponent<CTransform>();
+
+
+					for (auto e2 : m_entityManager.getEntities("chapt3b")) {
+						if (e2->hasComponent<CSprite>()) {
+							auto& sprite2 = e2->getComponent<CSprite>().sprite;
+
+							if (overlap.x > 0 && overlap.y > 0) {
+
+								if (!m_playSound && menuState("CHAPTER3")) {
+									SoundPlayer::getInstance().play("menuPing");
+									m_playSound = true;
+								}
+
+								menuSelection("CHAPTER3", true);
+								m_game->window().draw(sprite2);
+							}
+							else {
+								menuSelection("CHAPTER3", false);
+								m_game->window().draw(sprite1);
+							}
+						}
+					}
+				}
 			}
 		}
-
+			
+		if (m_isGuide) {
+			for (auto& e : m_entityManager.getEntities("instruction")) {
+				if (e->getComponent<CSprite>().has) {
+					auto& sprite = e->getComponent<CSprite>().sprite;
+					m_game->window().draw(sprite);
+				}
+			}
+		}
+		if (m_isCredits) {
+			for (auto& e : m_entityManager.getEntities("byme")) {
+				if (e->getComponent<CSprite>().has) {
+					auto& sprite = e->getComponent<CSprite>().sprite;
+					m_game->window().draw(sprite);
+				}
+			}
+		}
 		for (auto& e1 : m_entityManager.getEntities("back1")) {
 
 			if (e1->hasComponent<CSprite>()) {
@@ -258,8 +461,9 @@ void Scene_Menu::sRender()
 
 						if (overlap.x > 0 && overlap.y > 0) {
 
-							if (!menuSound()) {
-								menuSound(true);
+							if (!m_playSound && menuState("BACK")) {
+								SoundPlayer::getInstance().play("menuPing");
+								m_playSound = true;
 							}
 							menuSelection("BACK", true);
 							m_game->window().draw(sprite2);
@@ -274,7 +478,7 @@ void Scene_Menu::sRender()
 		}
 	}
 
-	if (m_isCuba) {
+	if (m_isPlay) {
 		for (auto& e : m_entityManager.getEntities("curtain")) {
 
 			if (e->getComponent<CSprite>().has) {
@@ -300,7 +504,24 @@ void Scene_Menu::sRender()
 			}
 		}
 	}
-	menuSound();
+	if(menuState("ALL"))
+		m_playSound = false;
+	else if (m_isLevels && !menuState("CHAPTER1")
+			&& !menuState("CHAPTER1")
+			&& !menuState("CHAPTER2")
+			&& !menuState("CHAPTER3")
+			&& !menuState("BACK")) {
+		m_playSound = false;
+	}
+	else if (m_isGuide && !menuState("BACK")) {
+		m_playSound = false;
+	}
+	else if (m_isCredits && !menuState("BACK")) {
+		m_playSound = false;
+	}
+
+
+	//menuSound();
 }
 void Scene_Menu::sUpdate(sf::Time dt) {
 
@@ -311,12 +532,19 @@ void Scene_Menu::sUpdate(sf::Time dt) {
 #pragma region Menu
 bool Scene_Menu::menuSound(bool check) {
 
-	if (check == true && menuState("ALL"))
-		SoundPlayer::getInstance().play("menuPing");
+	//if (check == true && !menuState("ALL"))
+	//	menuSound(false);
+		//SoundPlayer::getInstance().play("menuPing");
 
-	else if (check == true && menuState("GUIDE") && !menuState("BACK")){
-		SoundPlayer::getInstance().play("menuPing");
-	}
+	//if (check == true && !menuState("ALL") && !menuState("BACK")){
+	//	SoundPlayer::getInstance().play("menuPing");
+	//}
+	//if (check == true && !menuState("GUIDE") && !menuState("BACK")) {
+	//	SoundPlayer::getInstance().play("menuPing");
+	//}
+	//else if (check == true && menuState("CREDITS") && !menuState("BACK")) {
+	//	SoundPlayer::getInstance().play("menuPing");
+	//}
 
 	return check;
 }
@@ -336,14 +564,22 @@ void Scene_Menu::menuSelection(std::string tag, bool selection) {
 }
 bool Scene_Menu::menuState(std::string tag) {
 
+
 	if (tag == "ALL") {
 		return std::all_of(m_menu_menu.begin(), m_menu_menu.end(), [](const auto& item) {
 			return !item.second;
 		});
 	}
-	else if (tag == "GUIDE") {
-		return m_isGuide;
-	}
+	//else if (tag == "GUIDE") {
+	//	return m_isGuide;
+	//}
+	//else if (tag == "LEVELS") {
+	//	return m_isLevels;
+	//}
+	//
+	//else if (tag == "CREDITS") {
+	//	return m_isCredits;
+	//}
 
 	for (auto& item : m_menu_menu) {
 		if (item.first == tag) {
@@ -408,6 +644,149 @@ void Scene_Menu::loadMenu(const std::string& path) {
 			sprite.setOrigin(0.f, 0.f);
 			sprite.setPosition(pos);
 		}
+		else if (token == "Lvls1") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("levels1");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+		}
+		else if (token == "Lvls2") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("levels2");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+		}
+		else if (token == "Chapt1a") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("chapt1a");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+		}
+		else if (token == "Chapt1b") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("chapt1b");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+		}
+		else if (token == "Chapt2a") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("chapt2a");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+		}
+		else if (token == "Chapt2b") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("chapt2b");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+		}
+		else if (token == "Chapt3a") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("chapt3a");
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+		}
+		else if (token == "Chapt3b") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("chapt3b");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			e->addComponent<CBoundingBox>(sprite.getLocalBounds().getSize());
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+		}
 		else if (token == "Ctrls1") {
 			std::string name;
 			sf::Vector2f pos;
@@ -448,6 +827,46 @@ void Scene_Menu::loadMenu(const std::string& path) {
 			sprite.setPosition(pos);
 
 		}
+		else if (token == "Creds1") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("credits1");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			auto spriteSize = sprite.getLocalBounds().getSize();
+
+			e->addComponent<CBoundingBox>(spriteSize);
+			sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+			sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+			e->addComponent<CTransform>(boundingBoxPosition);
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+
+			}
+		else if (token == "Creds2") {
+				std::string name;
+				sf::Vector2f pos;
+
+				config >> name >> pos.x >> pos.y;
+				auto e = m_entityManager.addEntity("credits2");
+
+				auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+				auto spriteSize = sprite.getLocalBounds().getSize();
+
+				e->addComponent<CBoundingBox>(spriteSize);
+				sf::Vector2f spriteOrigin = sprite.getOrigin();
+
+				sf::Vector2f boundingBoxPosition = pos + spriteOrigin;
+
+				e->addComponent<CTransform>(boundingBoxPosition);
+				sprite.setOrigin(0.f, 0.f);
+				sprite.setPosition(pos);
+
+				}
 		else if (token == "Qut1") {
 			std::string name;
 			sf::Vector2f pos;
@@ -522,6 +941,18 @@ void Scene_Menu::loadMenu(const std::string& path) {
 			sprite.setOrigin(0.f, 0.f);
 			sprite.setPosition(pos);
 		}
+		else if (token == "ByMe") {
+			std::string name;
+			sf::Vector2f pos;
+
+			config >> name >> pos.x >> pos.y;
+			auto e = m_entityManager.addEntity("byme");
+
+			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+			e->addComponent<CBoundingBox>(sprite.getLocalBounds().getSize());
+			sprite.setOrigin(0.f, 0.f);
+			sprite.setPosition(pos);
+			}
 		else if (token == "CurtainTop") {
 			std::string name;
 			sf::Vector2f pos;

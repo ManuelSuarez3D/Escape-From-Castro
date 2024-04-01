@@ -88,12 +88,37 @@ void Scene_Loading::loadLevel(const std::string& path) {
 
     config.close();
 }
+void Scene_Loading::loadSelectedLevel(const std::string& filePath) {
+
+    std::ifstream config(filePath);
+    if (config.fail()) {
+        std::cerr << "Open file " << filePath << " failed\n";
+        config.close();
+        exit(1);
+    }
+    std::string token;
+    while (config >> token) {
+        if (token == "isCuba") {
+
+            m_isCuba = true;
+        }
+        else if (token == "isBermuda") {
+
+            m_isBermuda = true;
+        }
+        else if (token[0] == '#') {
+            std::cout << token;
+            std::string tmp;
+            std::getline(config, tmp);
+        }
+    }
+}
 void Scene_Loading::init() {
 
-   m_isCuba = true;
+   //m_isCuba = true;
    MusicPlayer::getInstance().play("loadingTheme");
    MusicPlayer::getInstance().setVolume(50);
-
+   loadSelectedLevel("../assets/levelSelected.txt");
 }
 void Scene_Loading::onEnd() {
 
@@ -217,7 +242,7 @@ void Scene_Loading::renderUI() {
 
         }
     }
-    else if (m_isMiami) {
+    else if (m_isUSA) {
         for (auto& e : m_entityManager.getEntities("loadMiami")) {
 
             auto& anim = e->getComponent<CAnimation>().animation;
@@ -240,10 +265,10 @@ void Scene_Loading::loadCuba() {
     m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, "../assets/level1.txt"), true);
 }
 void Scene_Loading::loadBermuda() {
-  //  m_game->changeScene("LEVEL2", std::make_shared<Scene_Bermuda>(m_game, "../assets/level2.txt"), true);
+    m_game->changeScene("LEVEL2", std::make_shared<Scene_Bermuda>(m_game, "../assets/level2.txt"), true);
 }
-void Scene_Loading::loadMiami() {
-  //  m_game->changeScene("LEVEL3", std::make_shared<Scene_Miami>(m_game, "../assets/level3.txt"), true);
+void Scene_Loading::loadUSA() {
+    m_game->changeScene("LEVEL3", std::make_shared<Scene_USA>(m_game, "../assets/level3.txt"), true);
 }
 #pragma endregion
 
@@ -264,7 +289,7 @@ void Scene_Loading::gameState() {
         loadCuba();
     else if (m_isBermuda)
         loadBermuda();
-    else if (m_isMiami)
-        loadMiami();
+    else if (m_isUSA)
+        loadUSA();
 }
 #pragma endregion
