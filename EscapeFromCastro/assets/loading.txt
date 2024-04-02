@@ -2,4 +2,4 @@
 
 # Level		| Name |	| Values |
 Bkg		CurtainFull 	0 0
-LoadMap		Loading		243 35
+LoadMap		Loading		277 22

@@ -22,6 +22,8 @@ protected:
 
 
 	void			writeToLoadingFile(std::string level);
+	void			writeToScoreFile(int score); 
+	void			writeToInventoryFile(int inventory);
 
 	bool			m_isPaused{ false };
 
@@ -30,7 +32,7 @@ protected:
 	bool			m_isCuba{ false };
 	bool			m_isBermuda{ false };
 	bool			m_isUSA{ false };
-	bool			m_is0ver{ false };
+	bool			m_isOver{ false };
 
 	virtual void	onEnd() = 0;
 	void			setPaused(bool paused);
@@ -42,8 +44,6 @@ public:
 	virtual void		update(sf::Time dt) = 0;
 	virtual void		sDoAction(const Command& action) = 0;
 	virtual void		sRender() = 0;
-
-	bool				getLevelSelection(std::string level);
 
 	void				simulate(int);
 	void				doAction(Command);

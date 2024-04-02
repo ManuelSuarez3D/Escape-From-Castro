@@ -515,6 +515,52 @@ void Scene_Bermuda::loadLevel(const std::string& path) {
 
     config.close();
 }
+void Scene_Bermuda::loadScore(const std::string& filePath) {
+
+    std::ifstream config(filePath);
+    if (config.fail()) {
+        std::cerr << "Open file " << filePath << " failed\n";
+        config.close();
+        exit(1);
+    }
+    std::string token;
+    while (config >> token) {
+        if (token == "Score") {
+            std::string scoreStr;
+            config >> scoreStr;
+
+            m_playScore = std::stoi(scoreStr);
+        }
+        else if (token[0] == '#') {
+            std::cout << token;
+            std::string tmp;
+            std::getline(config, tmp);
+        }
+    }
+}
+void Scene_Bermuda::loadInventory(const std::string& filePath) {
+
+    std::ifstream config(filePath);
+    if (config.fail()) {
+        std::cerr << "Open file " << filePath << " failed\n";
+        config.close();
+        exit(1);
+    }
+    std::string token;
+    while (config >> token) {
+        if (token == "Coca") {
+            std::string inventoryStr;
+            config >> inventoryStr;
+
+            m_special = std::stoi(inventoryStr);
+        }
+        else if (token[0] == '#') {
+            std::cout << token;
+            std::string tmp;
+            std::getline(config, tmp);
+        }
+    }
+}
 void Scene_Bermuda::registerActions() {
     registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
     registerAction(sf::Keyboard::Escape, "BACK");
@@ -561,6 +607,16 @@ void Scene_Bermuda::spawnPlayer(sf::Vector2f pos) {
         hp3Pos = sf::Vector2f{ pos };
     }
 }
+void Scene_Bermuda::nextLevel() {
+
+    m_isUSA = true;
+    writeToInventoryFile(m_special);
+    writeToScoreFile(m_finalScore);
+
+    writeToLoadingFile("USA");
+    m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, "../assets/loading.txt"), true);
+
+}
 void Scene_Bermuda::init() {
 
     registerActions();
@@ -577,7 +633,8 @@ void Scene_Bermuda::init() {
 
     MusicPlayer::getInstance().play("bermudaTheme");
     MusicPlayer::getInstance().setVolume(25);
-
+    loadScore("../assets/score.txt");
+    loadInventory("../assets/inventory.txt");
 }
 #pragma endregion
 
@@ -846,24 +903,63 @@ void Scene_Bermuda::sMovement(sf::Time dt) {
             tfm.pos += tfm.vel * dt.asSeconds();
         }
     }
+
     for (auto& e : m_entityManager.getEntities("enemyWhirlpool")) {
+        std::uniform_int_distribution<int> yLaneDis(1, 2);
+        int test = yLaneDis(rng);
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
+            auto ebb = e->getComponent<CBoundingBox>();
 
-            tfm.pos -= tfm.vel * dt.asSeconds();
+            tfm.pos.x -= tfm.vel.x * dt.asSeconds();
+
+            float speed = 150.0f;
+            float movingY = speed * dt.asSeconds();
+
+            if (test == 1 && (tfm.pos.y + (ebb.size.y / 6)) > view.top + 205.f)
+                tfm.pos.y -= movingY;
+             else if (test == 2 && (tfm.pos.y + (ebb.size.y / 2)) < 512.f)
+                tfm.pos.y += movingY;
         }
     }
+
     for (auto& e : m_entityManager.getEntities("enemyTornado")) {
+
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
+            auto& eUp = e->getComponent<CType>().up;
+            auto& eDown = e->getComponent<CType>().down;
+            auto ebb = e->getComponent<CBoundingBox>();
+            tfm.pos.x -= tfm.vel.x * dt.asSeconds();
 
-            tfm.pos -= tfm.vel * dt.asSeconds();
+            float speed = 100.0f;
+            float movingY = speed * dt.asSeconds();
+
+            if (eUp) {
+                if ((tfm.pos.y + (ebb.size.y / 2)) > view.top + 190.f) {
+                    tfm.pos.y -= movingY;
+                }
+                else {
+                    eUp = false;
+                    eDown = true;
+                }
+            }
+            if (eDown) {
+                if ((tfm.pos.y + (ebb.size.y / 2)) < 512.f)
+                    tfm.pos.y += movingY;
+                else{
+                    eUp = true;
+                    eDown = false;
+                }
+
+            }
         }
     }
+
     for (auto& e : m_entityManager.getEntities("enemyShark")) {
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
-
+            
             tfm.pos -= tfm.vel * dt.asSeconds();
         }
     }
@@ -882,8 +978,11 @@ void Scene_Bermuda::sMovement(sf::Time dt) {
             if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
                 tfm.pos.y -= 145.f * dt.asSeconds();
             }
-            else if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
+            if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
                 tfm.pos.y += 145.f * dt.asSeconds();
+            }
+            else if (m_isEnd && (tfm.pos.y + ebb.size.y) == 512.f) {
+                nextLevel();
             }
         }
     }
@@ -928,7 +1027,7 @@ void Scene_Bermuda::sAnimation(sf::Time dt) {
 void Scene_Bermuda::sEntitySpawner(sf::Time dt) {
     sf::FloatRect field = getEnemySpawnBounds();
 
-    std::exponential_distribution<float> exp(0.8f);
+    std::exponential_distribution<float> exp(1.f);
 
     static std::vector<float> spawnLanes{ 478.f };
 
@@ -1613,9 +1712,6 @@ void Scene_Bermuda::onEnd() {
     m_game->quitLevel();
 
 }
-void Scene_Bermuda::nextLevel() {
-    m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, "../assets/loading.txt"), true);
-}// To change
 void Scene_Bermuda::update(sf::Time dt) {
     sUpdate(dt);
 }
@@ -1689,7 +1785,7 @@ void Scene_Bermuda::spawnEnemy(sf::Vector2f pos) {
     }
     case 2:
     {
-        if (m_entityManager.getEntities("enemyShark").size() < 4 && !m_isIntro) {
+        if (m_entityManager.getEntities("enemyShark").size() < 2 && !m_isIntro) {
             float eHalfHeight = 11.5f;
             if (pos.y > field.top + field.height - eHalfHeight) {
                 pos.y = field.top + field.height - eHalfHeight;
@@ -1719,7 +1815,7 @@ void Scene_Bermuda::spawnEnemy(sf::Vector2f pos) {
     }
     case 4:
     {
-        if (m_entityManager.getEntities("enemyWhirlpool").size() < 7) {
+        if (m_entityManager.getEntities("enemyWhirlpool").size() < 4) {
             float eHalfHeight = 26.f;
             if (pos.y > field.top + field.height - eHalfHeight) {
                 pos.y = field.top + field.height - eHalfHeight;
@@ -1750,6 +1846,9 @@ void Scene_Bermuda::spawnEnemy(sf::Vector2f pos) {
 void Scene_Bermuda::spawnTornado(sf::Vector2f pos) {
     auto raceCarL = m_entityManager.addEntity("enemyTornado");
 
+    std::uniform_int_distribution<int> initialDirection(0, 1);
+    bool direction = initialDirection(rng);
+
     raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_bermudaConfig.enemySpeed, 0.f });
     auto& sprite = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Tornado")).sprite;
     raceCarL->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tornado_Left"));
@@ -1757,8 +1856,14 @@ void Scene_Bermuda::spawnTornado(sf::Vector2f pos) {
     auto spriteSize = sprite.getLocalBounds().getSize();
     raceCarL->addComponent<CBoundingBox>(spriteSize);
 
-    raceCarL->addComponent<CType>().tornado = true;
-    raceCarL->addComponent<CType>().entity = true;
+    auto& typeComponent = raceCarL->getComponent<CType>();
+    if (direction)
+        typeComponent.up = true;
+    else
+        typeComponent.down = true;
+
+    typeComponent.tornado = true;
+    typeComponent.entity = true;
 
     //auto waterAnim = m_entityManager.addEntity("water");
     //auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Coral_Sprite")).sprite;
@@ -1957,6 +2062,7 @@ void Scene_Bermuda::lifeState() {
         auto& lifespan = e->getComponent<CLife>();
         if (lifespan.has) {
             if (lifespan.remaining < 0) {
+                m_playScore += 40.f;
                 e->destroy();
             }
         }
@@ -2028,7 +2134,7 @@ void Scene_Bermuda::checkCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyTornado")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "tornado");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
@@ -2040,35 +2146,22 @@ void Scene_Bermuda::checkCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyWhirlpool")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "coral");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "whirpool");
         if (overlap.x > 0 and overlap.y > 0) {
 
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
-            for (auto& e2 : m_entityManager.getEntities("water")) {
-                auto overlap = Physics::getOverlapEntity(e2, e);
-                if (overlap.x > 0 and overlap.y > 0) {
-                    if (e2->getComponent<CType>().coral) {
-                        e2->destroy();
-                    }
-                }
-            }
-            e->destroy();
-            if (m_playScore >= 5) {
-                m_playScore -= 5.f;
-            }
-            else {
-                m_playScore -= m_playScore;
-            }
+
             if (m_life != 0) {
                 m_life -= 1;
             }
+            playerState();
         }
     }
 
     for (auto& e : m_entityManager.getEntities("enemySquid")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "squid");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
@@ -2114,28 +2207,21 @@ void Scene_Bermuda::checkSpecialCollisions() {
         }
     }
     for (auto& e : m_entityManager.getEntities("enemyWhirlpool")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "coral");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "whirpool");
         if (overlap.x > 0 and overlap.y > 0) {
-            for (auto& e2 : m_entityManager.getEntities("water")) {
-                auto overlap = Physics::getOverlapEntity(e2, e);
-                if (overlap.x > 0 and overlap.y > 0) {
-                    if (e2->getComponent<CType>().coral) {
-                        e2->destroy();
-                    }
-                }
+            m_player->removeComponent<CBoundingBox>();
+            m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
+            m_player->addComponent<CState>().state = "dead";
+
+            if (m_life != 0) {
+                m_life -= 1;
             }
-            e->destroy();
-            if (m_playScore >= 5) {
-                m_playScore -= 5.f;
-            }
-            else {
-                m_playScore -= m_playScore;
-            }
+            playerState();
         }
     }
 
     for (auto& e : m_entityManager.getEntities("enemyTornado")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "tornado");
         if (overlap.x > 0 and overlap.y > 0) {
 
             m_player->removeComponent<CBoundingBox>();
@@ -2147,21 +2233,12 @@ void Scene_Bermuda::checkSpecialCollisions() {
             }
             playerState();
         }
-
-        for (auto& e2 : m_entityManager.getEntities("bullet")) {
-            auto overlap2 = Physics::getOverlapEntity(e, e2, "bullet");
-            if (overlap2.x > 0 and overlap2.y > 0) {
-                e->getComponent<CLife>().remaining -= 1;
-                e2->destroy();
-                m_playScore += 30.f;
-            }
-        }
     }
 
 
 
     for (auto& e : m_entityManager.getEntities("enemySquid")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "squid");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
@@ -2169,6 +2246,14 @@ void Scene_Bermuda::checkSpecialCollisions() {
 
             if (m_life != 0) {
                 m_life -= 1;
+            }
+        }
+        for (auto& e2 : m_entityManager.getEntities("bullet")) {
+            auto overlap2 = Physics::getOverlapEntity(e, e2, "bullet");
+            if (overlap2.x > 0 and overlap2.y > 0) {
+                e->getComponent<CLife>().remaining -= 1;
+                e2->destroy();
+                m_playScore += 30.f;
             }
         }
     }

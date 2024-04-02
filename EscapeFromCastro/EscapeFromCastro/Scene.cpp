@@ -48,12 +48,42 @@ void Scene::writeToLoadingFile(std::string level) {
             outputFile << "isUSA " << (m_isUSA ? "true" : "false") << std::endl;
         }
         else if (level == "OVER") {
-            outputFile << "isUSA " << (m_is0ver ? "true" : "false") << std::endl;
+            outputFile << "isOver " << (m_isOver ? "true" : "false") << std::endl;
         }
         outputFile.close();
         std::cout << "Successfully wrote to levelSelected.txt" << std::endl;
     }
     else {
         std::cerr << "Failed to open levelSelected.txt" << std::endl;
+    }
+}
+
+void Scene::writeToScoreFile(int score) {
+    std::ofstream outputFile("../assets/score.txt");
+
+    if (outputFile.is_open()) {
+
+        outputFile << "#\n" << "Score " << std::to_string(score) << std::endl;
+
+        outputFile.close();
+        std::cout << "Successfully wrote to score.txt" << std::endl;
+    }
+    else {
+        std::cerr << "Failed to open score.txt" << std::endl;
+    }
+}
+
+void Scene::writeToInventoryFile(int inventory) {
+    std::ofstream outputFile("../assets/inventory.txt");
+
+    if (outputFile.is_open()) {
+
+        outputFile << "#\n" << "Coca " << std::to_string(inventory) << std::endl;
+
+        outputFile.close();
+        std::cout << "Successfully wrote to inventory.txt" << std::endl;
+    }
+    else {
+        std::cerr << "Failed to open inventory.txt" << std::endl;
     }
 }

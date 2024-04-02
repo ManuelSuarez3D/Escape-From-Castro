@@ -144,6 +144,9 @@ struct CType : public Component
     bool police{ false };
     bool dune{ false };
 
+    bool up{ false };
+    bool down{ false };
+
     bool entity{ false };
     bool player{ false };
 

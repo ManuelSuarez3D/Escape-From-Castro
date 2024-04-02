@@ -122,7 +122,8 @@ private:
 
     void            specialAbility();
     void            loadLevel(const std::string& path);
-
+    void            loadScore(const std::string& filePath);
+    void            loadInventory(const std::string& filePath);
 
 public:
 

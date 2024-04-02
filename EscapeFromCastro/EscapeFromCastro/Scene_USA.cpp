@@ -515,6 +515,52 @@ void Scene_USA::loadLevel(const std::string& path) {
 
     config.close();
 }
+void Scene_USA::loadScore(const std::string& filePath) {
+
+    std::ifstream config(filePath);
+    if (config.fail()) {
+        std::cerr << "Open file " << filePath << " failed\n";
+        config.close();
+        exit(1);
+    }
+    std::string token;
+    while (config >> token) {
+        if (token == "Score") {
+            std::string scoreStr;
+            config >> scoreStr;
+
+            m_playScore = std::stoi(scoreStr);
+        }
+        else if (token[0] == '#') {
+            std::cout << token;
+            std::string tmp;
+            std::getline(config, tmp);
+        }
+    }
+}
+void Scene_USA::loadInventory(const std::string& filePath) {
+
+    std::ifstream config(filePath);
+    if (config.fail()) {
+        std::cerr << "Open file " << filePath << " failed\n";
+        config.close();
+        exit(1);
+    }
+    std::string token;
+    while (config >> token) {
+        if (token == "Coca") {
+            std::string inventoryStr;
+            config >> inventoryStr;
+
+            m_special = std::stoi(inventoryStr);
+        }
+        else if (token[0] == '#') {
+            std::cout << token;
+            std::string tmp;
+            std::getline(config, tmp);
+        }
+    }
+}
 void Scene_USA::registerActions() {
     registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
     registerAction(sf::Keyboard::Escape, "BACK");
@@ -577,7 +623,17 @@ void Scene_USA::init() {
 
     MusicPlayer::getInstance().play("usaTheme");
     MusicPlayer::getInstance().setVolume(25);
+    loadScore("../assets/score.txt");
+    loadInventory("../assets/inventory.txt");
+}
+void Scene_USA::nextLevel() {
 
+    m_isOver = true;
+    writeToInventoryFile(m_special);
+    writeToScoreFile(m_finalScore);
+
+    writeToLoadingFile("OVER");
+    m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, "../assets/loading.txt"), true);
 }
 #pragma endregion
 
@@ -851,15 +907,29 @@ void Scene_USA::sMovement(sf::Time dt) {
     for (auto& e : m_entityManager.getEntities("enemyPolice")) {
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
+            auto& tfmP = m_player->getComponent<CTransform>();
 
-            tfm.pos -= tfm.vel * dt.asSeconds();
+            sf::Vector2f direction = tfmP.pos - tfm.pos;
+            sf::Vector2f eDirection = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+            if (tfmP.pos.x < tfm.pos.x)
+                tfm.pos.y += (tfm.vel.y + 50.f) * eDirection.y * dt.asSeconds();
+
+            tfm.pos.x -= tfm.vel.x * dt.asSeconds();
         }
     }
     for (auto& e : m_entityManager.getEntities("enemyFloridaMan")) {
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
+            auto& tfmP = m_player->getComponent<CTransform>();
 
-            tfm.pos -= tfm.vel * dt.asSeconds();
+            sf::Vector2f direction = tfmP.pos - tfm.pos;
+            sf::Vector2f eDirection = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+            if (tfmP.pos.x < tfm.pos.x)
+                tfm.pos.y += (tfm.vel.y + 200.f) * eDirection.y * dt.asSeconds();
+
+            tfm.pos.x -= tfm.vel.x * dt.asSeconds();
         }
     }
     for (auto& e : m_entityManager.getEntities("enemyShark")) {
@@ -884,8 +954,11 @@ void Scene_USA::sMovement(sf::Time dt) {
             if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
                 tfm.pos.y -= 145.f * dt.asSeconds();
             }
-            else if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
+            if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
                 tfm.pos.y += 145.f * dt.asSeconds();
+            }
+            else if (m_isEnd && (tfm.pos.y + ebb.size.y) == 512.f) {
+                nextLevel();
             }
         }
     }
@@ -931,7 +1004,7 @@ void Scene_USA::sAnimation(sf::Time dt) {
 void Scene_USA::sEntitySpawner(sf::Time dt) {
     sf::FloatRect field = getEnemySpawnBounds();
 
-    std::exponential_distribution<float> exp(0.8f);
+    std::exponential_distribution<float> exp(1.f);
 
     static std::vector<float> spawnLanes{ 478.f };
 
@@ -954,17 +1027,22 @@ void Scene_USA::sEntitySpawner(sf::Time dt) {
     occupiedLanes.insert(laneNumber);
 
     std::uniform_real_distribution<float> xLaneDis(field.left + field.width, field.left + field.width);
-    std::uniform_real_distribution<float> yRandDis(-150.f, 70.f);
     std::uniform_real_distribution<float> yLaneDis(spawnLanes[laneNumber], spawnLanes[laneNumber] + 34.f);
+
+    std::uniform_real_distribution<float> yRandDis(-150.f, 70.f);
+    std::uniform_real_distribution<float> xRandDis(-50.f, 250.f);
 
     float xLane = xLaneDis(rng);
     float yLane = yLaneDis(rng);
     float yDis = 0.f;
+    float xDis = 0.f;
+
     do {
         yDis = yRandDis(rng);
+        xDis = xRandDis(rng);
     } while (yLane + yDis < field.top + 190.f);
 
-    sf::Vector2f spawnPos{ xLane + 200.f, yLane + yDis };
+    sf::Vector2f spawnPos{ xLane + xDis, yLane + yDis };
 
     static sf::Time countDownTimer{ sf::Time::Zero };
     countDownTimer -= dt;
@@ -1605,9 +1683,6 @@ void Scene_USA::onEnd() {
     MusicPlayer::getInstance().setVolume(50);
     m_game->quitLevel();
 }
-void Scene_USA::nextLevel() {
-    m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, "../assets/loading.txt"), true);
-}// To change
 void Scene_USA::update(sf::Time dt) {
     sUpdate(dt);
 }
@@ -1665,7 +1740,7 @@ void Scene_USA::spawnEnemy(sf::Vector2f pos) {
     {
     case 1:
     {
-        if (m_entityManager.getEntities("enemyFloridaMan").size() < 8 && !m_isIntro) {
+        if (m_entityManager.getEntities("enemyFloridaMan").size() < 2 && !m_isIntro) {
             float eHalfHeight = 41.f;
             float eFullWidth = 325.f;
             if (pos.y > field.top + field.height - eHalfHeight) {
@@ -1681,7 +1756,7 @@ void Scene_USA::spawnEnemy(sf::Vector2f pos) {
     }
     case 2:
     {
-        if (m_entityManager.getEntities("enemyShark").size() < 4 && !m_isIntro) {
+        if (m_entityManager.getEntities("enemyShark").size() < 3 && !m_isIntro) {
             float eHalfHeight = 11.5f;
             if (pos.y > field.top + field.height - eHalfHeight) {
                 pos.y = field.top + field.height - eHalfHeight;
@@ -1695,7 +1770,7 @@ void Scene_USA::spawnEnemy(sf::Vector2f pos) {
     }
     case 3:
     {       // Fix all sizes
-        if (m_entityManager.getEntities("enemyDune").size() < 4) {
+        if (m_entityManager.getEntities("enemyDune").size() < 5) {
             float eFullHeight = 148.f;
             if ((pos.y + eFullHeight) > field.top + field.height) {
                 pos.y = pos.y - eFullHeight;
@@ -1711,7 +1786,7 @@ void Scene_USA::spawnEnemy(sf::Vector2f pos) {
     }
     case 4:
     {
-        if (m_entityManager.getEntities("enemyPolice").size() < 7) {
+        if (m_entityManager.getEntities("enemyPolice").size() < 3 && !m_isIntro) {
             float eHalfHeight = 26.f;
             if (pos.y > field.top + field.height - eHalfHeight) {
                 pos.y = field.top + field.height - eHalfHeight;
@@ -2020,7 +2095,7 @@ void Scene_USA::checkCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyFloridaMan")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "floridaMan");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
@@ -2032,7 +2107,7 @@ void Scene_USA::checkCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyPolice")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "boatPolice");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
@@ -2045,7 +2120,7 @@ void Scene_USA::checkCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyDune")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "dune");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
@@ -2092,7 +2167,7 @@ void Scene_USA::checkSpecialCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyPolice")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "boatPolice");
         if (overlap.x > 0 and overlap.y > 0) {
 
             m_player->removeComponent<CBoundingBox>();
@@ -2117,7 +2192,7 @@ void Scene_USA::checkSpecialCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyFloridaMan")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "floridaMan");
         if (overlap.x > 0 and overlap.y > 0) {
 
             m_player->removeComponent<CBoundingBox>();
@@ -2136,7 +2211,7 @@ void Scene_USA::checkSpecialCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyDune")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "dune");
         if (overlap.x > 0 and overlap.y > 0) {
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));

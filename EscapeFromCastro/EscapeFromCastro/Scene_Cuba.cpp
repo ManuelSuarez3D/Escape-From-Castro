@@ -5,6 +5,7 @@
 #include "Components.h"
 #include "Physics.h"
 #include "Scene_Menu.h"
+#include "Scene_Loading.h"
 #include "Utilities.h"
 #include "MusicPlayer.h"
 #include "Assets.h"
@@ -847,8 +848,15 @@ void Scene_Cuba::sMovement(sf::Time dt) {
     for (auto& e : m_entityManager.getEntities("enemyBoat")) {
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
+            auto& tfmP = m_player->getComponent<CTransform>();
 
-            tfm.pos -= tfm.vel * dt.asSeconds();
+            sf::Vector2f direction = tfmP.pos - tfm.pos;
+            sf::Vector2f eDirection = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+            if (tfmP.pos.x < tfm.pos.x)
+                tfm.pos.y += (tfm.vel.y + 50.f) * eDirection.y * dt.asSeconds();
+
+            tfm.pos.x -= tfm.vel.x * dt.asSeconds();
         }
     }
     for (auto& e : m_entityManager.getEntities("enemyShark")) {
@@ -873,9 +881,13 @@ void Scene_Cuba::sMovement(sf::Time dt) {
             if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
                 tfm.pos.y -= 145.f * dt.asSeconds();
             }
-            else if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
+            if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
                 tfm.pos.y += 145.f * dt.asSeconds();
             }
+            else if(m_isEnd && (tfm.pos.y + ebb.size.y) == 512.f) {
+                nextLevel();
+            }
+            
         }
     }
     for (auto& e : m_entityManager.getEntities("curtaintop")) {
@@ -919,7 +931,7 @@ void Scene_Cuba::sAnimation(sf::Time dt) {
 void Scene_Cuba::sEntitySpawner(sf::Time dt) {
     sf::FloatRect field = getEnemySpawnBounds();
 
-    std::exponential_distribution<float> exp(0.8f);
+    std::exponential_distribution<float> exp(1.f);
 
     static std::vector<float> spawnLanes{ 478.f };
 
@@ -942,17 +954,22 @@ void Scene_Cuba::sEntitySpawner(sf::Time dt) {
     occupiedLanes.insert(laneNumber);
 
     std::uniform_real_distribution<float> xLaneDis(field.left + field.width, field.left + field.width);
-    std::uniform_real_distribution<float> yRandDis(-150.f, 70.f);
     std::uniform_real_distribution<float> yLaneDis(spawnLanes[laneNumber], spawnLanes[laneNumber] + 34.f);
+
+    std::uniform_real_distribution<float> yRandDis(-150.f, 70.f);
+    std::uniform_real_distribution<float> xRandDis(-50.f, 250.f);
 
     float xLane = xLaneDis(rng);
     float yLane = yLaneDis(rng);
     float yDis = 0.f;
+    float xDis = 0.f;
+
     do {
         yDis = yRandDis(rng);
+        xDis = xRandDis(rng);
     } while (yLane + yDis < field.top + 190.f);
 
-    sf::Vector2f spawnPos{ xLane + 200.f, yLane + yDis };
+    sf::Vector2f spawnPos{ xLane + xDis, yLane + yDis };
 
     static sf::Time countDownTimer{ sf::Time::Zero };
     countDownTimer -= dt;
@@ -1561,8 +1578,13 @@ void Scene_Cuba::onEnd() {
     
 }
 void Scene_Cuba::nextLevel() {
-    m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, "../assets/loading.txt"), true);
-}// To change
+    m_isBermuda = true;
+
+    writeToInventoryFile(m_special);
+    writeToScoreFile(m_finalScore);
+    writeToLoadingFile("BERMUDA");
+    m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, "../assets/loading.txt"), true);
+}
 void Scene_Cuba::update(sf::Time dt) {
     sUpdate(dt);
 }
@@ -1620,7 +1642,7 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
     {
         case 1:
         {
-            if (m_entityManager.getEntities("enemyBoat").size() < 2 && !m_isIntro) {
+            if (m_entityManager.getEntities("enemyBoat").size() < 3 && !m_isIntro) {
                 float eHalfHeight = 41.f;
                 float eFullWidth = 325.f;
                 if (pos.y > field.top + field.height - eHalfHeight) {
@@ -1650,7 +1672,7 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
         }
         case 3: 
         {
-            if (m_entityManager.getEntities("enemyIsland").size() < 8) {
+            if (m_entityManager.getEntities("enemyIsland").size() < 7) {
                 float eFullHeight = 148.f;
                 if ((pos.y + eFullHeight) > field.top + field.height) {
                    pos.y = pos.y - eFullHeight;
@@ -1666,7 +1688,7 @@ void Scene_Cuba::spawnEnemy(sf::Vector2f pos) {
         }
         case 4: 
         {
-            if (m_entityManager.getEntities("enemyCoral").size() < 8) {
+            if (m_entityManager.getEntities("enemyCoral").size() < 7) {
                 float eHalfHeight = 26.f;
                 if (pos.y > field.top + field.height - eHalfHeight) {
                     pos.y = field.top + field.height - eHalfHeight;
@@ -1884,6 +1906,7 @@ void Scene_Cuba::lifeState() {
         auto& lifespan = e->getComponent<CLife>();
         if (lifespan.has) {
             if (lifespan.remaining < 0) {
+                m_playScore += 40.f;
                 e->destroy();
             }
         }

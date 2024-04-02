@@ -23,7 +23,6 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
                 float dy = std::abs(atx.pos.y - btx.pos.y);
                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, abb.halfSize.y + bbb.halfSize.y - dy);
             }
-
         }
         if (entityName == "bullet") {
 
@@ -135,6 +134,130 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 5.f - dy);
             }
         }
+        else if (entityName == "squid") {
+
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+            float bottomB = btx.pos.y + bbb.halfSize.y - 21.f;
+
+            float leftB = btx.pos.x - bbb.halfSize.x + 4.f;
+            float rightB = btx.pos.x + bbb.halfSize.x - 54.f;
+
+            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
+            float rightA = atx.pos.x + abb.halfSize.x;
+
+
+            if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+            {
+
+                float dx = std::abs(atx.pos.x - btx.pos.x);
+                float dy = std::abs(bottomA - bottomB);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+            }
+        }
+        else if (entityName == "tornado") {
+
+                // bottom of a and b
+                float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+                float bottomB = btx.pos.y + bbb.halfSize.y - 30.f;
+                // Calculate the left and right edges of the bottom section of b
+                float leftB = btx.pos.x - bbb.halfSize.x + 54.f; // 10 from the left
+                float rightB = btx.pos.x + bbb.halfSize.x - 55.f; // 19 on the right
+
+                // left and right edge of a, 5 in height from the bottom
+                float leftA = atx.pos.x - abb.halfSize.x + 45.f;
+                float rightA = atx.pos.x + abb.halfSize.x;
+
+                // bottom section of a overlaps with bottom section of b
+                if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+                {
+                    // overlap
+                    float dx = std::abs(atx.pos.x - btx.pos.x);
+                    float dy = std::abs(bottomA - bottomB);
+                    overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 15.f - dy); // 5.f in height and 15.f
+                }
+        }
+        else if (entityName == "whirpool") {
+
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+            float bottomB = btx.pos.y + bbb.halfSize.y - 40.f;
+
+            float leftB = btx.pos.x - bbb.halfSize.x + 15.f;
+            float rightB = btx.pos.x + bbb.halfSize.x - 14.f;
+
+            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
+            float rightA = atx.pos.x + abb.halfSize.x;
+
+
+            if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+            {
+
+                float dx = std::abs(atx.pos.x - btx.pos.x);
+                float dy = std::abs(bottomA - bottomB);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+            }
+            }
+        else if (entityName == "boatPolice") {
+
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+            float bottomB = btx.pos.y + bbb.halfSize.y - 10.f;
+
+            float leftB = btx.pos.x - bbb.halfSize.x + 30.f;
+            float rightB = btx.pos.x + bbb.halfSize.x - 61.f;
+
+            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
+            float rightA = atx.pos.x + abb.halfSize.x;
+
+
+            if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+            {
+
+                float dx = std::abs(atx.pos.x - btx.pos.x);
+                float dy = std::abs(bottomA - bottomB);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+            }
+        }
+        else if (entityName == "floridaMan") {
+
+             // bottom of a and b
+             float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+             float bottomB = btx.pos.y + bbb.halfSize.y - 6.f;
+             // Calculate the left and right edges of the bottom section of b
+             float leftB = btx.pos.x - bbb.halfSize.x + 3.f; // 10 from the left
+             float rightB = btx.pos.x + bbb.halfSize.x - 19.f; // 19 on the right
+
+             // left and right edge of a, 5 in height from the bottom
+             float leftA = atx.pos.x - abb.halfSize.x + 45.f;
+             float rightA = atx.pos.x + abb.halfSize.x;
+
+             // bottom section of a overlaps with bottom section of b
+             if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+             {
+                 // overlap
+                 float dx = std::abs(atx.pos.x - btx.pos.x);
+                 float dy = std::abs(bottomA - bottomB);
+                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 15.f - dy); // 5.f in height and 15.f
+             }
+         }
+        else if (entityName == "dune") {
+
+             float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+             float bottomB = btx.pos.y + bbb.halfSize.y - 11.f;
+
+             float leftB = btx.pos.x - bbb.halfSize.x + 2.f;
+             float rightB = btx.pos.x + bbb.halfSize.x - 2.f;
+
+             float leftA = atx.pos.x - abb.halfSize.x + 46.f;
+             float rightA = atx.pos.x + abb.halfSize.x;
+
+
+             if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+             {
+
+                 float dx = std::abs(atx.pos.x - btx.pos.x);
+                 float dy = std::abs(bottomA - bottomB);
+                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+             }
+         }
     }
     return overlap;
 }

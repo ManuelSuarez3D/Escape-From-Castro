@@ -36,6 +36,8 @@ void Scene_Menu::init() {
 	//m_levelPaths.push_back("../assets/level1.txt");
 	//m_levelPaths.push_back("../assets/level2.txt");
 	//m_levelPaths.push_back("../assets/level3.txt");
+	writeToScoreFile(0);
+	writeToInventoryFile(0);
 
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
 	registerAction(sf::Mouse::Left, "MOUSE_CLICK");
@@ -69,6 +71,8 @@ void Scene_Menu::sDoAction(const Command& action) {
 			if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
 			if (action.name() == "MOUSE_CLICK") {
 				if (menuState("START")) {
+					m_isCuba = true;
+					writeToLoadingFile("CUBA");
 					m_isPlay = true;
 				}
 				else if (menuState("LEVELS")) {
@@ -81,10 +85,12 @@ void Scene_Menu::sDoAction(const Command& action) {
 						m_isPlay = true;
 					}
 					else if (menuState("CHAPTER2")) {
+						m_isBermuda = true;
 						writeToLoadingFile("BERMUDA");
 						m_isPlay = true;
 					}
 					else if (menuState("CHAPTER3")) {
+						m_isUSA = true;
 						writeToLoadingFile("USA");
 						m_isPlay = true;
 					}

@@ -63,21 +63,29 @@ void Scene_Loading::loadLevel(const std::string& path) {
 
             e->addComponent<CTransform>(pos);
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture("Loading")).sprite;
-
             sprite.setOrigin(0.f, 0.f);
             sprite.setPosition(pos);
 
-            //auto e2 = m_entityManager.addEntity("loadBermuda");
-            //
-            //e2->addComponent<CTransform>(pos);
-            //auto& sprite2 = e2->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
-            //e2->addComponent<CAnimation>(Assets::getInstance().getAnimation("Bermuda_Loading"));
-            //
-            //auto e3 = m_entityManager.addEntity("loadMiami");
-            //
-            //e3->addComponent<CTransform>(pos);
-            //auto& sprite3 = e3->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
-            //e3->addComponent<CAnimation>(Assets::getInstance().getAnimation("Miami_Loading"));
+            auto e2 = m_entityManager.addEntity("loadBermuda");
+            e2->addComponent<CTransform>(sf::Vector2f{ 450.f, 206.f });
+            auto& sprite2 = e2->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+            e2->addComponent<CAnimation>(Assets::getInstance().getAnimation("Bermuda_Loading"));
+            sprite2.setOrigin(450.f, 206.f);
+            sprite2.setPosition(pos);
+
+            auto e3 = m_entityManager.addEntity("loadUSA");
+            e3->addComponent<CTransform>(sf::Vector2f{ 450.f, 206.f });
+            auto& sprite3 = e3->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+            e3->addComponent<CAnimation>(Assets::getInstance().getAnimation("USA_Loading"));
+            sprite3.setOrigin(450.f, 206.f);
+            sprite3.setPosition(pos);
+
+            auto e4 = m_entityManager.addEntity("loadCredits");
+            e4->addComponent<CTransform>(sf::Vector2f{ 450.f, 206.f });
+            auto& sprite4= e4->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+            e4->addComponent<CAnimation>(Assets::getInstance().getAnimation("Credits_Loading"));
+            sprite4.setOrigin(450.f, 206.f);
+            sprite4.setPosition(pos);
         }
         else if (token[0] == '#') {
             std::cout << token;
@@ -106,6 +114,14 @@ void Scene_Loading::loadSelectedLevel(const std::string& filePath) {
 
             m_isBermuda = true;
         }
+        else if (token == "isUSA") {
+
+            m_isUSA = true;
+        }
+        else if (token == "isOver") {
+
+            m_isOver = true;
+        }
         else if (token[0] == '#') {
             std::cout << token;
             std::string tmp;
@@ -115,10 +131,10 @@ void Scene_Loading::loadSelectedLevel(const std::string& filePath) {
 }
 void Scene_Loading::init() {
 
-   //m_isCuba = true;
    MusicPlayer::getInstance().play("loadingTheme");
    MusicPlayer::getInstance().setVolume(50);
    loadSelectedLevel("../assets/levelSelected.txt");
+
 }
 void Scene_Loading::onEnd() {
 
@@ -163,7 +179,8 @@ void Scene_Loading::sRender() {
             m_game->window().draw(sprite);
         }
 
-    }/*else if(m_isBermuda){
+    }
+    else if (m_isBermuda) {
 
         for (auto& e : m_entityManager.getEntities("loadBermuda")) {
 
@@ -173,7 +190,29 @@ void Scene_Loading::sRender() {
             anim.getSprite().setRotation(tfm.angle);
             m_game->window().draw(anim.getSprite());
         }
-    }*/
+    }
+    else if (m_isUSA) {
+
+        for (auto& e : m_entityManager.getEntities("loadUSA")) {
+
+            auto& anim = e->getComponent<CAnimation>().animation;
+            auto& tfm = e->getComponent<CTransform>();
+            anim.getSprite().setPosition(tfm.pos);
+            anim.getSprite().setRotation(tfm.angle);
+            m_game->window().draw(anim.getSprite());
+        }
+    }
+    if (m_isOver) {
+        for (auto& e : m_entityManager.getEntities("loadCredits")) {
+
+            auto& anim = e->getComponent<CAnimation>().animation;
+            auto& tfm = e->getComponent<CTransform>();
+            anim.getSprite().setPosition(tfm.pos);
+            anim.getSprite().setRotation(tfm.angle);
+            m_game->window().draw(anim.getSprite());
+        }
+    }
+
     renderUI();
 }
 void Scene_Loading::sMovement(sf::Time dt) {
@@ -253,6 +292,17 @@ void Scene_Loading::renderUI() {
 
         }
     }
+    else if (m_isOver) {
+        for (auto& e : m_entityManager.getEntities("loadCredits")) {
+
+            auto& anim = e->getComponent<CAnimation>().animation;
+            auto& tfm = e->getComponent<CTransform>();
+            anim.getSprite().setPosition(tfm.pos);
+            anim.getSprite().setRotation(tfm.angle);
+            m_game->window().draw(anim.getSprite());
+
+        }
+    }
 
 }
 #pragma endregion
@@ -270,6 +320,7 @@ void Scene_Loading::loadBermuda() {
 void Scene_Loading::loadUSA() {
     m_game->changeScene("LEVEL3", std::make_shared<Scene_USA>(m_game, "../assets/level3.txt"), true);
 }
+
 #pragma endregion
 
 #pragma region sState
