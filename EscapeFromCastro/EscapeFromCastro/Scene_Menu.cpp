@@ -3,6 +3,7 @@
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
 #include "Scene.h"
+#include "Scene_Credits.h"
 #include "Scene_Cuba.h"
 #include "Scene_Loading.h"
 #include "Scene_Bermuda.h"
@@ -68,12 +69,19 @@ void Scene_Menu::sDoAction(const Command& action) {
 
 	if (!m_isPlay) {
 		if (action.type() == "START") {
+
 			if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
 			if (action.name() == "MOUSE_CLICK") {
 				if (menuState("START")) {
+
+					//m_isOver = true;
+					//writeToLoadingFile("OVER");
+					//m_game->changeScene("LOADING", std::make_shared<Scene_Loading>(m_game, "../assets/loading.txt"));
+
 					m_isCuba = true;
 					writeToLoadingFile("CUBA");
 					m_isPlay = true;
+
 				}
 				else if (menuState("LEVELS")) {
 					m_isLevels = true;
@@ -85,11 +93,13 @@ void Scene_Menu::sDoAction(const Command& action) {
 						m_isPlay = true;
 					}
 					else if (menuState("CHAPTER2")) {
+
 						m_isBermuda = true;
 						writeToLoadingFile("BERMUDA");
 						m_isPlay = true;
 					}
 					else if (menuState("CHAPTER3")) {
+
 						m_isUSA = true;
 						writeToLoadingFile("USA");
 						m_isPlay = true;
@@ -146,6 +156,9 @@ void Scene_Menu::sMovement(sf::Time dt) {
 							}
 							else {
 								tfm.pos.y = 0 - 512.f;
+								m_isCuba = false;
+								m_isBermuda = false;
+								m_isUSA = false;
 								m_isPlay = false;
 								m_isLevels = false;
 								m_isGuide = false;
@@ -390,7 +403,7 @@ void Scene_Menu::sRender()
 
 							if (overlap.x > 0 && overlap.y > 0) {
 
-								if (!m_playSound && menuState("CHAPTER2")) {
+								if (!m_playSound && menuState("LEVELS")) {
 									SoundPlayer::getInstance().play("menuPing");
 									m_playSound = true;
 								}

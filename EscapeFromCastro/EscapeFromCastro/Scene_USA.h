@@ -49,7 +49,9 @@ private:
     float           m_deathTime = 0.0f;
     float           m_introTime = 5.f;
     float           m_specialTime = 0.0f;
-    sf::Clock       m_pecialFlashClock;
+
+    sf::Clock       m_specialFlashClock;
+    sf::Clock       m_deathFlashClock;
 
     bool            m_isEnd{ false };
     bool            m_isIntro{ false };

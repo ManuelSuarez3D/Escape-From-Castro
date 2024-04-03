@@ -169,15 +169,6 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 345, "h": 368 },
     "sourceSize": { "w": 345, "h": 368 },
     "duration": 100
-   },
-   {
-    "filename": "USA_Loading (20).aseprite",
-    "frame": { "x": 6555, "y": 0, "w": 345, "h": 368 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 345, "h": 368 },
-    "sourceSize": { "w": 345, "h": 368 },
-    "duration": 100
    }
  ],
  "meta": {
@@ -185,10 +176,10 @@
   "version": "1.x-dev",
   "image": "USA_Loading_Atlas.png",
   "format": "RGBA8888",
-  "size": { "w": 6900, "h": 368 },
+  "size": { "w": 6555, "h": 368 },
   "scale": "1",
   "frameTags": [
-   { "name": "USA_Loading", "from": 0, "to": 19, "direction": "forward", "color": "#000000ff" }
+   { "name": "USA_Loading", "from": 0, "to": 18, "direction": "forward", "color": "#000000ff" }
   ]
  }
 }

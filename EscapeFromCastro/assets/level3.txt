@@ -23,21 +23,21 @@ Water_Coca_Sprite	Water_Coca_Sprite	0	0
 Menu1			Menu01			693	9
 Menu2			Menu02			661	0
 MenuT			MenuT			307	114
-Restart1M		Restart01 		333 	240
-Restart2M		Restart02 		276 	230
+Restart1M		Restart01 		332 	239
+Restart2M		Restart02 		274 	228
 UiSpecial		UiSpecial		22 	71
-Controls1M		Controls01 		298 	299
-Controls2M		Controls02 		237 	290
-Quit1M			Quit01 			392 	356
-Quit2M			Quit02	 		362 	346
+Controls1M		Controls01 		322 	304
+Controls2M		Controls02 		276 	297
+Quit1M			Quit01 			400 	365
+Quit2M			Quit02	 		375 	356
 InstrcM			Instructions		169	228
 Back1M			Back01 			672 	418
-Back2M			Back02	 		651 	405
-GameOverT		GameOverT		135	113
-Restart1G		Restart01 		332 	270
-Restart2G		Restart02 		275 	260
-Quit1G			Quit01 			389 	329
-Quit2G			Quit02	 		359 	319
+Back2M			Back02	 		659 	413
+GameOverT		GameOverT		136	138
+Restart1G		Restart01 		327 	267
+Restart2G		Restart02 		269 	256
+Quit1G			Quit01 			397 	330
+Quit2G			Quit02	 		372 	319
 UiScore			UiScore 		50 	18
 UiCocaine1		UiCocaine01		55	79
 UiCocaine2		UiCocaine02		55	79
@@ -46,8 +46,8 @@ UiHp1			UiHp01			0 	0
 UiHp2			UiHp02			0 	0
 UiHp3  			UiHp03			0 	0
 
-Chapter1a		Chapter1a		193	152
-Chapter1b		Chapter1b		216	152
+Chapter3a		Chapter3a		215	152
+Chapter3b		Chapter3b		215	152
 
 Curtain 		Curtain			0	12
 CurtainTop 		CurtainTop		0	0

@@ -534,7 +534,7 @@ void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
 
     m_player = m_entityManager.addEntity("player");
     m_player->addComponent<CTransform>(pos);
-
+    m_player->addComponent<CState>().state = "alive";
     m_player->addComponent<CInput>();
 
     auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Fony_Sprite")).sprite;
@@ -563,7 +563,7 @@ void Scene_Cuba::spawnPlayer(sf::Vector2f pos) {
 void Scene_Cuba::init() {
 
     registerActions();
-
+    std::cout << m_isGameOver;
     m_menu_cuba.push_back(std::make_pair("MENU", false));
     m_menu_cuba.push_back(std::make_pair("RESTART", false));
     m_menu_cuba.push_back(std::make_pair("CONTROLS", false));
@@ -574,8 +574,9 @@ void Scene_Cuba::init() {
     sf::Vector2f spawnPos{ field.left - field.width, (field.top + field.height) - 173.f };
     spawnPlayer(spawnPos);
 
+    SoundPlayer::getInstance().play("gameStart");
     MusicPlayer::getInstance().play("gameTheme");
-    MusicPlayer::getInstance().setVolume(50);
+    MusicPlayer::getInstance().setVolume(45);
    
 }
 #pragma endregion
@@ -727,6 +728,8 @@ void Scene_Cuba::sState(sf::Time dt) {
 
     if (m_isSpecial)
         specialState();
+    else
+        m_specialFlashClock.restart();
 
     timeState(dt);
     playerState();
@@ -874,34 +877,53 @@ void Scene_Cuba::sMovement(sf::Time dt) {
                 tfm.pos += tfm.vel * dt.asSeconds();
         }
     }
+    bool curtainReachedTop = false;
+
     for (auto& e : m_entityManager.getEntities("curtain")) {
         auto ebb = e->getComponent<CBoundingBox>();
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
-            if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
-                tfm.pos.y -= 145.f * dt.asSeconds();
-            }
             if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
                 tfm.pos.y += 145.f * dt.asSeconds();
             }
-            else if(m_isEnd && (tfm.pos.y + ebb.size.y) == 512.f) {
+            else if (m_isEnd) {
                 nextLevel();
             }
-            
+
+            if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
+                tfm.pos.y -= 145.f * dt.asSeconds();
+            }
+            else {
+                curtainReachedTop = true;
+            }
         }
     }
+
     for (auto& e : m_entityManager.getEntities("curtaintop")) {
         auto ebb = e->getComponent<CBoundingBox>();
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
-            if (m_isPlay && (tfm.pos.y + ebb.size.y) > view.top){
-                tfm.pos.y -= 50.f * dt.asSeconds();
-            }
-            else if (m_isEnd && (tfm.pos.y + ebb.size.y) < 17.f) {
+            if (m_isEnd && (tfm.pos.y + ebb.size.y) < 17.f) {
                 tfm.pos.y += 50.f * dt.asSeconds();
             }
+            else if (curtainReachedTop && (tfm.pos.y + ebb.size.y) > view.top) {
+                tfm.pos.y -= 50.f * dt.asSeconds();
+            }
+
         }
     }
+    //for (auto& e : m_entityManager.getEntities("curtaintop")) {
+    //    auto ebb = e->getComponent<CBoundingBox>();
+    //    if (e->hasComponent<CTransform>()) {
+    //        auto& tfm = e->getComponent<CTransform>();
+    //        if (m_isPlay && (tfm.pos.y + ebb.size.y) > view.top){
+    //            tfm.pos.y -= 50.f * dt.asSeconds();
+    //        }
+    //        else if (m_isEnd && (tfm.pos.y + ebb.size.y) < 17.f) {
+    //            tfm.pos.y += 50.f * dt.asSeconds();
+    //        }
+    //    }
+    //}
 
 }
 void Scene_Cuba::sCollisions() {
@@ -921,11 +943,28 @@ void Scene_Cuba::sUpdate(sf::Time dt) {
 }
 void Scene_Cuba::sAnimation(sf::Time dt) {
     for (auto e : m_entityManager.getEntities()) {
+        auto& pST = e->getComponent<CType>().shark;
 
         if (e->hasComponent<CAnimation>()) {
+
             auto& anim = e->getComponent<CAnimation>();
-                anim.animation.update(dt);
+            anim.animation.update(dt);
         }
+
+    }
+    for (auto e : m_entityManager.getEntities("enemyShark")) {
+        auto& pST = e->getComponent<CType>().shark;
+        if (e->hasComponent<CAnimation>()) {
+
+            auto& anim = e->getComponent<CAnimation>();
+
+            if (!anim.animation.m_isRepeating && anim.animation.isLastFrame())
+            {
+                e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Dead"));
+            }
+            anim.animation.update(dt);
+        }
+
     }
 }
 void Scene_Cuba::sEntitySpawner(sf::Time dt) {
@@ -1078,7 +1117,6 @@ void Scene_Cuba::renderEntities() {
     }
 
     if (m_player->getComponent<CState>().state == "dead") {
-
         if (m_life == 2) {
             for (auto hp2 : m_entityManager.getEntities("uihp2")) {
                 if (hp2->hasComponent<CSprite>()) {
@@ -1548,18 +1586,19 @@ void Scene_Cuba::renderUI() {
 void Scene_Cuba::specialAbility() {
 
     if (!m_isSpecial) {
-        m_pecialFlashClock.restart();
-
+        m_specialFlashClock.restart();
+        SoundPlayer::getInstance().play("powerUp");
         auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tontana_Sprite")).sprite;
         auto spriteSize = sprite.getLocalBounds().getSize();
         m_player->addComponent<CBoundingBox>(spriteSize);
 
         MusicPlayer::getInstance().play("specialTheme");
-        MusicPlayer::getInstance().setVolume(50);
+        MusicPlayer::getInstance().setVolume(20);
 
         m_cubaConfig.scrollSpeed += 50.f;
     }
     if (m_player->getComponent<CInput>().shoot) {
+
         spawnBullet(m_player);
         m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Fire_Right")).animation.m_currentFrame += m_player->getComponent<CAnimation>().animation.m_currentFrame;
     }
@@ -1568,9 +1607,13 @@ void Scene_Cuba::specialAbility() {
 
 }
 void Scene_Cuba::onRestart() {
+    std::cout << m_isGameOver;
     m_game->changeScene("LEVEL1", std::make_shared<Scene_Cuba>(m_game, "../assets/level1.txt"), true);
 }
 void Scene_Cuba::onEnd() {
+
+    writeToScoreFile(0);
+    writeToInventoryFile(0);
 
     MusicPlayer::getInstance().play("menuTheme");
     MusicPlayer::getInstance().setVolume(50);
@@ -1579,7 +1622,6 @@ void Scene_Cuba::onEnd() {
 }
 void Scene_Cuba::nextLevel() {
     m_isBermuda = true;
-
     writeToInventoryFile(m_special);
     writeToScoreFile(m_finalScore);
     writeToLoadingFile("BERMUDA");
@@ -1828,6 +1870,10 @@ void Scene_Cuba::spawnBullet(std::shared_ptr<Entity> e) {
         bullet->getComponent<CTransform>().vel.y = 0;
         bullet->addComponent<CType>().bullet = true;
         bullet->addComponent<CType>().entity = true;
+
+        //Set volume?
+        SoundPlayer::getInstance().play("gunShot");
+
     }
 }
 #pragma endregion
@@ -1837,37 +1883,44 @@ void Scene_Cuba::playerState() {
     auto& pST = m_player->getComponent<CState>().state;
     sf::Vector2f spawnPos{ m_worldView.getSize().x / 2.f, m_worldView.getSize().y / 2.f };
 
+    if (pST == "alive") {
+        m_deathFlashClock.restart();
+    }
+
     if (pST == "dead") {
 
-        if (m_life == 0){
+        if (m_life == 0) {
+
+            if (!m_isGameOver)
+                SoundPlayer::getInstance().play("gameOver");
+
             m_isGameOver = true;
             m_player->destroy();
         }
 
-        const float flashDuration = 5.0f;
-        static sf::Clock flashClock;
+        if (!m_isGameOver && pST == "dead") {
+            const float flashDuration = 5.0f;
 
-        float elapsedTime = flashClock.getElapsedTime().asSeconds();
-        m_player->removeComponent<CBoundingBox>();
+            float elapsedTime = m_deathFlashClock.getElapsedTime().asSeconds();
+            m_player->removeComponent<CBoundingBox>();
 
-        if (elapsedTime > flashDuration) {
-            flashClock.restart();
+            if (elapsedTime > flashDuration) {
+                if (m_isSpecial) {
+                    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
+                    auto& sprite = m_player->getComponent<CSprite>().sprite;
+                    auto spriteSize = sprite.getLocalBounds().getSize();
 
-            if (m_isSpecial) {
-                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
-                auto& sprite = m_player->getComponent<CSprite>().sprite;
-                auto spriteSize = sprite.getLocalBounds().getSize();
+                    m_player->addComponent<CBoundingBox>(spriteSize);
+                    m_player->addComponent<CState>().state = "alive";
+                }
+                else {
+                    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
+                    auto& sprite = m_player->getComponent<CSprite>().sprite;
+                    auto spriteSize = sprite.getLocalBounds().getSize();
 
-                m_player->addComponent<CBoundingBox>(spriteSize);
-                m_player->addComponent<CState>().state = "alive";
-            }
-            else {
-                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
-                auto& sprite = m_player->getComponent<CSprite>().sprite;
-                auto spriteSize = sprite.getLocalBounds().getSize();
-
-                m_player->addComponent<CBoundingBox>(spriteSize);
-                m_player->addComponent<CState>().state = "alive";
+                    m_player->addComponent<CBoundingBox>(spriteSize);
+                    m_player->addComponent<CState>().state = "alive";
+                }
             }
         }
     }
@@ -1935,7 +1988,7 @@ void Scene_Cuba::gameState() {
 void Scene_Cuba::specialState() {
 
     const float flashDuration = 10.f;
-    m_specialTime = m_pecialFlashClock.getElapsedTime().asSeconds();
+    m_specialTime = m_specialFlashClock.getElapsedTime().asSeconds();
 
     if (m_specialTime > flashDuration) {
         auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Fony_Sprite")).sprite;
@@ -1944,8 +1997,8 @@ void Scene_Cuba::specialState() {
         m_player->addComponent<CBoundingBox>(spriteSize);
 
         MusicPlayer::getInstance().play("gameTheme");
-        MusicPlayer::getInstance().setVolume(50);
-        m_pecialFlashClock.restart();
+        MusicPlayer::getInstance().setVolume(45);
+        m_specialFlashClock.restart();
 
         m_isSpecial = false;
         m_cubaConfig.scrollSpeed -= 50.f;
@@ -1967,8 +2020,13 @@ void Scene_Cuba::checkCollisions() {
              e->getComponent<CTransform>().vel.x = 0.f;
              e->removeComponent<CBoundingBox>();
              e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Death"));
+
+             if(m_player->hasComponent<CBoundingBox>())
+                 SoundPlayer::getInstance().play("hitHurt");
+
              m_player->removeComponent<CBoundingBox>();
              m_player->addComponent<CState>().state = "dead";
+
              m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
              m_playScore += 10.f;
              if (m_life != 0) {
@@ -1980,9 +2038,14 @@ void Scene_Cuba::checkCollisions() {
      for (auto& e : m_entityManager.getEntities("enemyBoat")) {
          auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
          if (overlap.x > 0 and overlap.y > 0) {
+
+             if (m_player->hasComponent<CBoundingBox>())
+                 SoundPlayer::getInstance().play("hitHurt");
+
              m_player->removeComponent<CBoundingBox>();
              m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
              m_player->addComponent<CState>().state = "dead";
+
              if (m_life != 0) {
                  m_life -= 1;
              }
@@ -1993,9 +2056,13 @@ void Scene_Cuba::checkCollisions() {
          auto overlap = Physics::getOverlapEntity(m_player, e, "coral");
          if (overlap.x > 0 and overlap.y > 0) {
 
+             if (m_player->hasComponent<CBoundingBox>())
+                 SoundPlayer::getInstance().play("hitHurt");
+
              m_player->removeComponent<CBoundingBox>();
-             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
              m_player->addComponent<CState>().state = "dead";
+             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
+
              for (auto& e2 : m_entityManager.getEntities("water")) {
                  auto overlap = Physics::getOverlapEntity(e2, e);
                  if (overlap.x > 0 and overlap.y > 0) {
@@ -2020,10 +2087,14 @@ void Scene_Cuba::checkCollisions() {
      for (auto& e : m_entityManager.getEntities("enemyIsland")) {
          auto overlap = Physics::getOverlapEntity(m_player, e, "island");
          if (overlap.x > 0 and overlap.y > 0) {
+
+             if (m_player->hasComponent<CBoundingBox>())
+                 SoundPlayer::getInstance().play("hitHurt");
+
              m_player->removeComponent<CBoundingBox>();
              m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
              m_player->addComponent<CState>().state = "dead";
-
+\
              if (m_life != 0) {
                  m_life -= 1;
              }
@@ -2044,6 +2115,7 @@ void Scene_Cuba::checkCollisions() {
                          }
                      }
                  }
+                 SoundPlayer::getInstance().play("pickUp");
                  e->destroy();
              }
          }
@@ -2054,8 +2126,12 @@ void Scene_Cuba::checkCollisions() {
 void Scene_Cuba::checkSpecialCollisions() {
 
     for (auto& e : m_entityManager.getEntities("enemyShark")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "shark");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "shark", "special");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("ehitHurt");
+
             e->getComponent<CTransform>().vel.x = 0.f;
             e->removeComponent<CBoundingBox>();
             e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Death"));
@@ -2064,8 +2140,12 @@ void Scene_Cuba::checkSpecialCollisions() {
         }
     }
     for (auto& e : m_entityManager.getEntities("enemyCoral")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "coral");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "coral", "special");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("ehitHurt");
+
             for (auto& e2 : m_entityManager.getEntities("water")) {
                 auto overlap = Physics::getOverlapEntity(e2, e);
                 if (overlap.x > 0 and overlap.y > 0) {
@@ -2085,8 +2165,11 @@ void Scene_Cuba::checkSpecialCollisions() {
     }
 
     for (auto& e : m_entityManager.getEntities("enemyBoat")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "boatMilitary", "special");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
 
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
@@ -2101,6 +2184,7 @@ void Scene_Cuba::checkSpecialCollisions() {
         for (auto& e2 : m_entityManager.getEntities("bullet")) {
             auto overlap2 = Physics::getOverlapEntity(e, e2, "bullet");
             if (overlap2.x > 0 and overlap2.y > 0) {
+                SoundPlayer::getInstance().play("ehitHurt");
                 e->getComponent<CLife>().remaining -= 1;
                 e2->destroy();
                 m_playScore += 30.f;
@@ -2111,14 +2195,37 @@ void Scene_Cuba::checkSpecialCollisions() {
 
 
     for (auto& e : m_entityManager.getEntities("enemyIsland")) {
-        auto overlap = Physics::getOverlapEntity(m_player, e, "island");
+        auto overlap = Physics::getOverlapEntity(m_player, e, "island", "special");
         if (overlap.x > 0 and overlap.y > 0) {
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
 
             if (m_life != 0) {
                 m_life -= 1;
+            }
+        }
+    }
+
+    for (auto& e : m_entityManager.getEntities("coca")) {
+        auto overlap = Physics::getOverlapEntity(m_player, e, "coca");
+        if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_special != 3) {
+                m_special += 1;
+                for (auto& e2 : m_entityManager.getEntities("water")) {
+                    auto overlap = Physics::getOverlapEntity(e2, e);
+                    if (overlap.x > 0 and overlap.y > 0) {
+                        if (e2->getComponent<CType>().coca) {
+                            e2->destroy();
+                        }
+                    }
+                }
+                SoundPlayer::getInstance().play("pickUp");
+                e->destroy();
             }
         }
     }

@@ -33,6 +33,7 @@ public:
 
 public:
     void			    play(String effect);
+    //void			    stop(String effect);
     void			    play(String effect, sf::Vector2f position);
     void			    removeStoppedSounds();
     void			    setListnerPosition(sf::Vector2f position);

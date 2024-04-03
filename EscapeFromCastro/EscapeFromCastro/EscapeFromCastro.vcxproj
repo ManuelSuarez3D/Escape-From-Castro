@@ -154,6 +154,7 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene_Bermuda.cpp" />
+    <ClCompile Include="Scene_Credits.cpp" />
     <ClCompile Include="Scene_Cuba.cpp" />
     <ClCompile Include="Scene_Loading.cpp" />
     <ClCompile Include="Scene_Menu.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene_Bermuda.h" />
+    <ClInclude Include="Scene_Credits.h" />
     <ClInclude Include="Scene_Cuba.h" />
     <ClInclude Include="Scene_Loading.h" />
     <ClInclude Include="Scene_Menu.h" />

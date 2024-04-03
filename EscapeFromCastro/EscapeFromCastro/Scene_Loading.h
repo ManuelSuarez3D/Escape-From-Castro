@@ -39,6 +39,7 @@ public:
 	void			loadCuba();
 	void			loadBermuda();
 	void			loadUSA();
+	void			loadCredits();
 
 };
 

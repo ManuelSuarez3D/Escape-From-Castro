@@ -438,12 +438,12 @@ void Scene_Bermuda::loadLevel(const std::string& path) {
             e->addComponent<CTransform>(boundingBoxPosition);
 
         }
-        else if (token == "Chapter1a") {
+        else if (token == "Chapter2a") {
             std::string name;
             sf::Vector2f pos;
 
             config >> name >> pos.x >> pos.y;
-            auto e = m_entityManager.addEntity("chapter1a");
+            auto e = m_entityManager.addEntity("chapter2a");
             e->addComponent<CTransform>(pos);
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 
@@ -451,12 +451,12 @@ void Scene_Bermuda::loadLevel(const std::string& path) {
             sprite.setPosition(pos);
 
         }
-        else if (token == "Chapter1b") {
+        else if (token == "Chapter2b") {
             std::string name;
             sf::Vector2f pos;
 
             config >> name >> pos.x >> pos.y;
-            auto e = m_entityManager.addEntity("chapter1b");
+            auto e = m_entityManager.addEntity("chapter2b");
             e->addComponent<CTransform>(pos);
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
 
@@ -583,7 +583,7 @@ void Scene_Bermuda::spawnPlayer(sf::Vector2f pos) {
     m_player->addComponent<CTransform>(pos);
 
     m_player->addComponent<CInput>();
-
+    m_player->addComponent<CState>().state = "alive";
     auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Fony_Sprite")).sprite;
     m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
 
@@ -631,6 +631,7 @@ void Scene_Bermuda::init() {
     sf::Vector2f spawnPos{ field.left - field.width, (field.top + field.height) - 173.f };
     spawnPlayer(spawnPos);
 
+    SoundPlayer::getInstance().play("gameStart");
     MusicPlayer::getInstance().play("bermudaTheme");
     MusicPlayer::getInstance().setVolume(25);
     loadScore("../assets/score.txt");
@@ -785,6 +786,8 @@ void Scene_Bermuda::sState(sf::Time dt) {
 
     if (m_isSpecial)
         specialState();
+    else
+        m_specialFlashClock.restart();
 
     timeState(dt);
     playerState();
@@ -971,31 +974,39 @@ void Scene_Bermuda::sMovement(sf::Time dt) {
                 tfm.pos += tfm.vel * dt.asSeconds();
         }
     }
+    bool curtainReachedTop = false;
+
     for (auto& e : m_entityManager.getEntities("curtain")) {
         auto ebb = e->getComponent<CBoundingBox>();
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
-            if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
-                tfm.pos.y -= 145.f * dt.asSeconds();
-            }
             if (m_isEnd && (tfm.pos.y + ebb.size.y) < 512.f) {
                 tfm.pos.y += 145.f * dt.asSeconds();
             }
-            else if (m_isEnd && (tfm.pos.y + ebb.size.y) == 512.f) {
+            else if (m_isEnd) {
                 nextLevel();
+            }
+
+            if (m_isIntro && (tfm.pos.y + ebb.size.y) > view.top) {
+                tfm.pos.y -= 145.f * dt.asSeconds();
+            }
+            else {
+                curtainReachedTop = true;
             }
         }
     }
+
     for (auto& e : m_entityManager.getEntities("curtaintop")) {
         auto ebb = e->getComponent<CBoundingBox>();
         if (e->hasComponent<CTransform>()) {
             auto& tfm = e->getComponent<CTransform>();
-            if (m_isPlay && (tfm.pos.y + ebb.size.y) > view.top) {
-                tfm.pos.y -= 50.f * dt.asSeconds();
-            }
-            else if (m_isEnd && (tfm.pos.y + ebb.size.y) < 17.f) {
+            if (m_isEnd && (tfm.pos.y + ebb.size.y) < 17.f) {
                 tfm.pos.y += 50.f * dt.asSeconds();
             }
+            else if (curtainReachedTop && (tfm.pos.y + ebb.size.y) > view.top) {
+                tfm.pos.y -= 50.f * dt.asSeconds();
+            }
+
         }
     }
 
@@ -1023,6 +1034,21 @@ void Scene_Bermuda::sAnimation(sf::Time dt) {
             anim.animation.update(dt);
         }
     }
+    for (auto e : m_entityManager.getEntities("enemyShark")) {
+        auto& pST = e->getComponent<CType>().shark;
+        if (e->hasComponent<CAnimation>()) {
+
+            auto& anim = e->getComponent<CAnimation>();
+
+            if (!anim.animation.m_isRepeating && anim.animation.isLastFrame())
+            {
+                e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Dead"));
+            }
+            anim.animation.update(dt);
+        }
+
+    }
+
 }
 void Scene_Bermuda::sEntitySpawner(sf::Time dt) {
     sf::FloatRect field = getEnemySpawnBounds();
@@ -1523,49 +1549,6 @@ void Scene_Bermuda::renderUI() {
         }
     }
 
-    /*for (auto& hp3 : m_entityManager.getEntities("uihp3")) {
-        auto& ppos = m_player->getComponent<CTransform>().pos;
-
-        if (hp3->hasComponent<CSprite>()) {
-            auto& hp03 = hp3->getComponent<CSprite>().sprite;
-            if (hp3->hasComponent<CTransform>()) {
-                auto& tfm = hp3->getComponent<CTransform>();
-                hp03.setPosition(ppos.x, ppos.y + 50.f);
-                hp03.setRotation(tfm.angle);
-            }
-            if (m_life == 3) {
-                m_game->window().draw(hp03);
-            }
-            else if (m_life == 2) {
-                for (auto hp2 : m_entityManager.getEntities("uihp2")) {
-                    if (hp2->hasComponent<CSprite>()) {
-                        auto& hp02 = hp2->getComponent<CSprite>().sprite;
-                        if (hp2->hasComponent<CTransform>()) {
-                            auto& tfm = hp2->getComponent<CTransform>();
-                            hp02.setPosition(ppos.x, ppos.y + 50.f);
-                            hp02.setRotation(tfm.angle);
-                        }
-                        m_game->window().draw(hp02);
-                    }
-                }
-            }
-            else {
-                for (auto hp1 : m_entityManager.getEntities("uihp1")) {
-                    if (hp1->hasComponent<CSprite>()) {
-                        auto& hp01 = hp1->getComponent<CSprite>().sprite;
-                        if (hp1->hasComponent<CTransform>()) {
-                            auto& tfm = hp1->getComponent<CTransform>();
-                            hp01.setPosition(ppos.x, ppos.y + 50.f);
-                            hp01.setRotation(tfm.angle);
-                        }
-                        m_game->window().draw(hp01);
-                    }
-                }
-            }
-
-        }
-    }*/
-
     for (auto& hp3 : m_entityManager.getEntities("uicocaine3")) {
 
         if (hp3->hasComponent<CSprite>()) {
@@ -1636,7 +1619,7 @@ void Scene_Bermuda::renderUI() {
         }
 
         if (m_isIntro) {
-            for (auto& e : m_entityManager.getEntities("chapter1a")) {
+            for (auto& e : m_entityManager.getEntities("chapter2a")) {
 
                 if (e->getComponent<CSprite>().has) {
                     auto& sprite = e->getComponent<CSprite>().sprite;
@@ -1650,7 +1633,7 @@ void Scene_Bermuda::renderUI() {
             }
         }
         if (m_isEnd) {
-            for (auto& e : m_entityManager.getEntities("chapter1b")) {
+            for (auto& e : m_entityManager.getEntities("chapter2b")) {
 
                 if (e->getComponent<CSprite>().has) {
                     auto& sprite = e->getComponent<CSprite>().sprite;
@@ -1683,14 +1666,14 @@ void Scene_Bermuda::renderUI() {
 void Scene_Bermuda::specialAbility() {
 
     if (!m_isSpecial) {
-        m_pecialFlashClock.restart();
-
+        m_specialFlashClock.restart();
+        SoundPlayer::getInstance().play("powerUp");
         auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Tontana_Sprite")).sprite;
         auto spriteSize = sprite.getLocalBounds().getSize();
         m_player->addComponent<CBoundingBox>(spriteSize);
 
         MusicPlayer::getInstance().play("specialTheme");
-        MusicPlayer::getInstance().setVolume(50);
+        MusicPlayer::getInstance().setVolume(20);
 
         m_bermudaConfig.scrollSpeed += 50.f;
     }
@@ -1706,6 +1689,9 @@ void Scene_Bermuda::onRestart() {
     m_game->changeScene("LEVEL2", std::make_shared<Scene_Bermuda>(m_game, "../assets/level2.txt"), true);
 }
 void Scene_Bermuda::onEnd() {
+
+    writeToScoreFile(0);
+    writeToInventoryFile(0);
 
     MusicPlayer::getInstance().play("menuTheme");
     MusicPlayer::getInstance().setVolume(50);
@@ -1865,13 +1851,6 @@ void Scene_Bermuda::spawnTornado(sf::Vector2f pos) {
     typeComponent.tornado = true;
     typeComponent.entity = true;
 
-    //auto waterAnim = m_entityManager.addEntity("water");
-    //auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Coral_Sprite")).sprite;
-    //auto waterSpriteSize = waterSprite.getLocalBounds().getSize();
-    //waterAnim->addComponent<CTransform>(sf::Vector2f(pos.x, pos.y + (spriteSize.y / 2) + waterSpriteSize.y / 4), sf::Vector2f{ m_bermudaConfig.enemySpeed, 0.f });
-    //waterAnim->addComponent<CAnimation>(Assets::getInstance().getAnimation("Water_Coral"));
-    //waterAnim->addComponent<CBoundingBox>(waterSpriteSize);
-    //waterAnim->addComponent<CType>().coral = true;
 }
 void Scene_Bermuda::spawnWhirpool(sf::Vector2f pos) {
     auto raceCarL = m_entityManager.addEntity("enemyWhirlpool");
@@ -1911,25 +1890,13 @@ void Scene_Bermuda::spawnSquid(sf::Vector2f pos) {
     raceCarL->addComponent<CType>().squid = true;
     raceCarL->addComponent<CType>().entity = true;
 
-    //auto raceCarL = m_entityManager.addEntity("enemyIsland");
-
-    //raceCarL->addComponent<CTransform>(pos, sf::Vector2f{ m_bermudaConfig.enemySpeed, 0.f });
-    //auto& sprite = raceCarL->addComponent<CSprite>().sprite;
-    //auto& spriteName = raceCarL->addComponent<CSprite>(Assets::getInstance().getTexture("Island")).sprite;
-    //sprite.setTexture(Assets::getInstance().getTexture("Island"));
-    //auto spriteSize = sprite.getLocalBounds().getSize();
-    //
-    //raceCarL->addComponent<CBoundingBox>(spriteSize);
-    //raceCarL->addComponent<CType>().island = true;
-    //raceCarL->addComponent<CType>().entity = true;
-
-    //auto waterAnim = m_entityManager.addEntity("water");
-    //auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Tree_Sprite")).sprite;
-    //auto waterSpriteSize = waterSprite.getLocalBounds().getSize();
-    //waterAnim->addComponent<CTransform>(sf::Vector2f(pos.x, pos.y + (spriteSize.y / 2)), sf::Vector2f{ m_bermudaConfig.enemySpeed, 0.f });
-    //waterAnim->addComponent<CAnimation>(Assets::getInstance().getAnimation("Water_Tree"));
-    //waterAnim->addComponent<CBoundingBox>(waterSpriteSize);
-    //waterAnim->addComponent<CType>().island = true;
+    auto waterAnim = m_entityManager.addEntity("water");
+    auto& waterSprite = waterAnim->addComponent<CSprite>(Assets::getInstance().getTexture("Water_Squid_Sprite")).sprite;
+    auto waterSpriteSize = waterSprite.getLocalBounds().getSize();
+    waterAnim->addComponent<CTransform>(sf::Vector2f(pos.x, pos.y + (spriteSize.y / 2)), sf::Vector2f{ m_bermudaConfig.enemySpeed, 0.f });
+    waterAnim->addComponent<CAnimation>(Assets::getInstance().getAnimation("Water_Squid"));
+    waterAnim->addComponent<CBoundingBox>(waterSpriteSize);
+    waterAnim->addComponent<CType>().squid = true;
 
 }
 void Scene_Bermuda::spawnShark(sf::Vector2f pos) {
@@ -1985,6 +1952,8 @@ void Scene_Bermuda::spawnBullet(std::shared_ptr<Entity> e) {
         bullet->getComponent<CTransform>().vel.y = 0;
         bullet->addComponent<CType>().bullet = true;
         bullet->addComponent<CType>().entity = true;
+
+        SoundPlayer::getInstance().play("gunShot");
     }
 }
 #pragma endregion
@@ -1994,36 +1963,44 @@ void Scene_Bermuda::playerState() {
     auto& pST = m_player->getComponent<CState>().state;
     sf::Vector2f spawnPos{ m_worldView.getSize().x / 2.f, m_worldView.getSize().y / 2.f };
 
+    if (pST == "alive"){
+        m_deathFlashClock.restart();
+    }
+
     if (pST == "dead") {
 
         if (m_life == 0) {
+
+            if (!m_isGameOver)
+                SoundPlayer::getInstance().play("gameOver");
+
             m_isGameOver = true;
             m_player->destroy();
         }
 
-        const float flashDuration = 5.0f;
-        static sf::Clock flashClock;
+        if (!m_isGameOver && pST == "dead") {
+            const float flashDuration = 5.0f;
 
-        float elapsedTime = flashClock.getElapsedTime().asSeconds();
-        m_player->removeComponent<CBoundingBox>();
+            float elapsedTime = m_deathFlashClock.getElapsedTime().asSeconds();
+            m_player->removeComponent<CBoundingBox>();
 
-        if (elapsedTime > flashDuration) {
-            flashClock.restart();
-            if (m_isSpecial) {
-                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
-                auto& sprite = m_player->getComponent<CSprite>().sprite;
-                auto spriteSize = sprite.getLocalBounds().getSize();
+            if (elapsedTime > flashDuration) {
+                if (m_isSpecial) {
+                    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Idle_Right"));
+                    auto& sprite = m_player->getComponent<CSprite>().sprite;
+                    auto spriteSize = sprite.getLocalBounds().getSize();
 
-                m_player->addComponent<CBoundingBox>(spriteSize);
-                m_player->addComponent<CState>().state = "alive";
-            }
-            else {
-                m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
-                auto& sprite = m_player->getComponent<CSprite>().sprite;
-                auto spriteSize = sprite.getLocalBounds().getSize();
+                    m_player->addComponent<CBoundingBox>(spriteSize);
+                    m_player->addComponent<CState>().state = "alive";
+                }
+                else {
+                    m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Idle_Right"));
+                    auto& sprite = m_player->getComponent<CSprite>().sprite;
+                    auto spriteSize = sprite.getLocalBounds().getSize();
 
-                m_player->addComponent<CBoundingBox>(spriteSize);
-                m_player->addComponent<CState>().state = "alive";
+                    m_player->addComponent<CBoundingBox>(spriteSize);
+                    m_player->addComponent<CState>().state = "alive";
+                }
             }
         }
     }
@@ -2062,6 +2039,15 @@ void Scene_Bermuda::lifeState() {
         auto& lifespan = e->getComponent<CLife>();
         if (lifespan.has) {
             if (lifespan.remaining < 0) {
+
+                for (auto& e2 : m_entityManager.getEntities("water")) {
+                    auto overlap = Physics::getOverlapEntity(e2, e);
+                    if (overlap.x > 0 and overlap.y > 0) {
+                        if (e2->getComponent<CType>().squid) {
+                            e2->destroy();
+                        }
+                    }
+                }
                 m_playScore += 40.f;
                 e->destroy();
             }
@@ -2091,7 +2077,7 @@ void Scene_Bermuda::gameState() {
 void Scene_Bermuda::specialState() {
 
     const float flashDuration = 10.f;
-    m_specialTime = m_pecialFlashClock.getElapsedTime().asSeconds();
+    m_specialTime = m_specialFlashClock.getElapsedTime().asSeconds();
 
     if (m_specialTime > flashDuration) {
         auto& sprite = m_player->addComponent<CSprite>(Assets::getInstance().getTexture("Fony_Sprite")).sprite;
@@ -2100,8 +2086,8 @@ void Scene_Bermuda::specialState() {
         m_player->addComponent<CBoundingBox>(spriteSize);
 
         MusicPlayer::getInstance().play("bermudaTheme");
-        MusicPlayer::getInstance().setVolume(50);
-        m_pecialFlashClock.restart();
+        MusicPlayer::getInstance().setVolume(25);
+        m_specialFlashClock.restart();
 
         m_isSpecial = false;
         m_bermudaConfig.scrollSpeed -= 50.f;
@@ -2121,6 +2107,10 @@ void Scene_Bermuda::checkCollisions() {
         auto overlap = Physics::getOverlapEntity(m_player, e, "shark");
         if (overlap.x > 0 and overlap.y > 0) {
             e->getComponent<CTransform>().vel.x = 0.f;
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             e->removeComponent<CBoundingBox>();
             e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Death"));
             m_player->removeComponent<CBoundingBox>();
@@ -2130,24 +2120,33 @@ void Scene_Bermuda::checkCollisions() {
             if (m_life != 0) {
                 m_life -= 1;
             }
+            playerState();
         }
     }
 
     for (auto& e : m_entityManager.getEntities("enemyTornado")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "tornado");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
             if (m_life != 0) {
                 m_life -= 1;
             }
+            playerState();
         }
     }
 
     for (auto& e : m_entityManager.getEntities("enemyWhirlpool")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "whirpool");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
 
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
@@ -2163,6 +2162,10 @@ void Scene_Bermuda::checkCollisions() {
     for (auto& e : m_entityManager.getEntities("enemySquid")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "squid");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Fony_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
@@ -2170,6 +2173,7 @@ void Scene_Bermuda::checkCollisions() {
             if (m_life != 0) {
                 m_life -= 1;
             }
+            playerState();
         }
     }
 
@@ -2187,18 +2191,21 @@ void Scene_Bermuda::checkCollisions() {
                         }
                     }
                 }
+                SoundPlayer::getInstance().play("pickUp");
                 e->destroy();
             }
         }
     }
-
-    playerState();
 }
 void Scene_Bermuda::checkSpecialCollisions() {
 
     for (auto& e : m_entityManager.getEntities("enemyShark")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "shark");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("ehitHurt");
+
             e->getComponent<CTransform>().vel.x = 0.f;
             e->removeComponent<CBoundingBox>();
             e->addComponent<CAnimation>(Assets::getInstance().getAnimation("Shark_Death"));
@@ -2209,6 +2216,10 @@ void Scene_Bermuda::checkSpecialCollisions() {
     for (auto& e : m_entityManager.getEntities("enemyWhirlpool")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "whirpool");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
@@ -2224,6 +2235,9 @@ void Scene_Bermuda::checkSpecialCollisions() {
         auto overlap = Physics::getOverlapEntity(m_player, e, "tornado");
         if (overlap.x > 0 and overlap.y > 0) {
 
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
@@ -2235,11 +2249,13 @@ void Scene_Bermuda::checkSpecialCollisions() {
         }
     }
 
-
-
     for (auto& e : m_entityManager.getEntities("enemySquid")) {
         auto overlap = Physics::getOverlapEntity(m_player, e, "squid");
         if (overlap.x > 0 and overlap.y > 0) {
+
+            if (m_player->hasComponent<CBoundingBox>())
+                SoundPlayer::getInstance().play("hitHurt");
+
             m_player->removeComponent<CBoundingBox>();
             m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("Tontana_Hit_Right"));
             m_player->addComponent<CState>().state = "dead";
@@ -2251,14 +2267,33 @@ void Scene_Bermuda::checkSpecialCollisions() {
         for (auto& e2 : m_entityManager.getEntities("bullet")) {
             auto overlap2 = Physics::getOverlapEntity(e, e2, "bullet");
             if (overlap2.x > 0 and overlap2.y > 0) {
+                SoundPlayer::getInstance().play("ehitHurt");
+
                 e->getComponent<CLife>().remaining -= 1;
                 e2->destroy();
                 m_playScore += 30.f;
             }
         }
     }
+    for (auto& e : m_entityManager.getEntities("coca")) {
+        auto overlap = Physics::getOverlapEntity(m_player, e, "coca");
+        if (overlap.x > 0 and overlap.y > 0) {
 
-    playerState();
+            if (m_special != 3) {
+                m_special += 1;
+                for (auto& e2 : m_entityManager.getEntities("water")) {
+                    auto overlap = Physics::getOverlapEntity(e2, e);
+                    if (overlap.x > 0 and overlap.y > 0) {
+                        if (e2->getComponent<CType>().coca) {
+                            e2->destroy();
+                        }
+                    }
+                }
+                SoundPlayer::getInstance().play("pickUp");
+                e->destroy();
+            }
+        }
+    }
 }
 void Scene_Bermuda::checkPlayerPosition() {
 

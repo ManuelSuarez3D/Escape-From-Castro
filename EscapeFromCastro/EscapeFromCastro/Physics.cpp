@@ -1,7 +1,7 @@
 #include "Physics.h"
 #include <cmath>
 
-sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b, std::string entityName)
+sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b, std::string entityName, std::string state)
 {
     sf::Vector2f overlap(0.f, 0.f);
     if (!a->hasComponent<CBoundingBox>() || !b->hasComponent<CBoundingBox>())
@@ -11,6 +11,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
     auto abb = a->getComponent<CBoundingBox>();
     auto btx = b->getComponent<CTransform>();
     auto bbb = b->getComponent<CBoundingBox>();
+
 
     if (abb.has && bbb.has)
     {
@@ -39,38 +40,72 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
         }
         else if (entityName == "shark") {
 
-            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
-            float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;
+            float topA = 0;
 
-            float leftB = btx.pos.x - bbb.halfSize.x;
-            float rightB = btx.pos.x + bbb.halfSize.x;
+            float dx = std::abs(atx.pos.x - btx.pos.x);
+            float dy = std::abs(atx.pos.y - btx.pos.y);
 
-            float leftA = atx.pos.x - abb.halfSize.x + 46.f;
-            float rightA = atx.pos.x + abb.halfSize.x;
+            float bottomA = atx.pos.y + abb.halfSize.y;
+            if(state == "fony")
+                topA = atx.pos.y - abb.halfSize.y + 44.f;
+            else if (state == "special")
+                topA = atx.pos.y - abb.halfSize.y + 53.f;
 
-            if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+            float bottomB = btx.pos.y + bbb.halfSize.y;
+            float topB = btx.pos.y - bbb.halfSize.y + 18.f; 
+
+            if (dx < abb.halfSize.x + bbb.halfSize.x && dy < abb.halfSize.y + bbb.halfSize.y)
             {
-                float dx = std::abs(atx.pos.x - btx.pos.x);
-                float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 5.f - dy);
+                float effectiveLeftA = 0.f;
+                if(state == "fony")
+                    float effectiveLeftA = atx.pos.x - abb.halfSize.x + 46.f;
+                else if (state == "special")
+                    float effectiveLeftA = atx.pos.x - abb.halfSize.x + 56.f;
+
+                if (effectiveLeftA < atx.pos.x - 46.f && state == "fony") {
+                    effectiveLeftA = atx.pos.x - 46.f;
+                } else if(effectiveLeftA < atx.pos.x - 56.f && state == "special")
+                    effectiveLeftA = atx.pos.x - 56.f;
+
+                float overlapLeft = std::max(0.f, std::min(atx.pos.x + abb.halfSize.x, btx.pos.x + bbb.halfSize.x) - effectiveLeftA);
+                float overlapHeight = std::max(0.f, std::min(bottomA, bottomB) - std::max(topA, topB));
+                overlap = sf::Vector2f(overlapLeft, overlapHeight);
             }
+            //float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+
+            //float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;
+
+            //float leftB = btx.pos.x - bbb.halfSize.x;
+            //float rightB = btx.pos.x + bbb.halfSize.x;
+
+
+            //float leftA = atx.pos.x - abb.halfSize.x + 46.f;
+
+            //float rightA = atx.pos.x + abb.halfSize.x;
+
+            //if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
+            //{
+            //    float dx = std::abs(atx.pos.x - btx.pos.x);
+            //    float dy = std::abs(bottomA - bottomB);
+            //    overlap = sf::Vector2f(std::min(abb.halfSize.x + bbb.halfSize.x - dx, 46.f), std::min(6.f, std::abs(bottomA - bottomB)));
+            //}
         }
         else if (entityName == "coral") {
 
             float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;
-
+            
             float leftB = btx.pos.x - bbb.halfSize.x + 8.f;
             float rightB = btx.pos.x + bbb.halfSize.x - 10.f;
-
+            
             float leftA = atx.pos.x - abb.halfSize.x + 46.f;
             float rightA = atx.pos.x + abb.halfSize.x;
-
+            
             if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
             {
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 5.f - dy);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 5.f - dy);
             }
         }
         else if (entityName == "boatMilitary") {
@@ -90,7 +125,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 10.f - dy);
             }
         }
         else if (entityName == "island") {
@@ -111,12 +146,12 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
                 // overlap
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 15.f - dy); // 5.f in height and 15.f
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 15.f - dy); // 5.f in height and 15.f
             }
         }
         else if (entityName == "coca") {
 
-            float bottomA = atx.pos.y + abb.halfSize.y - 5.f;
+            float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
             float bottomB = btx.pos.y + bbb.halfSize.y - 5.f;
 
             float leftB = btx.pos.x - bbb.halfSize.x;
@@ -131,7 +166,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 5.f - dy);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 5.f - dy);
             }
         }
         else if (entityName == "squid") {
@@ -151,7 +186,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 21.f - dy);
             }
         }
         else if (entityName == "tornado") {
@@ -173,7 +208,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
                     // overlap
                     float dx = std::abs(atx.pos.x - btx.pos.x);
                     float dy = std::abs(bottomA - bottomB);
-                    overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 15.f - dy); // 5.f in height and 15.f
+                    overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 30.f - dy); // 5.f in height and 15.f
                 }
         }
         else if (entityName == "whirpool") {
@@ -193,7 +228,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 40.f - dy);
             }
             }
         else if (entityName == "boatPolice") {
@@ -213,7 +248,7 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
 
                 float dx = std::abs(atx.pos.x - btx.pos.x);
                 float dy = std::abs(bottomA - bottomB);
-                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+                overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 10.f - dy);
             }
         }
         else if (entityName == "floridaMan") {
@@ -235,29 +270,42 @@ sf::Vector2f Physics::getOverlapEntity(std::shared_ptr<Entity> a, std::shared_pt
                  // overlap
                  float dx = std::abs(atx.pos.x - btx.pos.x);
                  float dy = std::abs(bottomA - bottomB);
-                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 15.f - dy); // 5.f in height and 15.f
+                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 6.f - dy); // 5.f in height and 15.f
              }
          }
         else if (entityName == "dune") {
 
-             float bottomA = atx.pos.y + abb.halfSize.y - 6.f;
-             float bottomB = btx.pos.y + bbb.halfSize.y - 11.f;
+            float bottomA = 0.f;
+            float bottomB = 0.f;
+            float leftB = 0.f;
+            float rightB = 0.f;
+            float leftA = 0.f;
+            float rightA = 0.f;
 
-             float leftB = btx.pos.x - bbb.halfSize.x + 2.f;
-             float rightB = btx.pos.x + bbb.halfSize.x - 2.f;
+            if(state == "fony")
+                bottomA = atx.pos.y + abb.halfSize.y - 6.f;
+            else if (state == "special")
+                bottomA = atx.pos.y + abb.halfSize.y - 9.f;
 
-             float leftA = atx.pos.x - abb.halfSize.x + 46.f;
-             float rightA = atx.pos.x + abb.halfSize.x;
+             bottomB = btx.pos.y + bbb.halfSize.y - 11.f;
 
+             leftB = btx.pos.x - bbb.halfSize.x + 2.f;
+             rightB = btx.pos.x + bbb.halfSize.x - 2.f;
+
+             if (state == "fony")
+                leftA = atx.pos.x - abb.halfSize.x + 46.f;
+             else if (state == "special")
+                leftA = atx.pos.x - abb.halfSize.x + 54.f;
+
+                rightA = atx.pos.x + abb.halfSize.x;
 
              if (bottomA >= bottomB && leftA <= rightB && rightA >= leftB)
              {
-
                  float dx = std::abs(atx.pos.x - btx.pos.x);
                  float dy = std::abs(bottomA - bottomB);
-                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 5.f + 10.f - dy);
+                 overlap = sf::Vector2f(abb.halfSize.x + bbb.halfSize.x - dx, 6.f + 11.f - dy);
              }
-         }
+        }
     }
     return overlap;
 }

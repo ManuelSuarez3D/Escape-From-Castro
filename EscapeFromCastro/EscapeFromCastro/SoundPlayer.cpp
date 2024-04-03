@@ -35,6 +35,16 @@ void SoundPlayer::play(String effect) {
     play(effect, getListnerPosition());
 }
 
+//void SoundPlayer::stop(String effect) {
+//    for (auto& sound : m_sounds) {
+//
+//        sf::Sound soundEffect = Assets::getInstance.getSound(effect));
+//        if (== effect) {
+//            sound.stop();
+//            break;
+//        }
+//    }
+//}
 
 void SoundPlayer::play(String effect, sf::Vector2f position) {
     m_sounds.push_back(sf::Sound());
@@ -46,6 +56,7 @@ void SoundPlayer::play(String effect, sf::Vector2f position) {
     sound.setAttenuation(Attenuation);
     sound.setMinDistance(MinDistance3D);
 
+    sound.setVolume(30);
     sound.play();
 }
 
