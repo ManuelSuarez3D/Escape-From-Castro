@@ -22,7 +22,7 @@ namespace {
 #pragma region SceneLoad
 Scene_Credits::Scene_Credits(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine),
-    m_worldView(gameEngine->window().getDefaultView()) {
+    m_worldView(gameEngine->window().getView()) {
 
     loadLevel(levelPath);
     init();
@@ -289,13 +289,13 @@ void Scene_Credits::sState(sf::Time dt) {
 void Scene_Credits::sRender() {
 
     sf::RenderWindow& window = m_game->window();
-    sf::Event event;
-    sf::View view = window.getView();
-    view.setCenter(window.getSize().x / 2.f, window.getSize().y / 2.f);
-    window.setView(view);
+
+    sf::View view1;
+    view1.reset(sf::FloatRect(0.f, 0.f, 900.f, 512.f));
+    m_game->window().setView(view1);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view);
+    sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view1);
 
     for (auto& e : m_entityManager.getEntities("bkg")) {
         auto& sprite = e->getComponent<CSprite>().sprite;

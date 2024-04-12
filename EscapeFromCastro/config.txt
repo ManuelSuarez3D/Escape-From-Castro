@@ -20,6 +20,9 @@ Texture 	Level1      		../assets/Textures/cuba.png
 Texture		Level2			../assets/Textures/bermuda.png
 Texture		Level3			../assets/Textures/florida.png
 
+Texture		Player			../assets/Textures/Sprites/player.png
+Texture		ProgressBar		../assets/Textures/Sprites/bar.png
+	
 Texture 	Start01         	../assets/Textures/start_01.png
 Texture 	Start02         	../assets/Textures/start_02.png
 
@@ -141,6 +144,9 @@ Sprite Level3			Level3			0 0
 
 Sprite	ScoreCredits		ScoreCredits 		0 0
 Sprite	FinalCredits		FinalCredits		0 0
+
+Sprite	Player			Player 			0 0
+Sprite	ProgressBar		ProgressBar		0 0
 
 Sprite	Levels01		Levels01 		0 0
 Sprite	Levels02		Levels02		0 0

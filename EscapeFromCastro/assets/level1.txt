@@ -45,3 +45,5 @@ Chapter1a		Chapter1a		193	152
 Chapter1b		Chapter1b		215	152
 Curtain 		Curtain			0	12
 CurtainTop 		CurtainTop		0	0
+Player 			Player			0	471
+ProgressBar 		ProgressBar		252	477

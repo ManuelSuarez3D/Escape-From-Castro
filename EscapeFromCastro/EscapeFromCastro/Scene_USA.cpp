@@ -21,7 +21,7 @@ namespace {
 #pragma region SceneLoad
 Scene_USA::Scene_USA(GameEngine* gameEngine, const std::string& levelPath)
     : Scene(gameEngine),
-    m_worldView(gameEngine->window().getDefaultView()) {
+    m_worldView(gameEngine->window().getView()) {
 
     loadLevel(levelPath);
     init();
@@ -68,6 +68,29 @@ void Scene_USA::loadLevel(const std::string& path) {
 
             config >> name >> pos.x >> pos.y;
             auto e = m_entityManager.addEntity("ui");
+            e->addComponent<CTransform>(pos);
+            auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+            sprite.setOrigin(0.f, 0.f);
+            sprite.setPosition(pos);
+        }
+        else if (token == "Player") {
+            std::string name;
+            sf::Vector2f pos;
+
+            config >> name >> pos.x >> pos.y;
+            auto e = m_entityManager.addEntity("playerIcon");
+            e->addComponent<CTransform>(pos);
+            auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+
+            sprite.setOrigin(0.f, 0.f);
+            sprite.setPosition(pos);
+        }
+        else if (token == "ProgressBar") {
+            std::string name;
+            sf::Vector2f pos;
+
+            config >> name >> pos.x >> pos.y;
+            auto e = m_entityManager.addEntity("progressbar");
             e->addComponent<CTransform>(pos);
             auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
             sprite.setOrigin(0.f, 0.f);
@@ -1583,6 +1606,38 @@ void Scene_USA::renderUI() {
         }
     }
 
+    for (auto& e : m_entityManager.getEntities("progressbar")) {
+        if (e->getComponent<CSprite>().has) {
+            auto& sprite = e->getComponent<CSprite>().sprite;
+            auto& tfm = e->getComponent<CTransform>();
+            sprite.setPosition(tfm.pos);
+            sprite.setRotation(tfm.angle);
+            m_game->window().draw(sprite);
+        }
+    }
+    for (auto& e : m_entityManager.getEntities("playerIcon")) {
+        if (e->getComponent<CSprite>().has) {
+
+            auto& pos = m_player->getComponent<CTransform>().pos;
+            auto& sprite = e->getComponent<CSprite>().sprite;
+            auto& tfm = e->getComponent<CTransform>().pos;
+
+            float pPos = pos.x;
+            float mapL = 2800.f - 427.059f;
+            float pBarL = 327.f;
+
+            float pPosRatio = (pPos - 427.059f) / mapL;
+            float pBarPos = pBarL * pPosRatio;
+
+            if (m_isIntro)
+                sprite.setPosition(273.f, tfm.y);
+            else if ((pBarPos + 273.f) < 600.f && pos.x > 427.059f)
+                sprite.setPosition(pBarPos + 273.f, tfm.y);
+
+            m_game->window().draw(sprite);
+        }
+    }
+
     m_score_text.setFont(Assets::getInstance().getFont("Arcade"));
     m_score_text.setPosition(70.f, 8.f);
     m_score_text.setCharacterSize(50);
@@ -1708,7 +1763,7 @@ sf::FloatRect Scene_USA::getEnemySpawnBounds() {
 }
 sf::FloatRect Scene_USA::getPlayerSpawnBounds() {
 
-    auto viewBounds = m_game->window().getDefaultView();
+    auto viewBounds = m_game->window().getView();
 
     auto test = sf::FloatRect(
         (viewBounds.getCenter().x - viewBounds.getSize().x / 2.f), (viewBounds.getCenter().y - viewBounds.getSize().y / 2.f),

@@ -20,7 +20,7 @@ private:
 	std::vector<std::pair<std::string, bool>> m_menu_menu;
 	int							m_menuIndex{ 0 };
 	sf::View					m_worldView;
-
+	sf::Vector2f				m_worldBounds;
 	bool						m_drawAABB{ false };
 	bool						m_isPlay{ false };
 	bool						m_playSound{ false };

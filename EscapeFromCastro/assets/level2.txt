@@ -49,6 +49,7 @@ UiHp3  			UiHp03			0 	0
 
 Chapter2a		Chapter2a		215	152
 Chapter2b		Chapter2b		215	152
-
+Player 			Player			0	471
+ProgressBar 		ProgressBar		252	477
 Curtain 		Curtain			0	12
 CurtainTop 		CurtainTop		0	0

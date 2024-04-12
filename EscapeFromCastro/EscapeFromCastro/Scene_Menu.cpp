@@ -12,7 +12,8 @@
 
 #pragma region SceneLoad
 Scene_Menu::Scene_Menu(GameEngine* gameEngine)
-	: Scene(gameEngine)
+	: Scene(gameEngine),
+	 m_worldBounds(gameEngine->window().getSize())
 {
 	loadMenu("../assets/menu.txt");
 	init();
@@ -134,8 +135,8 @@ void Scene_Menu::sDoAction(const Command& action) {
 }
 void Scene_Menu::sMovement(sf::Time dt) {
 
-	sf::FloatRect view = getViewBounds();
-	m_worldView.move(m_menuConfig.scrollSpeed * dt.asSeconds() * 1, 0.f);
+	//sf::FloatRect view = getViewBounds();
+	//m_worldView.move(m_menuConfig.scrollSpeed * dt.asSeconds() * 1, 0.f);
 
 	if (m_isPlay) {
 
@@ -175,17 +176,31 @@ void Scene_Menu::sMovement(sf::Time dt) {
 void Scene_Menu::sRender()
 {
 	sf::RenderWindow& window = m_game->window();
-	sf::Event event;
-	sf::View view = window.getView();
-	view.setCenter(window.getSize().x / 2.f, window.getSize().y / 2.f);
-	window.setView(view);
+	//sf::Event event;
+	//
+	//sf::View view = window.getView();
+	//view.setCenter(window.getSize().x / 2.f, window.getSize().y / 2.f);
+	//window.setView(view);
+	//sf::Vector2f bkgSize{ 900, 512 };
 
+	sf::View view1;
+	view1.reset(sf::FloatRect(0.f, 0.f, 900.f, 512.f));
+	m_game->window().setView(view1);
+
+	//sf::View view = window.getView();
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-	sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view);
+	sf::Vector2f viewMousePos = window.mapPixelToCoords(mousePos, view1);
 
 	for (auto& e : m_entityManager.getEntities("bkg")) {
 		if (e->getComponent<CSprite>().has) {
 			auto& sprite = e->getComponent<CSprite>().sprite;
+			auto& tfm = e->getComponent<CTransform>();
+
+			//tfm.scale.x = m_worldBounds.x / bkgSize.x;
+			//tfm.scale.y = m_worldBounds.y / bkgSize.y;
+			//
+			////sprite.setPosition(tfm.pos);
+			//sprite.setScale(tfm.scale);
 			m_game->window().draw(sprite);
 		}
 	}
@@ -213,12 +228,21 @@ void Scene_Menu::sRender()
 			if (e1->hasComponent<CSprite>()) {
 				auto& sprite1 = e1->getComponent<CSprite>().sprite;
 				auto overlap = Physics::getOverlapMouse(viewMousePos, e1);
-				auto test = e1->getComponent<CTransform>();
+				auto& tfm1 = e1->getComponent<CTransform>();
+				//tfm1.scale.x = m_worldBounds.x / bkgSize.x;
+				//tfm1.scale.y = m_worldBounds.y / bkgSize.y;
+
+				//tfm1.pos.x = m_worldBounds.x / bkgSize.x;
+				//tfm1.pos.y = m_worldBounds.y / bkgSize.y;
+
+				//sprite1.setPosition(tfm1.pos);
+				//sprite1.setScale(tfm1.scale);
 
 
 				for (auto e2 : m_entityManager.getEntities("start2")) {
 					if (e2->hasComponent<CSprite>()) {
 						auto& sprite2 = e2->getComponent<CSprite>().sprite;
+						auto& tfm = e2->getComponent<CTransform>();
 
 						if (overlap.x > 0 && overlap.y > 0) {
 

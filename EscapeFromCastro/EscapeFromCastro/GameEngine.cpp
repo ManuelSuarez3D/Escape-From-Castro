@@ -21,7 +21,10 @@ void GameEngine::init(const std::string& path)
 	loadConfigFromFile(path, width, height);
 
 
-	m_window.create(sf::VideoMode(width, height), "Escape From Castro");
+	//m_window.create(sf::VideoMode(width, height), "Escape From Castro");
+
+	sf::VideoMode fullscreenMode = sf::VideoMode::getDesktopMode();
+	m_window.create(fullscreenMode, "Escape From Castro", sf::Style::Fullscreen);
 
 	//m_statisticsText.setFont(Assets::getInstance().getFont("main"));
 	//m_statisticsText.setPosition(15.0f, 5.0f);
